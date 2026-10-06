@@ -310,8 +310,10 @@ function rebusLine() {
 function boldDigits(str) {
   return String(str).replace(/[0-9]/g, function (d) { return String.fromCodePoint(0x1D7EC + Number(d)); });
 }
+// The result starts with an invisible zero-width space. Without it the text begins "Spitball:", which iPhones read
+// as a web address (like "https:") and then paste with every space and emoji turned into %20-style codes.
 function shareText() {
-  return "Spitball: " + boldDigits(total().toLocaleString("en-US")) + "\n🧩Rebus: " + rebusLine() + "\n" +
+  return "\u200BSpitball: " + boldDigits(total().toLocaleString("en-US")) + "\n🧩Rebus: " + rebusLine() + "\n" +
     S.guesses.map(function (r) { return r.score + face(r.score); }).join(" ") + "\n" + PUZZLE.shareDate;
 }
 
@@ -536,11 +538,8 @@ function closeShare() { veil.hidden = true; }
 document.getElementById("sheetClose").addEventListener("click", closeShare);
 veil.addEventListener("click", function (e) { if (e.target === veil) { closeShare(); } });
 document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !veil.hidden) { closeShare(); } });
-// The text link can be blocked (for example inside a preview frame) and the page cannot tell, so copy as a backup.
-document.getElementById("smsBtn").addEventListener("click", function () {
-  var note = function () { sheetMsg.textContent = "If Messages did not open, your result is copied. Paste it into a text."; };
-  try { navigator.clipboard.writeText(shareText()).then(note, function () {}); } catch (err) {}
-});
+// "Text your results" is a plain link with no script attached, so the phone treats the tap as a direct request
+// to open Messages.
 document.getElementById("copyBtn").addEventListener("click", function () {
   var ok = function () { sheetMsg.textContent = "Copied. Paste it anywhere."; };
   var no = function () { selectShare(); sheetMsg.textContent = "Could not copy automatically. The text is selected, so copy it from there."; };
