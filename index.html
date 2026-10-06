@@ -35,8 +35,8 @@ img { max-width: 100%; }
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html { background: var(--bg); }
-body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; padding-inline: 16px; padding-block: 18px 32px; -webkit-font-smoothing: antialiased; }
-.app { max-width: 440px; margin-inline: auto; display: flex; flex-direction: column; gap: 16px; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; padding-inline: 16px; padding-block: 12px 32px; -webkit-font-smoothing: antialiased; }
+.app { max-width: 440px; margin-inline: auto; display: flex; flex-direction: column; gap: 12px; }
 p, h1, h2, ul, dl, dd, pre { margin: 0; }
 
 .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -62,13 +62,15 @@ h2 { font-family: var(--display); font-weight: 800; font-size: 27px; line-height
 .muted { color: var(--muted); font-size: 14px; }
 
 .rebus { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; padding-bottom: 5px; scroll-margin-top: 12px; }
-.tile { width: 80px; height: 80px; border-radius: 20px; display: grid; place-items: center; font-size: 44px; line-height: 1; background: var(--tint); box-shadow: 0 5px 0 var(--line); }
+.tile { width: 72px; height: 72px; border-radius: 20px; display: grid; place-items: center; font-size: 40px; line-height: 1; background: var(--tint); box-shadow: 0 5px 0 var(--line); }
 .tile.txt { font-family: var(--display); font-weight: 800; font-size: 40px; }
 .plus { font-family: var(--display); font-weight: 800; font-size: 26px; color: var(--muted); }
 .tries { display: inline-flex; gap: 5px; align-items: center; }
 .tries span:last-child { margin-left: 3px; }
 .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--sun); }
 h2.sm { font-size: 22px; }
+/* The rebus card is kept short so the answer box sits high enough to stay clear of the phone keyboard. */
+.card.compact { padding-top: 16px; gap: 13px; }
 .note.sm { font-size: 14px; line-height: 1.4; padding: 10px 14px; }
 #rebusInput { font-size: 20px; padding: 14px 4px 14px 16px; }
 .go { flex: none; margin: 6px; padding: 0 18px; border: 0; border-radius: 13px; background: var(--sun); color: var(--on-sun); font-family: var(--display); font-weight: 800; font-size: 17px; box-shadow: 0 3px 0 var(--sun-deep); }
@@ -306,8 +308,12 @@ function rebusLine() {
   return S.gaveUp ? "Revealed" : "Not solved";
 }
 // Share result: total up top, then rebus, closeness per question with a reaction, and the date.
+// Text messages cannot carry real bold, so the score uses Unicode bold digits, which show as bold on iPhone and Android.
+function boldDigits(str) {
+  return String(str).replace(/[0-9]/g, function (d) { return String.fromCodePoint(0x1D7EC + Number(d)); });
+}
 function shareText() {
-  return "Spitball: " + total().toLocaleString("en-US") + "\n🧩Rebus: " + rebusLine() + "\n" +
+  return "Spitball: " + boldDigits(total().toLocaleString("en-US")) + "\n🧩Rebus: " + rebusLine() + "\n" +
     S.guesses.map(function (r) { return r.score + face(r.score); }).join(" ") + "\n" + PUZZLE.shareDate;
 }
 
@@ -350,6 +356,25 @@ function nudgeRebus(clear) {
 }
 // Tapping the inline Guess button must not steal focus from the input (that would drop the keyboard).
 stage.addEventListener("pointerdown", function (e) { if (e.target.closest(".go")) { e.preventDefault(); } });
+// iPhone Safari nudges the page up when the keyboard opens, even when the answer box already fits above it.
+// If the box is fully visible with the page at the top, put the page back so the title is not cut off.
+function keepTop() {
+  var el = document.activeElement;
+  if (!el || el.tagName !== "INPUT" || !stage.contains(el)) { return; }
+  var vv = window.visualViewport;
+  var visible = vv ? vv.height : window.innerHeight;
+  var pageY = window.pageYOffset || 0, off = vv ? vv.offsetTop : 0;
+  if (pageY === 0 && off === 0) { return; }
+  var boxBottom = el.closest(".field").getBoundingClientRect().bottom + pageY;
+  if (boxBottom + 16 <= visible) { window.scrollTo(0, 0); }
+}
+stage.addEventListener("focusin", function (e) {
+  if (e.target.tagName !== "INPUT") { return; }
+  [80, 250, 450, 700].forEach(function (ms) { setTimeout(keepTop, ms); });
+});
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", function () { setTimeout(keepTop, 50); });
+}
 var lastView = "";
 function render() {
   renderPips();
@@ -358,7 +383,7 @@ function render() {
     var tiles = PUZZLE.rebus.tiles.map(function (t) {
       return '<div class="tile' + (t.t ? " txt" : "") + '">' + (t.e || t.t) + "</div>";
     }).join('<span class="plus">+</span>');
-    h = open +
+    h = '<section class="card compact ' + S.anim + '">' +
       '<p class="eyebrow"><span>Unlock today\'s theme</span><span class="tries" id="triesBox">' + triesHtml() + "</span></p>" +
       '<h2 class="sm">What do the pictures say?</h2>' +
       '<div class="rebus" id="rebusTiles" role="img" aria-label="' + PUZZLE.rebus.alt + '">' + tiles + "</div>" +
