@@ -20,9 +20,9 @@ window.SPITBALL_PUZZLES = {
         fact: "About 200 miles per hour (320 km/h), on the line running north from Tokyo." },
       { level: "Medium", q: "In what year did the first U.S. train robbery take place?", a: 1866, type: "year", spread: 35, unit: "year",
         fact: "October 6, 1866, a year and a half after the Civil War ended. The case made the Pinkerton detectives famous." },
-      { level: "Medium-hard", q: "How many stations does the New York City subway have?", a: 472, type: "ratio", spread: 50, unit: "stations",
+      { level: "Medium-hard", q: "How many stations does the New York City subway have?", a: 472, type: "ratio", spread: 80, unit: "stations",
         fact: "472 by the MTA's count, more than any other subway system in the world." },
-      { level: "Hard", q: "The longest train ever run was a record-setting freight train in Australia. How many cars did it have?", a: 682, type: "ratio", spread: 70, unit: "cars",
+      { level: "Hard", q: "The longest train ever run was a record-setting freight train in Australia. How many cars did it have?", a: 682, type: "ratio", spread: 90, unit: "cars",
         fact: "682 cars of iron ore, pulled by eight locomotives. End to end, it stretched about four and a half miles." }
     ]
   }

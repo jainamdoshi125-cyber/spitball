@@ -24,7 +24,11 @@ Add an entry to `puzzles.js` under the new date. Each entry has:
 - The hook is a real event from that date. The theme is one level broader (a film becomes the movies).
 - At most one or two questions about the event itself. The rest should be things anyone can reason toward.
 - Every answer is a number. State the unit.
-- `spread` is how far off earns 50 points, as a percent. Use about 30 for well-known facts and up to 80 for obscure ones. For years it is a percent of how long ago the event was (35 is standard).
+- `spread` is how far off earns 50 points, as a percent. Set it by how guessable the answer is, not how hard the question sounds:
+  - about 30 for facts people can anchor on (keys on a piano)
+  - about 50 for things you can reason toward (the speed of a train)
+  - 80 to 100 for shots in the dark (stations in a subway system)
+- For years, `spread` is a percent of how long ago the event was (35 is standard).
 - Check every fact against a source before publishing.
 
 ## Scoring
