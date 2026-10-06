@@ -5,7 +5,7 @@ window.SPITBALL_PUZZLES = {
     rebus: {
       tiles: [{ e: "💰" }, { e: "🥷" }],
       alt: "Rebus: a bag of money, plus a masked thief",
-      answers: ["moneyheist", "heist", "moneyrobbery", "moneyrobber", "moneythief", "moneyheists", "cashheist", "robbery", "trainrobbery"],
+      answers: ["moneyheist", "heist", "moneyrobbery", "moneyrobber", "moneythief", "moneyheists", "cashheist", "robbery", "trainrobbery", "bankrobbery", "bankrobber", "bankheist"],
       display: "Money Heist",
       hint: "Two words, and also the name of a hit TV show. The first is what is in the bag. The second is a big, planned robbery."
     },
