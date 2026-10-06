@@ -81,6 +81,7 @@ form { display: flex; flex-direction: column; gap: 12px; }
 .field:focus-within { border-color: var(--ink); box-shadow: 0 0 0 4px var(--sun); }
 .field input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--ink); font-family: var(--mono); font-weight: 500; font-size: 26px; padding: 15px 16px; outline: none; font-variant-numeric: tabular-nums; border-radius: 18px; }
 .field input::placeholder { color: var(--muted); opacity: 0.6; }
+.unit:empty { display: none; }
 .unit { display: grid; place-items: center; padding-inline: 4px 16px; font-size: 14px; font-weight: 600; color: var(--muted); white-space: nowrap; }
 button { font: inherit; cursor: pointer; touch-action: manipulation; }
 .btn { font-family: var(--display); font-weight: 800; font-size: 20px; letter-spacing: -0.01em; width: 100%; min-height: 58px; border: 0; border-radius: 18px; padding: 12px 18px; background: var(--sun); color: var(--on-sun); box-shadow: 0 5px 0 var(--sun-deep); transition: transform 0.08s, box-shadow 0.08s; }

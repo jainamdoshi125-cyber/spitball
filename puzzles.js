@@ -2,28 +2,28 @@
 // To add a day: copy an entry, change the date key, and fill it in. See README.md for the writing rules.
 window.SPITBALL_PUZZLES = {
   "2026-10-06": {
-  rebus: {
-    tiles: [{ e: "🎷" }, { e: "🎤" }],
-    alt: "Rebus: a saxophone, plus a microphone",
-    answers: ["jazzsinger", "jazzsingers", "ajazzsinger"],
-    display: "The Jazz Singer",
-    hint: "Two words, and a very old movie. The first is the music a saxophone is famous for. The second is the person holding the microphone."
-  },
-  theme: "Sound and Music",
-  hype: ["Music to my ears!", "Pitch perfect.", "Encore!"],
-  oof: ["That one fell flat.", "Way out of tune.", "Someone cut the mic."],
-  snippet: "On this day, <strong>The Jazz Singer</strong> premiered in New York City. It was the first feature film in which audiences heard the actors sing and speak, and it ended the silent era almost overnight. So today is all about sound and music.",
-  questions: [
-    { level: "Easy", q: "How many strings does a standard guitar have?", a: 6, type: "ratio", spread: 35, unit: "strings",
-      fact: "Six. A bass guitar usually has four, and a ukulele has four too." },
-    { level: "Easy-medium", q: "How many keys are on a standard piano?", a: 88, type: "ratio", spread: 30, unit: "keys",
-      fact: "88 in total: 52 white and 36 black." },
-    { level: "Medium", q: "In what year did The Jazz Singer premiere?", a: 1927, type: "year", spread: 35, unit: "year",
-      fact: "October 6, 1927. Within about three years, Hollywood had all but stopped making silent films." },
-    { level: "Medium-hard", q: "How fast does sound travel through air, in miles per hour?", a: 767, type: "ratio", spread: 50, unit: "mph",
-      fact: "About 767 miles per hour at sea level. That is why thunder arrives after the lightning." },
-    { level: "Hard", q: "Orchestras tune to the note A. How many vibrations per second is that note?", a: 440, type: "ratio", spread: 60, unit: "per second",
-      fact: "440 per second, known as A440. It became the international standard in 1955." }
-  ]
-}
+    rebus: {
+      tiles: [{ e: "🚂" }, { e: "💰" }],
+      alt: "Rebus: a steam train, plus a bag of money",
+      answers: ["trainrobbery", "trainrobber", "trainrobbers", "trainheist", "greattrainrobbery", "firsttrainrobbery", "robatrain", "moneytrain"],
+      display: "Train Robbery",
+      hint: "Two words. The first picture is what it looks like. The second word is what outlaws did to it to get the money."
+    },
+    theme: "Trains",
+    hype: ["Right on track!", "Full steam ahead!", "A first-class guess."],
+    oof: ["That one went off the rails.", "Wrong platform.", "You missed the train."],
+    snippet: "On this day, the <strong>Reno Gang</strong> boarded a train as it pulled out of Seymour, Indiana, broke open one safe and shoved a second off the moving cars. It was the first peacetime train robbery in U.S. history. So today is all about trains.",
+    questions: [
+      { level: "Easy", q: "What number is painted on the side of Thomas the Tank Engine?", a: 1, type: "ratio", spread: 40, unit: "",
+        fact: "Number 1. His friends Edward, Henry, Gordon and James are numbers 2 through 5." },
+      { level: "Easy-medium", q: "How fast do Japan's fastest bullet trains run in regular service, in miles per hour?", a: 200, type: "ratio", spread: 40, unit: "mph",
+        fact: "About 200 miles per hour (320 km/h), on the line running north from Tokyo." },
+      { level: "Medium", q: "In what year did the first U.S. train robbery take place?", a: 1866, type: "year", spread: 35, unit: "year",
+        fact: "October 6, 1866, a year and a half after the Civil War ended. The case made the Pinkerton detectives famous." },
+      { level: "Medium-hard", q: "How many stations does the New York City subway have?", a: 472, type: "ratio", spread: 50, unit: "stations",
+        fact: "472 by the MTA's count, more than any other subway system in the world." },
+      { level: "Hard", q: "How many miles long is the Trans-Siberian Railway, the longest rail line in the world?", a: 5772, type: "ratio", spread: 60, unit: "miles",
+        fact: "5,772 miles from Moscow to Vladivostok, crossing eight time zones. The full ride takes about a week." }
+    ]
+  }
 };
