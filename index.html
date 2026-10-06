@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spitball</title>
+<meta name="description" content="Spitball is a daily guessing game. Solve the picture puzzle to unlock today's theme, then answer five questions with a number. The closer you land, the more you score.">
+<meta name="theme-color" content="#150B2E">
+<meta property="og:title" content="Spitball">
+<meta property="og:description" content="A daily guessing game. Five questions, every answer is a number, and close counts.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23150B2E'/%3E%3Ccircle cx='32' cy='32' r='17' fill='%23FF3D9A'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%2336E6FF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Figtree:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Page basics */
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+/* Layout: one game card on a dark arcade field, sized for a phone held upright. Hot pink is the action color; the cyan outline frames the card. */
+/* Arcade is a single committed dark look, so there is no separate light palette. */
+:root {
+  --bg: #150B2E; --bg-deep: #0A0518; --on-bg: #F4EEFF; --bg-muted: #B6A6E8; --chip: rgba(255,255,255,0.10);
+  --card: #24134F; --ink: #F4EEFF; --muted: #B6A6E8; --line: #3D2A7A; --tint: #2F1B66;
+  --sun: #FF3D9A; --sun-deep: #B81F68; --on-sun: #1A0730; --meh: #FFB03D; --meh-fg: #17163A; --edge: #36E6FF;
+  --hit-bg: #3DF5B0; --hit-fg: #06281C; --miss-bg: #9A90BF; --miss-fg: #150B2E; --err: #FF8E9E; --veil: rgba(5,2,14,0.7);
+  --tier-bg: var(--sun); --tier-fg: var(--on-sun);
+  --display: "Chakra Petch", "Trebuchet MS", sans-serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "DM Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r-card: 14px; --r-ui: 8px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { background: var(--bg); }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; padding-inline: 16px; padding-block: 18px 32px; -webkit-font-smoothing: antialiased; }
+.app { max-width: 440px; margin-inline: auto; display: flex; flex-direction: column; gap: 16px; }
+p, h1, h2, ul, dl, dd, pre { margin: 0; }
+
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { font-family: var(--display); font-weight: 800; font-size: 30px; line-height: 1.1; letter-spacing: -0.02em; color: var(--on-bg); white-space: nowrap; }
+.brand mark { display: inline-block; background: var(--sun); color: var(--on-sun); padding: 0 0.16em 0.04em; border-radius: 8px; transform: rotate(-3deg); }
+.date { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; background: var(--chip); color: var(--on-bg); padding: 7px 11px; border-radius: 99px; white-space: nowrap; }
+
+.pips { display: flex; gap: 5px; }
+.pip { height: 8px; border-radius: 99px; background: var(--chip); transition: background-color 0.3s; }
+.pip.done { background: var(--sun); }
+.pip.now { background: var(--on-bg); }
+
+.card { background: var(--card); border-radius: 26px; padding: 22px 20px 24px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 0 0 2px var(--edge), 0 8px 0 var(--bg-deep); min-width: 0; }
+.card.rise { animation: rise 0.32s cubic-bezier(.2,.8,.2,1); }
+.card.shake { animation: shake 0.32s; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes shake { 20% { transform: translateX(-7px); } 45% { transform: translateX(6px); } 70% { transform: translateX(-4px); } 90% { transform: translateX(2px); } }
+@keyframes pop { from { transform: rotate(-2deg) scale(0.6); opacity: 0; } to { transform: rotate(-2deg) scale(1); opacity: 1; } }
+
+.eyebrow { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.eyebrow .x { background: var(--sun); color: var(--on-sun); padding: 3px 9px; border-radius: 99px; font-weight: 500; }
+h2 { font-family: var(--display); font-weight: 800; font-size: 27px; line-height: 1.12; letter-spacing: -0.015em; text-wrap: balance; }
+.muted { color: var(--muted); font-size: 14px; }
+
+.rebus { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; padding-bottom: 5px; scroll-margin-top: 12px; }
+.tile { width: 80px; height: 80px; border-radius: 20px; display: grid; place-items: center; font-size: 44px; line-height: 1; background: var(--tint); box-shadow: 0 5px 0 var(--line); }
+.tile.txt { font-family: var(--display); font-weight: 800; font-size: 40px; }
+.plus { font-family: var(--display); font-weight: 800; font-size: 26px; color: var(--muted); }
+.tries { display: inline-flex; gap: 5px; align-items: center; }
+.tries span:last-child { margin-left: 3px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--sun); }
+h2.sm { font-size: 22px; }
+.note.sm { font-size: 14px; line-height: 1.4; padding: 10px 14px; }
+#rebusInput { font-size: 20px; padding: 14px 4px 14px 16px; }
+.go { flex: none; margin: 6px; padding: 0 18px; border: 0; border-radius: 13px; background: var(--sun); color: var(--on-sun); font-family: var(--display); font-weight: 800; font-size: 17px; box-shadow: 0 3px 0 var(--sun-deep); }
+.go:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--sun-deep); }
+
+.dot.used { background: var(--line); }
+
+form { display: flex; flex-direction: column; gap: 12px; }
+.field { display: flex; align-items: stretch; border: 2px solid var(--line); border-radius: 18px; background: var(--tint); min-width: 0; transition: border-color 0.15s, box-shadow 0.15s; }
+.field:focus-within { border-color: var(--ink); box-shadow: 0 0 0 4px var(--sun); }
+.field input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--ink); font-family: var(--mono); font-weight: 500; font-size: 26px; padding: 15px 16px; outline: none; font-variant-numeric: tabular-nums; border-radius: 18px; }
+.field input::placeholder { color: var(--muted); opacity: 0.6; }
+.unit { display: grid; place-items: center; padding-inline: 4px 16px; font-size: 14px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+button { font: inherit; cursor: pointer; touch-action: manipulation; }
+.btn { font-family: var(--display); font-weight: 800; font-size: 20px; letter-spacing: -0.01em; width: 100%; min-height: 58px; border: 0; border-radius: 18px; padding: 12px 18px; background: var(--sun); color: var(--on-sun); box-shadow: 0 5px 0 var(--sun-deep); transition: transform 0.08s, box-shadow 0.08s; }
+.btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--sun-deep); }
+.link { background: none; border: 0; color: var(--muted); font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; padding: 10px; align-self: center; }
+button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.msg { font-size: 14px; font-weight: 700; color: var(--err); }
+.msg:empty { display: none; }
+.note { background: var(--tint); border-radius: 18px; padding: 14px 16px; font-size: 16px; line-height: 1.5; }
+.note b.lbl { display: block; margin-bottom: 4px; }
+.note mark, .note strong { background: var(--sun); color: var(--on-sun); padding: 0 4px; border-radius: 4px; font-weight: 700; }
+.lbl { font-family: var(--mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+
+.t-hit { --tier-bg: var(--hit-bg); --tier-fg: var(--hit-fg); }
+.t-ok { --tier-bg: var(--sun); --tier-fg: var(--on-sun); }
+.t-meh { --tier-bg: var(--meh); --tier-fg: var(--meh-fg); }
+.t-miss { --tier-bg: var(--miss-bg); --tier-fg: var(--miss-fg); }
+.react { align-self: flex-start; max-width: 100%; font-family: var(--display); font-weight: 800; font-size: 25px; line-height: 1.1; letter-spacing: -0.01em; background: var(--tier-bg); color: var(--tier-fg); padding: 9px 15px 10px; border-radius: 16px; transform: rotate(-2deg); animation: pop 0.4s cubic-bezier(.3,1.5,.5,1) 0.1s backwards; }
+
+.meter { position: relative; padding-top: 38px; }
+.track { height: 14px; border-radius: 99px; background: var(--tint); position: relative; }
+.track::before { content: ""; position: absolute; left: 50%; top: -6px; bottom: -6px; width: 4px; margin-left: -2px; border-radius: 2px; background: var(--ink); }
+.pin { position: absolute; top: 0; bottom: 0; left: 50%; width: 0; transition: left 0.8s cubic-bezier(.2,.8,.2,1); }
+.pin .bubble { position: absolute; top: 0; left: 0; transform: translateX(-50%); transition: transform 0.8s cubic-bezier(.2,.8,.2,1); background: var(--ink); color: var(--card); font-family: var(--mono); font-size: 13px; font-weight: 500; padding: 3px 9px; border-radius: 9px; white-space: nowrap; }
+.pin .knob { position: absolute; bottom: -4px; left: -11px; width: 22px; height: 22px; border-radius: 50%; background: var(--tier-bg); border: 4px solid var(--card); box-shadow: 0 0 0 2px var(--ink); }
+.ends { display: flex; justify-content: space-between; margin-top: 10px; }
+
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.vs div { min-width: 0; background: var(--tint); border-radius: 16px; padding: 10px 14px; }
+.vs dd { font-family: var(--display); font-weight: 800; font-size: 26px; line-height: 1.15; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.vs small { font-family: var(--body); font-size: 13px; font-weight: 600; color: var(--muted); }
+.pts { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.pts .n { font-family: var(--display); font-weight: 800; font-size: 56px; line-height: 0.9; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.pts .calc { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+
+.total { font-family: var(--display); font-weight: 800; font-size: clamp(76px, 27vw, 116px); line-height: 0.85; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.verdict { align-self: flex-start; font-family: var(--display); font-weight: 800; font-size: 22px; background: var(--sun); color: var(--on-sun); padding: 6px 13px 7px; border-radius: 14px; transform: rotate(-2deg); }
+.rows { list-style: none; padding: 0; display: flex; flex-direction: column; }
+.rows li { display: flex; align-items: center; gap: 12px; padding-block: 11px; border-top: 1px solid var(--line); }
+.rows .sq { flex: none; width: 26px; font-size: 22px; line-height: 1; text-align: center; }
+.rows .what { flex: 1; min-width: 0; font-size: 14px; font-weight: 600; line-height: 1.3; }
+.rows .what span { display: block; font-weight: 400; color: var(--muted); font-size: 13px; }
+.rows .rp { font-family: var(--display); font-weight: 800; font-size: 20px; font-variant-numeric: tabular-nums; }
+.share { font-family: var(--mono); font-size: 15px; line-height: 1.6; white-space: pre-wrap; background: var(--tint); border-radius: 16px; padding: 14px 16px; margin-top: 6px; user-select: all; -webkit-user-select: all; }
+
+.veil { position: fixed; inset: 0; z-index: 10; background: var(--veil); display: flex; align-items: flex-end; justify-content: center; padding: 16px; padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)); animation: fade 0.2s; }
+.sheet { position: relative; width: 100%; max-width: 408px; background: var(--card); border-radius: 26px; padding: 22px 20px 20px; display: flex; flex-direction: column; gap: 14px; animation: rise 0.3s cubic-bezier(.2,.8,.2,1); }
+.sheet h2 { padding-right: 48px; }
+.sheet .share { margin-top: 0; }
+.close-x { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--tint); color: var(--ink); font-size: 26px; line-height: 1; display: grid; place-items: center; }
+a.btn { display: flex; align-items: center; justify-content: center; text-decoration: none; }
+a.btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.btn.alt { background: var(--tint); color: var(--ink); box-shadow: 0 5px 0 var(--line); }
+.btn.alt:active { box-shadow: 0 1px 0 var(--line); }
+.msg.ok { color: var(--muted); text-align: center; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@media (min-width: 600px) { .veil { align-items: center; } }
+@media (prefers-reduced-motion: reduce) { .veil, .sheet { animation: none; } }
+.proto { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 10px; font-size: 12px; color: var(--bg-muted); text-align: center; }
+.picker { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.picker button { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; min-height: 36px; padding: 6px 12px; border: 0; border-radius: 99px; background: var(--chip); color: var(--on-bg); }
+.picker button[aria-pressed="true"] { background: var(--on-bg); color: var(--bg-deep); }
+.picker button:focus-visible { outline-color: var(--on-bg); }
+@media (prefers-reduced-motion: reduce) { .card.rise, .card.shake, .react { animation: none; } .pin, .pin .bubble, .btn, .pip { transition: none; } }
+/* Arcade shape: squarer corners and uppercase buttons. Kept last so it wins over the base component rules. */
+.card, .sheet { border-radius: var(--r-card); }
+:is(.btn, .field, .field input, .tile, .note, .vs div, .go, .react, .verdict, .share) { border-radius: var(--r-ui); }
+:is(.btn, .go) { text-transform: uppercase; letter-spacing: 0.05em; }
+:is(.brand, h2) { letter-spacing: 0; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <h1 class="brand">Spit<mark>ball</mark></h1>
+    <div class="date" id="dateLabel"></div>
+  </header>
+  <div class="pips" id="pips" aria-hidden="true"></div>
+  <main id="stage"></main>
+</div>
+<div class="veil" id="veil" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <button class="close-x" type="button" id="sheetClose" aria-label="Close">&times;</button>
+    <h2 id="sheetTitle">Share your score</h2>
+    <pre class="share" id="sheetText"></pre>
+    <a class="btn" id="smsBtn" href="#">Text your results</a>
+    <button class="btn alt" type="button" id="copyBtn">Copy to clipboard</button>
+    <p class="msg ok" id="sheetMsg" role="status"></p>
+  </div>
+</div>
+<script src="puzzles.js"></script>
+<script>
+// ---------- today's puzzle ----------
+// Puzzles live in puzzles.js, keyed by date (YYYY-MM-DD). Players get the puzzle for their own calendar day.
+// If today has no puzzle yet, the most recent earlier one is shown so the game is never empty.
+var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+function isoDay(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+function pickPuzzle(all, today) {
+  var days = Object.keys(all).sort(), chosen = null;
+  days.forEach(function (d) { if (d <= today) { chosen = d; } });
+  if (!chosen) { return null; }
+  var p = all[chosen], parts = chosen.split("-"), dt = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+  p.day = chosen;
+  p.date = WEEKDAYS[dt.getDay()] + ", " + MONTHS[dt.getMonth()] + " " + dt.getDate();
+  p.shortDate = MONTHS[dt.getMonth()] + " " + dt.getDate();
+  p.shareDate = MONTHS[dt.getMonth()] + "-" + dt.getDate() + "-" + String(dt.getFullYear()).slice(-2);
+  return p;
+}
+var PUZZLE = pickPuzzle(window.SPITBALL_PUZZLES || {}, isoDay(new Date()));
+var WEIGHTS = [1, 1, 2, 3, 3];           // max = 100 x 10 = 1,000
+// Reaction shown after each answer. Top and bottom tiers mix in the day's themed lines.
+var REACT = {
+  exact: ["Bullseye!", "Dead on. Unreal.", "Did you peek?"],
+  great: ["Amazing!", "Way to crush it!", "Nailed it."],
+  good: ["So close!", "Nice one.", "A solid spitball."],
+  meh: ["Not bad, not great.", "Close-ish.", "Warm, but not hot."],
+  poor: ["Oof.", "There's always tomorrow.", "Yikes.", "Let's never speak of this."]
+};
+function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
+function reaction(score) {
+  if (score === 100) { return pick(REACT.exact.concat(PUZZLE.hype)); }
+  if (score >= 90) { return pick(REACT.great.concat(PUZZLE.hype, PUZZLE.hype)); }
+  if (score >= 60) { return pick(REACT.good); }
+  if (score >= 30) { return pick(REACT.meh); }
+  return pick(REACT.poor.concat(PUZZLE.oof, PUZZLE.oof));
+}
+function tier(score) { return score >= 90 ? "hit" : score >= 60 ? "ok" : score >= 30 ? "meh" : "miss"; }
+var MAX_TOTAL = 100 * WEIGHTS.reduce(function (s, w) { return s + w; }, 0);
+
+// ---------- rebus matching: ignore case, spaces, punctuation, a leading "the", and small typos ----------
+function norm(s) {
+  return String(s).toLowerCase().normalize("NFKD").replace(/[^a-z0-9]/g, "").replace(/^the(?=.{3,})/, "");
+}
+function editDistance(a, b) {               // Damerau-Levenshtein: a swapped pair counts as one slip
+  var d = [], i, j;
+  for (i = 0; i <= a.length; i++) { d[i] = [i]; }
+  for (j = 0; j <= b.length; j++) { d[0][j] = j; }
+  for (i = 1; i <= a.length; i++) {
+    for (j = 1; j <= b.length; j++) {
+      var cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) { d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1); }
+    }
+  }
+  return d[a.length][b.length];
+}
+function rebusMatches(guess) {
+  var g = norm(guess);
+  if (!g) { return false; }
+  return PUZZLE.rebus.answers.some(function (ans) {
+    var allowed = ans.length <= 4 ? 0 : ans.length <= 8 ? 2 : 3;
+    return editDistance(g, ans) <= allowed;
+  });
+}
+
+// ---------- closeness scoring ----------
+// Bell-curve scoring around the right answer: gentle near the top, steep in the middle, long tail.
+// Every question sets a spread: how far off earns 50, sized to how widely people would guess.
+// Numbers: spread is a percent off (half and double count the same). At the standard 43, 10% off = 90.
+// Years: spread is also a percent, of how many years ago the event happened (standard 35).
+var NOW_YEAR = new Date().getFullYear();
+function ratioScore(q, g) {
+  if (q.type === "year") {
+    // Years score like other numbers: by percent off, measured against how long ago the event was.
+    // 27 years off on something 99 years ago is 27% off. Recent events are treated as at least 20 years old.
+    var age = Math.max(20, NOW_YEAR - q.a);
+    var yp = Math.abs(g - q.a) / age * 100;
+    return Math.round(100 / (1 + Math.pow(yp / (q.spread || 35), 1.5)));
+  }
+  if (g <= 0) { return 0; }
+  var pct = Math.max(g / q.a, q.a / g) - 1;
+  return Math.round(100 / (1 + Math.pow(pct * 100 / (q.spread || 43), 1.5)));
+}
+// Whole-number answers also score by how many steps away you are: 1 away = 85, 2 = 65, 3 = 45, 4 = 25.
+function stepScore(q, g) {
+  if (q.type === "year" || q.a % 1 !== 0) { return 0; }
+  return Math.max(0, Math.round(105 - 20 * Math.abs(g - q.a)));
+}
+function closeness(q, g) {
+  if (g === q.a) { return 100; }
+  return Math.min(99, Math.max(ratioScore(q, g), stepScore(q, g)));
+}
+function parseNumber(raw, q) {
+  var s = String(raw).trim().toLowerCase().replace(/[,\s$]/g, "");
+  var m = s.match(/^(-?\d*\.?\d+)(k|m|b)?$/);
+  if (!m) { return null; }
+  var n = parseFloat(m[1]) * (m[2] === "k" ? 1e3 : m[2] === "m" ? 1e6 : m[2] === "b" ? 1e9 : 1);
+  if (q.million && n >= 1e5) { n = n / 1e6; }
+  if (q.thousand && n >= 1e4) { n = n / 1e3; }    // someone typed 239,000 instead of 239
+  return isFinite(n) ? n : null;
+}
+function fmt(n, q) {
+  if (q.type === "year") { return String(Math.round(n)); }
+  return Number(n).toLocaleString("en-US", { maximumFractionDigits: 2 });
+}
+function offText(q, g) {
+  if (g === q.a) { return "Bullseye"; }
+  if (q.type === "year") {
+    var d = Math.round(Math.abs(g - q.a));
+    return d + (d === 1 ? " year " : " years ") + (g < q.a ? "early" : "late");
+  }
+  var steps = Math.abs(g - q.a);
+  if (steps % 1 === 0 && stepScore(q, g) >= ratioScore(q, g) && stepScore(q, g) > 0) {
+    return steps + (g < q.a ? " too low" : " too high");
+  }
+  var pct = steps / q.a * 100;
+  var shown = pct < 1 ? "under 1%" : pct >= 1000 ? "over 1,000%" : Math.round(pct) + "%";
+  return shown + (g < q.a ? " low" : " high");
+}
+
+// ---------- game state ----------
+var S;
+function reset() { S = { stage: "rebus", wrong: 0, solvedOn: null, gaveUp: false, msg: "", qi: 0, guesses: [], answered: false, anim: "" }; }
+var stage = document.getElementById("stage");
+var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function face(score) { return score === 100 ? "👑" : score >= 90 ? "🤏" : score >= 75 ? "👌" : score >= 60 ? "👍" : score >= 40 ? "🤷" : score >= 20 ? "🫣" : score >= 10 ? "🙈" : "💩"; }
+function total() { return S.guesses.reduce(function (s, r, i) { return s + r.score * WEIGHTS[i]; }, 0); }
+function rebusLine() {
+  if (S.solvedOn) { return "Try " + S.solvedOn; }
+  return S.gaveUp ? "Revealed" : "Not solved";
+}
+// Share result: total up top, then rebus, closeness per question with a reaction, and the date.
+function shareText() {
+  return "Spitball: " + total().toLocaleString("en-US") + "\n🧩Rebus: " + rebusLine() + "\n" +
+    S.guesses.map(function (r) { return r.score + face(r.score); }).join(" ") + "\n" + PUZZLE.shareDate;
+}
+
+// Segment widths follow the weights, so the bar itself shows which questions count most.
+function renderPips() {
+  var grow = [0.7].concat(WEIGHTS);
+  var current = S.stage === "rebus" || S.stage === "theme" ? 0 : S.stage === "done" ? 6 : S.qi + 1;
+  document.getElementById("pips").innerHTML = grow.map(function (g, i) {
+    return '<div class="pip ' + (i < current ? "done" : i === current ? "now" : "") + '" style="flex:' + g + '"></div>';
+  }).join("");
+}
+function countUp(el) {
+  var end = Number(el.getAttribute("data-count")), pre = el.getAttribute("data-pre") || "";
+  if (calm || !end) { return; }
+  var t0 = null, dur = 650;
+  function step(t) {
+    if (t0 === null) { t0 = t; }
+    var k = Math.min(1, (t - t0) / dur), eased = 1 - Math.pow(1 - k, 3);
+    el.textContent = pre + Math.round(end * eased).toLocaleString("en-US");
+    if (k < 1) { requestAnimationFrame(step); }
+  }
+  el.textContent = pre + "0";
+  requestAnimationFrame(step);
+}
+
+function triesHtml() {
+  var left = 3 - S.wrong;
+  return [0, 1, 2].map(function (i) { return '<span class="dot' + (i >= left ? " used" : "") + '"></span>'; }).join("") +
+    "<span>" + left + (left === 1 ? " try left" : " tries left") + "</span>";
+}
+// A wrong rebus guess updates the card in place, so the input keeps focus and the keyboard stays up.
+function nudgeRebus(clear) {
+  var input = document.getElementById("rebusInput"), card = stage.querySelector(".card");
+  document.getElementById("triesBox").innerHTML = triesHtml();
+  document.getElementById("hintBox").hidden = S.wrong < 2;
+  document.getElementById("rebusMsg").textContent = S.msg;
+  if (clear) { input.value = ""; }
+  card.classList.remove("rise", "shake"); void card.offsetWidth; card.classList.add("shake");
+  input.focus({ preventScroll: true });
+}
+// Tapping the inline Guess button must not steal focus from the input (that would drop the keyboard).
+stage.addEventListener("pointerdown", function (e) { if (e.target.closest(".go")) { e.preventDefault(); } });
+var lastView = "";
+function render() {
+  renderPips();
+  var h = "", open = '<section class="card ' + S.anim + '">';
+  if (S.stage === "rebus") {
+    var tiles = PUZZLE.rebus.tiles.map(function (t) {
+      return '<div class="tile' + (t.t ? " txt" : "") + '">' + (t.e || t.t) + "</div>";
+    }).join('<span class="plus">+</span>');
+    h = open +
+      '<p class="eyebrow"><span>Unlock today\'s theme</span><span class="tries" id="triesBox">' + triesHtml() + "</span></p>" +
+      '<h2 class="sm">What do the pictures say?</h2>' +
+      '<div class="rebus" id="rebusTiles" role="img" aria-label="' + PUZZLE.rebus.alt + '">' + tiles + "</div>" +
+      '<p class="note sm" id="hintBox"' + (S.wrong >= 2 ? "" : " hidden") + '><b class="lbl">Hint</b>' + PUZZLE.rebus.hint + "</p>" +
+      '<form id="rebusForm" autocomplete="off">' +
+      '<div class="field"><input id="rebusInput" type="text" placeholder="Your answer" aria-label="Your answer" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go"><button class="go" type="submit">Guess</button></div>' +
+      '<p class="msg" role="status" id="rebusMsg">' + S.msg + "</p>" +
+      '<button class="link" type="button" data-act="giveup">Give up and show me</button>' +
+      "</form></section>";
+  } else if (S.stage === "theme") {
+    var how = S.solvedOn ? (S.solvedOn === 1 ? "Solved first try" : "Solved on try " + S.solvedOn) : S.gaveUp ? "Revealed" : "Out of tries";
+    h = open +
+      '<p class="eyebrow"><span>Today\'s theme</span><span>' + how + "</span></p>" +
+      "<h2>" + PUZZLE.theme + "</h2>" +
+      '<p class="note"><b class="lbl">The pictures said: ' + PUZZLE.rebus.display + "</b>" + PUZZLE.snippet + "</p>" +
+      '<p class="muted">Up next: five questions, each answered with a number. The closer you land, the more you score. They get harder, and the later ones count for more.</p>' +
+      '<button class="btn" type="button" data-act="start">Start the questions</button>' +
+      "</section>";
+  } else if (S.stage === "q") {
+    var q = PUZZLE.questions[S.qi], w = WEIGHTS[S.qi];
+    var r = S.guesses[S.qi];
+    h = '<section class="card ' + S.anim + (S.answered ? " t-" + tier(r.score) : "") + '">' +
+      '<p class="eyebrow"><span>' + (S.qi + 1) + " of 5 · " + q.level + '</span><span class="x">' + (w === 1 ? "100 pts" : "×" + w + " · " + (100 * w) + " pts") + "</span></p>" +
+      "<h2>" + q.q + "</h2>";
+    if (!S.answered) {
+      h += '<form id="numForm" autocomplete="off">' +
+        '<div class="field"><input id="numInput" type="text" inputmode="decimal" placeholder="0" aria-label="Your number" enterkeyhint="go"><span class="unit">' + q.unit + "</span></div>" +
+        '<p class="msg" role="status">' + S.msg + "</p>" +
+        '<button class="btn" type="submit">Lock it in</button></form>';
+    } else {
+      var unitLabel = q.type === "year" ? "" : " <small>" + q.unit + "</small>";
+      h += '<p class="react">' + r.react + "</p>" +
+        '<div><div class="meter"><div class="track"></div><div class="pin" id="pin"><span class="bubble">' + fmt(r.g, q) + '</span><span class="knob"></span></div></div>' +
+        '<div class="ends lbl"><span>Too low</span><span>Answer</span><span>Too high</span></div></div>' +
+        '<dl class="vs"><div><dt class="lbl">You said</dt><dd>' + fmt(r.g, q) + unitLabel + '</dd></div><div><dt class="lbl">Answer</dt><dd>' + fmt(q.a, q) + unitLabel + "</dd></div></dl>" +
+        '<p class="note"><b class="lbl">Fun fact · ' + offText(q, r.g) + "</b>" + q.fact + "</p>" +
+        '<div class="pts"><span class="n" data-count="' + (r.score * w) + '" data-pre="+">+' + (r.score * w) + '</span><span class="calc">' + r.score + " closeness" + (w > 1 ? " × " + w : "") + "</span></div>" +
+        '<button class="btn" type="button" data-act="next">' + (S.qi === 4 ? "See my score" : "Next question") + "</button>";
+    }
+    h += "</section>";
+  } else {
+    var t = total();
+    var label = t >= 900 ? "Certified know-it-all" : t >= 700 ? "Sharp as a tack" : t >= 400 ? "Getting warmer" : "Tomorrow is a new day";
+    var rows = PUZZLE.questions.map(function (q, i) {
+      var g = S.guesses[i];
+      return '<li class="t-' + tier(g.score) + '"><span class="sq">' + face(g.score) + '</span><div class="what">' + q.q + "<span>You said " + fmt(g.g, q) + " · Answer " + fmt(q.a, q) + '</span></div><span class="rp">+' + (g.score * WEIGHTS[i]) + "</span></li>";
+    }).join("");
+    h = open +
+      '<p class="eyebrow"><span>' + PUZZLE.theme + " · " + PUZZLE.shortDate + "</span></p>" +
+      '<div class="total" data-count="' + t + '">' + t.toLocaleString("en-US") + "</div>" +
+      '<p class="verdict">' + label + "</p>" +
+      '<ul class="rows">' + rows + "</ul>" +
+      '<button class="btn" type="button" data-act="share" id="shareBtn">Share my result</button>' +
+      "</section>";
+  }
+  stage.innerHTML = h;
+  S.anim = "";
+
+  var view = S.stage + S.qi + S.answered;
+  var willType = S.touched && (S.stage === "rebus" || (S.stage === "q" && !S.answered));
+  if (S.touched && view !== lastView && !willType) {
+    try { window.scrollTo({ top: 0, behavior: calm ? "auto" : "smooth" }); } catch (err) { window.scrollTo(0, 0); }
+  }
+  lastView = view;
+  var focusEl = document.getElementById("rebusInput") || document.getElementById("numInput");
+  if (focusEl && S.touched) { focusEl.focus({ preventScroll: true }); }
+  var pin = document.getElementById("pin");
+  if (pin) {
+    var q2 = PUZZLE.questions[S.qi], gg = S.guesses[S.qi];
+    // Only a true 0 touches the end. Any score above 0 stops at least a marker's width short of it.
+    var reach = gg.score === 0 ? 50 : (1 - gg.score / 100) * 43;
+    var pos = 50 + (gg.g < q2.a ? -1 : 1) * reach;
+    var bubble = pin.querySelector(".bubble");
+    requestAnimationFrame(function () { requestAnimationFrame(function () {
+      pin.style.left = pos + "%";
+      bubble.style.transform = "translateX(-" + pos + "%)";   // slides the label so it never hangs off the card
+    }); });
+  }
+  Array.prototype.forEach.call(stage.querySelectorAll("[data-count]"), countUp);
+}
+
+stage.addEventListener("submit", function (e) {
+  e.preventDefault();
+  S.touched = true;
+  if (e.target.id === "rebusForm") {
+    var val = document.getElementById("rebusInput").value;
+    if (!norm(val)) { S.msg = "Type a guess first."; nudgeRebus(false); return; }
+    if (rebusMatches(val)) { S.solvedOn = S.wrong + 1; S.msg = ""; S.stage = "theme"; S.anim = "rise"; render(); return; }
+    S.wrong += 1;
+    if (S.wrong >= 3) { S.msg = ""; S.stage = "theme"; S.anim = "rise"; }
+    else { S.msg = S.wrong === 2 ? "Not it. Here is a hint for your last try." : "Not it. 2 tries left."; nudgeRebus(true); return; }
+    render();
+  } else if (e.target.id === "numForm") {
+    var q = PUZZLE.questions[S.qi];
+    var n = parseNumber(document.getElementById("numInput").value, q);
+    if (n === null) { S.msg = "Enter a number, like 12 or 3,500."; S.anim = "shake"; render(); return; }
+    S.msg = "";
+    var sc = closeness(q, n);
+    S.guesses[S.qi] = { g: n, score: sc, react: reaction(sc) };
+    S.answered = true;
+    if (document.activeElement && document.activeElement.blur) { document.activeElement.blur(); }
+    render();
+  }
+});
+stage.addEventListener("click", function (e) {
+  var b = e.target.closest("[data-act]");
+  if (!b) { return; }
+  S.touched = true;
+  var act = b.getAttribute("data-act");
+  if (act === "giveup") { S.gaveUp = true; S.msg = ""; S.stage = "theme"; S.anim = "rise"; render(); }
+  else if (act === "start") { S.stage = "q"; S.qi = 0; S.answered = false; S.anim = "rise"; render(); }
+  else if (act === "next") {
+    if (S.qi === 4) { S.stage = "done"; } else { S.qi += 1; S.answered = false; }
+    S.anim = "rise"; render();
+    if (S.stage === "done") { var mine = S; setTimeout(function () { if (S === mine && S.stage === "done") { openShare(); } }, calm ? 0 : 800); }
+  }
+  else if (act === "share") { openShare(); }
+});
+
+// ---------- share popup ----------
+var veil = document.getElementById("veil"), sheetMsg = document.getElementById("sheetMsg");
+function openShare() {
+  var text = shareText();
+  document.getElementById("sheetText").textContent = text;
+  document.getElementById("smsBtn").href = "sms:?&body=" + encodeURIComponent(text);
+  sheetMsg.textContent = "";
+  veil.hidden = false;
+  document.getElementById("sheetClose").focus({ preventScroll: true });
+}
+function closeShare() { veil.hidden = true; }
+document.getElementById("sheetClose").addEventListener("click", closeShare);
+veil.addEventListener("click", function (e) { if (e.target === veil) { closeShare(); } });
+document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !veil.hidden) { closeShare(); } });
+// The text link can be blocked (for example inside a preview frame) and the page cannot tell, so copy as a backup.
+document.getElementById("smsBtn").addEventListener("click", function () {
+  var note = function () { sheetMsg.textContent = "If Messages did not open, your result is copied. Paste it into a text."; };
+  try { navigator.clipboard.writeText(shareText()).then(note, function () {}); } catch (err) {}
+});
+document.getElementById("copyBtn").addEventListener("click", function () {
+  var ok = function () { sheetMsg.textContent = "Copied. Paste it anywhere."; };
+  var no = function () { selectShare(); sheetMsg.textContent = "Could not copy automatically. The text is selected, so copy it from there."; };
+  try { navigator.clipboard.writeText(shareText()).then(ok, no); } catch (err) { no(); }
+});
+function selectShare() {
+  var box = document.getElementById("sheetText"), range = document.createRange();
+  range.selectNodeContents(box);
+  var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+}
+
+if (PUZZLE) {
+  document.getElementById("dateLabel").textContent = PUZZLE.date;
+  reset();
+  render();
+} else {
+  document.getElementById("dateLabel").hidden = true;
+  stage.innerHTML = '<section class="card"><p class="eyebrow"><span>Coming soon</span></p><h2>The first puzzle is not out yet.</h2><p class="muted">Check back tomorrow.</p></section>';
+}
+</script>
+</body>
+</html>
