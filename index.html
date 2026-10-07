@@ -384,17 +384,18 @@ function rebusLine() {
   if (S.solvedOn) { return "Try " + S.solvedOn; }
   return S.gaveUp ? "Revealed" : "Not solved";
 }
-// Share result: total up top, then rebus, closeness per question with a reaction, the date, and the game's address
-// on its own line so phones turn it into a tappable link.
+// Share result: the game's address and the total up top (phones turn the address into a tappable link), then rebus,
+// closeness per question with a reaction, and the date.
 // Text messages cannot carry real bold, so the score uses Unicode bold digits, which show as bold on iPhone and Android.
 function boldDigits(str) {
   return String(str).replace(/[0-9]/g, function (d) { return String.fromCodePoint(0x1D7EC + Number(d)); });
 }
-// The result starts with an invisible zero-width space. Without it the text begins "Spitball:", which iPhones read
-// as a web address (like "https:") and then paste with every space and emoji turned into %20-style codes.
+// The result starts with an invisible zero-width space. Without it the text begins with a word and a colon
+// ("spitball.uk:"), which iPhones read as a web address (like "https:") and then paste with every space and emoji
+// turned into %20-style codes.
 function shareText() {
-  return "\u200BSpitball: " + boldDigits(total().toLocaleString("en-US")) + "\n🧩Rebus: " + rebusLine() + "\n" +
-    S.guesses.map(function (r) { return r.score + face(r.score); }).join(" ") + "\n" + PUZZLE.shareDate + "\nspitball.uk";
+  return "\u200Bspitball.uk: " + boldDigits(total().toLocaleString("en-US")) + "\n🧩Rebus: " + rebusLine() + "\n" +
+    S.guesses.map(function (r) { return r.score + face(r.score); }).join(" ") + "\n" + PUZZLE.shareDate;
 }
 
 // Segment widths follow the weights, so the bar itself shows which questions count most.

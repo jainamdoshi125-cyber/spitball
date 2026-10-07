@@ -84,16 +84,15 @@ Jai's preferences on scoring: avoid giving 0 unless a guess is far off, and do n
 The shared text is exactly this shape:
 
 ```
-Spitball: 421
+spitball.uk: 421
 🧩Rebus: Try 2
 100👑 12🙈 87👌 45🤷 0💩
 Oct-6-26
-spitball.uk
 ```
 
-- The last line is the game's address on its own line, so phones make it a tappable link.
+- The first line starts with the game's address (`spitball.uk`, lowercase) in place of the name, so phones make it a tappable link. Jai chose this over a separate address line.
 - The score digits are Unicode bold digits, because text messages cannot carry real bold.
-- The text starts with an invisible zero-width space. Without it, iPhones read "Spitball:" as a web address and paste the result percent-encoded. Do not remove it.
+- The text starts with an invisible zero-width space. Without it, iPhones read the opening word and colon as a web address and paste the result percent-encoded. Do not remove it.
 - Emoji by closeness: 100 👑, 90+ 🤏, 75+ 👌, 60+ 👍, 40+ 🤷, 20+ 🫣, 10+ 🙈, under 10 💩.
 - "Share Your Results" is a plain `sms:` link with no script attached. Keep it that way.
 
