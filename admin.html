@@ -121,6 +121,11 @@ td .tag { font-family: var(--mono); font-size: 10px; text-transform: uppercase; 
 
   <p class="muted" id="status" role="status"></p>
   <main id="dash" hidden></main>
+  <section class="card plain" id="deviceCard" hidden>
+    <h2>This device</h2>
+    <p class="muted" id="deviceNote"></p>
+    <button class="pill" type="button" id="deviceBtn" style="align-self:flex-start"></button>
+  </section>
 </div>
 
 <script src="puzzles.js"></script>
@@ -169,13 +174,48 @@ function freshSession() {
   if (Date.now() < session.until) { return Promise.resolve(); }
   return auth("refresh_token", { refresh_token: session.refresh });
 }
-function api(path, extra) {
+function api(path, extra, method, body) {
   var headers = { "apikey": KEY, "Authorization": "Bearer " + session.access };
   Object.keys(extra || {}).forEach(function (k) { headers[k] = extra[k]; });
-  return fetch(BASE + "/rest/v1/" + path, { headers: headers }).then(function (res) {
+  var opts = { headers: headers, method: method || "GET" };
+  if (body) { headers["Content-Type"] = "application/json"; opts.body = JSON.stringify(body); }
+  return fetch(BASE + "/rest/v1/" + path, opts).then(function (res) {
     if (!res.ok) { throw new Error("The database said no (" + res.status + ")."); }
-    return res.json();
+    return opts.method === "GET" ? res.json() : null;
   });
+}
+// ---------- leaving your own devices out ----------
+// Signing in here marks this browser as yours: the game stops reporting from it, and the rounds it already sent
+// are left out of every number on this page. The list of left-out devices lives in the database, so it applies
+// whichever device you open this page on. The button at the bottom of the page switches it back.
+var IGNORED = {}, HIDDEN = 0;
+function keep(key, value) {
+  try { if (arguments.length === 1) { return localStorage.getItem(key); } localStorage.setItem(key, value); } catch (err) {}
+  return null;
+}
+function myDevice() { var id = keep("spitball.device"); return /^[0-9a-f-]{36}$/.test(id || "") ? id : null; }
+function syncDevice() {
+  var counted = keep("spitball.notrack") === "0", id = myDevice(), job = Promise.resolve();
+  if (!counted) {
+    keep("spitball.notrack", "1");
+    if (id) { job = api("ignored_devices?on_conflict=device_id", { "Prefer": "resolution=ignore-duplicates" }, "POST", { device_id: id }); }
+  } else if (id) {
+    job = api("ignored_devices?device_id=eq." + id, null, "DELETE");
+  }
+  return job.catch(function () {}).then(function () { return api("ignored_devices?select=device_id"); }).catch(function () { return []; }).then(function (rows) {
+    IGNORED = {};
+    rows.forEach(function (r) { IGNORED[r.device_id] = true; });
+  });
+}
+function drawDevice() {
+  var counted = keep("spitball.notrack") === "0";
+  $("deviceCard").hidden = false;
+  $("deviceNote").textContent = (counted
+    ? "Rounds played in this browser count in the numbers, like anyone else's."
+    : "Rounds played in this browser are not counted. The game does not report them, and any it sent earlier are left out.") +
+    " This applies to this browser on this web address only, so sign in here once on each device you test with." +
+    (HIDDEN ? " Left out right now: " + num(HIDDEN) + (HIDDEN === 1 ? " round" : " rounds") + " from your own devices." : "");
+  $("deviceBtn").textContent = counted ? "Stop counting this device" : "Count this device";
 }
 function fetchRounds() {            // the database hands back at most 1,000 rows at a time, so ask page by page
   var all = [], size = 1000;
@@ -188,20 +228,22 @@ function fetchRounds() {            // the database hands back at most 1,000 row
   return page(0);
 }
 function showLogin(message) {
-  $("loginCard").hidden = false; $("dash").hidden = true; $("tools").hidden = true; $("status").textContent = "";
+  $("loginCard").hidden = false; $("dash").hidden = true; $("tools").hidden = true; $("deviceCard").hidden = true; $("status").textContent = "";
   $("loginMsg").textContent = message || "";
 }
 function load() {
   $("loginCard").hidden = true; $("status").textContent = "Loading the numbers...";
   return freshSession().then(function () { return api("admins?select=user_id"); }).then(function (mine) {
     if (!mine.length) { saveSession(null); showLogin("That login works, but it is not on the admin list."); return null; }
-    return fetchRounds();
+    return syncDevice().then(fetchRounds);
   }).then(function (rows) {
     if (!rows) { return; }
-    ROUNDS = rows;
+    ROUNDS = rows.filter(function (r) { return !IGNORED[r.device_id]; });
+    HIDDEN = rows.length - ROUNDS.length;
     $("tools").hidden = false; $("dash").hidden = false;
     $("status").textContent = "";
     draw();
+    drawDevice();
   }).catch(function (err) {
     if (err.message === "signed out") { showLogin(""); return; }
     if (/refresh|token|JWT|sign in/i.test(err.message)) { saveSession(null); showLogin("Please sign in again."); return; }
@@ -219,6 +261,7 @@ $("loginForm").addEventListener("submit", function (e) {
 });
 $("outBtn").addEventListener("click", function () { saveSession(null); ROUNDS = []; $("dash").innerHTML = ""; showLogin(""); });
 $("refreshBtn").addEventListener("click", load);
+$("deviceBtn").addEventListener("click", function () { keep("spitball.notrack", keep("spitball.notrack") === "0" ? "1" : "0"); load(); });
 
 // ---------- adding it up ----------
 // A "player" is one device on one puzzle day. If the same device opened the game more than once that day,

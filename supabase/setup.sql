@@ -128,3 +128,18 @@ $$;
 
 revoke all on function public.log_round(jsonb) from public;
 grant execute on function public.log_round(jsonb) to anon, authenticated;
+
+-- Devices to leave out of the numbers (Jai's own phones and computers). The admin page adds the browser it is
+-- opened in, and filters these devices out of every chart. Only admins can see or change this list.
+create table if not exists public.ignored_devices (
+  device_id uuid primary key,
+  added_at  timestamptz not null default now()
+);
+alter table public.ignored_devices enable row level security;
+revoke all on public.ignored_devices from anon, authenticated;
+grant select, insert, delete on public.ignored_devices to authenticated;
+drop policy if exists "admins manage ignored devices" on public.ignored_devices;
+create policy "admins manage ignored devices" on public.ignored_devices
+  for all to authenticated
+  using (exists (select 1 from public.admins a where a.user_id = (select auth.uid())))
+  with check (exists (select 1 from public.admins a where a.user_id = (select auth.uid())));

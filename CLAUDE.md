@@ -31,6 +31,7 @@ The game sends one anonymous record per round to a small Supabase database (free
 - The game sends the whole round so far after each step, and the database keeps the fullest version. Every send is fire-and-forget: if it fails, the game carries on.
 - A device's second round on the same day is marked `replay` once it has seen the theme screen. The admin page leaves replays out of guesses, scores and rebus answers, because the player already knows the answers.
 - Copies opened on `localhost` do not report, so test runs stay out of the numbers.
+- Jai's own devices are left out. Signing in on the admin page marks that browser (`spitball.notrack` in its storage), so the game stops reporting from it, and adds its device ID to the `ignored_devices` table, so rounds it already sent are filtered out of every chart. This is per browser and per web address. A button at the bottom of the admin page switches it back.
 - The admin page downloads every round and adds the numbers up in the browser. That is fine for thousands of rounds. If the game grows far past that, move the adding-up into the database.
 - "Share Your Results" (the text message button) is tracked by a listener on the page as a whole, not on the link, so the link stays a plain `sms:` link.
 - Supabase pauses a free project after about a week with no activity.

@@ -350,6 +350,7 @@ function saveDayNote(change) {
 function trackStart() {
   var host = window.location.hostname;
   if (!host || host === "localhost" || host === "127.0.0.1") { return; }   // test copies do not report
+  if (saved("spitball.notrack") === "1") { return; }   // Jai's own devices: set by signing in on the admin page
   var device = saved("spitball.device");
   if (!/^[0-9a-f-]{36}$/.test(device || "")) { device = randomId(); saved("spitball.device", device); }
   var before = dayNotes()[PUZZLE.day] || { n: 0, seen: false };
