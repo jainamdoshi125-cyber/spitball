@@ -47,7 +47,7 @@ window.SPITBALL_PUZZLES = {
         fact: "October 7, 1959. Luna 3 developed its own film on board, then scanned the pictures and radioed them home. 📸" },
       { level: "Medium-hard", q: "On average, how far away is the Moon, in miles?", a: 238855, type: "ratio", spread: 100, unit: "miles",
         fact: "About 238,855 miles. You could line up 30 Earths in the gap. 🌍" },
-      { level: "Hard", q: "Earth has one moon. How many does Saturn have?", a: 293, type: "ratio", spread: 90, unit: "moons",
+      { level: "Hard", q: "Earth has one moon. How many does Saturn have?", a: 293, type: "ratio", by: "distance", spread: 68, unit: "moons",
         fact: "293 confirmed, more than every other planet combined. Astronomers keep finding more, so the count keeps climbing. 🪐" }
     ]
   }

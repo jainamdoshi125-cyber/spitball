@@ -265,6 +265,12 @@ function ratioScore(q, g) {
     var yp = Math.abs(g - q.a) / age * 100;
     return Math.round(100 / (1 + Math.pow(yp / (q.spread || 35), 1.5)));
   }
+  if (q.by === "distance") {
+    // One-off for answers far bigger than anyone expects: score by plain distance from the answer
+    // (as a percent of it) rather than by how many times off. A guess of 60 then beats a guess of 1,000 on 293.
+    if (g < 0) { return 0; }
+    return Math.round(100 / (1 + Math.pow(Math.abs(g - q.a) / q.a * 100 / (q.spread || 43), 1.5)));
+  }
   if (g <= 0) { return 0; }
   var pct = Math.max(g / q.a, q.a / g) - 1;
   return Math.round(100 / (1 + Math.pow(pct * 100 / (q.spread || 43), 1.5)));

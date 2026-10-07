@@ -284,6 +284,7 @@ function byDay(rows) {
 }
 function percentOff(q, g) {        // the same measure the game scores on
   if (q.type === "year") { return Math.abs(g - q.a) / Math.max(20, new Date().getFullYear() - q.a) * 100; }
+  if (q.by === "distance") { return Math.abs(g - q.a) / q.a * 100; }
   if (g <= 0) { return Infinity; }
   return (Math.max(g / q.a, q.a / g) - 1) * 100;
 }
