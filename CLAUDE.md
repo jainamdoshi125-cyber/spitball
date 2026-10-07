@@ -132,6 +132,7 @@ Do not make the rebus screen smaller to solve keyboard problems. Jai likes its c
    - drop-off: opened, solved the rebus, finished all five, shared
    - share rate, split by text and copy
    - returning players day over day
+   - how many different days each player has played so far (added at Jai's request, next to returning players)
    - the spread of total scores
 2. **Custom domain.** Jai will buy one. Attach it in Vercel, then add the address as its own line in the shared text so it becomes a tappable link.
 3. **Saved results and streaks.** One play per day, saved on the device first, accounts later if needed.

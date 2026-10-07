@@ -276,11 +276,18 @@ function draw() {
   var recent = dayKeys.slice(-30);
 
   // Across all days
-  var seenBefore = {}, perDay = dayKeys.map(function (k) {
+  var seenBefore = {}, daysPlayed = {}, perDay = dayKeys.map(function (k) {
     var ids = Object.keys(days[k].players), back = ids.filter(function (id) { return seenBefore[id]; }).length;
-    ids.forEach(function (id) { seenBefore[id] = true; });
+    ids.forEach(function (id) { seenBefore[id] = true; daysPlayed[id] = (daysPlayed[id] || 0) + 1; });
     return { day: k, players: ids.length, back: back };
   }).slice(-30);
+  // How many different days each device has played so far, capped at "10+" so the chart stays readable.
+  var counts = Object.keys(daysPlayed).map(function (id) { return daysPlayed[id]; });
+  var cameBack = counts.filter(function (n) { return n > 1; });
+  var top = Math.min(10, Math.max(3, Math.max.apply(null, counts))), tally = [];
+  for (var n = 1; n <= top; n++) { tally.push(0); }
+  counts.forEach(function (n) { tally[Math.min(n, top) - 1] += 1; });
+  var plus = top === 10 && Math.max.apply(null, counts) > 10;
   var hours = []; for (var h = 0; h < 24; h++) { hours.push(0); }
   dayKeys.forEach(function (k) { Object.keys(days[k].players).forEach(function (id) { var hr = days[k].players[id].hour; if (hr >= 0 && hr < 24) { hours[hr] += 1; } }); });
 
@@ -290,8 +297,11 @@ function draw() {
     bars("cPlayers", perDay.map(function (d) { return { label: dayLabel(d.day), value: d.players, tip: dayLabel(d.day) + ": " + num(d.players) + (d.players === 1 ? " player" : " players") }; }), { y: "Players", every: every }) + "</section>" +
     '<div class="grid2"><section class="card plain"><h2>Returning players</h2><p class="muted">Players that day who had also played on an earlier day.</p>' +
     bars("cBack", perDay.map(function (d) { return { label: dayLabel(d.day), value: d.back, tip: dayLabel(d.day) + ": " + num(d.back) + " of " + num(d.players) + " came back (" + pct(d.back, d.players) + ")" }; }), { y: "Returning players", every: every }) + "</section>" +
+    '<section class="card plain"><h2>Days played so far</h2><p class="muted">' + num(cameBack.length) + " of " + num(counts.length) + " players (" + pct(cameBack.length, counts.length) + ") have come back at least once." +
+    (cameBack.length ? " The typical returning player has played on " + num(median(cameBack), 1) + " days. The most is " + num(Math.max.apply(null, cameBack)) + "." : "") + "</p>" +
+    bars("cDays", tally.map(function (v, i) { var d = i + 1, last = plus && d === top; return { label: d + (last ? "+" : ""), value: v, tip: num(v) + (v === 1 ? " player has" : " players have") + " played on " + (last ? "10 or more days" : d === 1 ? "1 day only" : d + " different days") }; }), { y: "Players, by number of days played" }) + "</section></div>" +
     '<section class="card plain"><h2>Hour of day played</h2><p class="muted">On each player\'s own clock, all days together.</p>' +
-    bars("cHours", hours.map(function (n, i) { return { label: hourLabel(i).replace(" ", "").toLowerCase().replace("m", ""), value: n, tip: hourLabel(i) + ": " + num(n) + (n === 1 ? " player" : " players") }; }), { y: "Players", every: 3 }) + "</section></div>";
+    bars("cHours", hours.map(function (n, i) { return { label: hourLabel(i).replace(" ", "").toLowerCase().replace("m", ""), value: n, tip: hourLabel(i) + ": " + num(n) + (n === 1 ? " player" : " players") }; }), { y: "Players", every: 3 }) + "</section>";
 
   // One day
   var D = days[pickedDay], P = PUZZLES[pickedDay], ids = Object.keys(D.players), list = ids.map(function (id) { return D.players[id]; });
