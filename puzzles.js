@@ -25,5 +25,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "The longest train ever run was a record-setting freight train in Australia. How many cars did it have?", a: 682, type: "ratio", spread: 90, unit: "cars",
         fact: "682 cars of iron ore, pulled by eight locomotives. End to end, it stretched about four and a half miles. 🚃" }
     ]
+  },
+  "2026-10-07": {
+    rebus: {
+      tiles: [{ e: "🌙" }, { e: "🥃" }],
+      alt: "Rebus: a crescent moon, plus a small glass of liquor",
+      answers: ["moonshot", "moonshots", "moonshine", "moonshooter", "lunarshot"],
+      display: "Moon Shot",
+      hint: "Two words. The first is up in the night sky. The second is a small drink you knock back in one go."
+    },
+    theme: "The Moon",
+    hype: ["Over the moon!", "One giant leap!", "Houston, we have a winner."],
+    oof: ["Houston, we have a problem.", "Lost in space.", "Failure to launch."],
+    snippet: "On this day, the Soviet probe <strong>Luna 3</strong> pulled off a true moon shot. It swung around behind the Moon and snapped the first photos ever taken of its far side, a view no human had seen before. So today is all about the Moon.",
+    questions: [
+      { level: "Easy", q: "How many people have walked on the Moon?", a: 12, type: "ratio", spread: 40, unit: "people",
+        fact: "Twelve, all between 1969 and 1972. Nobody has been back since. 👨‍🚀" },
+      { level: "Easy-medium", q: "How many days does the Moon take to circle the Earth once?", a: 27, type: "ratio", spread: 40, unit: "days",
+        fact: "About 27 days. Full moon to full moon takes closer to 29, because the Earth is moving too. 🌕" },
+      { level: "Medium", q: "In what year were the first photos of the far side of the Moon taken?", a: 1959, type: "year", spread: 35, unit: "year",
+        fact: "October 7, 1959. Luna 3 developed its own film on board, then scanned the pictures and radioed them home. 📸" },
+      { level: "Medium-hard", q: "On average, how far away is the Moon, in miles?", a: 238855, type: "ratio", spread: 100, unit: "miles",
+        fact: "About 238,855 miles. You could line up 30 Earths in the gap. 🌍" },
+      { level: "Hard", q: "Earth has one moon. How many does Saturn have?", a: 293, type: "ratio", spread: 90, unit: "moons",
+        fact: "293 confirmed, more than every other planet combined. Astronomers keep finding more, so the count keeps climbing. 🪐" }
+    ]
   }
 };
