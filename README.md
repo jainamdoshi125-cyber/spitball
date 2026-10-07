@@ -7,7 +7,7 @@ A daily guessing game. Solve the picture rebus to unlock the day's theme, then a
 - `index.html` is the whole game: layout, styling, scoring and the share popup.
 - `puzzles.js` holds the puzzles, one per day, keyed by date (`YYYY-MM-DD`).
 
-Players get the puzzle for their own calendar day. If a day has no puzzle, the most recent earlier one is shown.
+The puzzle changes for everyone at 12:01 AM Eastern time. If a day has no puzzle, the most recent earlier one is shown.
 
 ## Adding a day's puzzle
 

@@ -175,8 +175,8 @@ a.btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 <script src="puzzles.js"></script>
 <script>
 // ---------- today's puzzle ----------
-// Puzzles live in puzzles.js, keyed by date (YYYY-MM-DD). Players get the puzzle for their own calendar day.
-// If today has no puzzle yet, the most recent earlier one is shown so the game is never empty.
+// Puzzles live in puzzles.js, keyed by date (YYYY-MM-DD). Everyone gets the new puzzle at the same moment:
+// 12:01 AM Eastern time, wherever they are. If that day has no puzzle yet, the most recent earlier one is shown.
 var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 var WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 function isoDay(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
@@ -191,7 +191,18 @@ function pickPuzzle(all, today) {
   p.shareDate = MONTHS[dt.getMonth()] + "-" + dt.getDate() + "-" + String(dt.getFullYear()).slice(-2);
   return p;
 }
-var PUZZLE = pickPuzzle(window.SPITBALL_PUZZLES || {}, isoDay(new Date()));
+// The puzzle day in Eastern time, rolling over at 12:01 AM (one minute is subtracted before reading the date).
+function easternDay(now) {
+  var at = new Date(now.getTime() - 60000);
+  try {
+    var parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(at);
+    var got = {};
+    parts.forEach(function (x) { got[x.type] = x.value; });
+    if (got.year && got.month && got.day) { return got.year + "-" + got.month + "-" + got.day; }
+  } catch (err) {}
+  return isoDay(at);   // very old browsers: fall back to the device's own date
+}
+var PUZZLE = pickPuzzle(window.SPITBALL_PUZZLES || {}, easternDay(new Date()));
 var WEIGHTS = [1, 1, 2, 3, 3];           // max = 100 x 10 = 1,000
 // Reaction shown after each answer. Top and bottom tiers mix in the day's themed lines.
 var REACT = {
