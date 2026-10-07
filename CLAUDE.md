@@ -78,6 +78,10 @@ Each question gives a closeness score from 0 to 100. An exact answer is 100, and
 
 Jai's preferences on scoring: avoid giving 0 unless a guess is far off, and do not make scoring so generous that everyone lands in the same range.
 
+## How to play popup
+
+A browser that has never played sees a "How to play" popup once, over the rebus screen. It has three short points (the theme comes from today's date, the picture puzzle is just for fun, then five number questions where closer scores more), a "Let's go!" button and a close button. Closing it either way saves `spitball.howto` on the device so it never shows again. Browsers that already have a saved device ID or a round in progress are treated as returning players and never see it.
+
 ## Result screens and sharing
 
 - After each answer: a themed reaction line, a bar showing where the guess landed, "You said" and "Answer", a fun fact, and the points. Only a true 0 touches the end of the bar.

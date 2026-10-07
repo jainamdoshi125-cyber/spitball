@@ -136,6 +136,12 @@ button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 .close-x { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--tint); color: var(--ink); font-size: 26px; line-height: 1; display: grid; place-items: center; }
 a.btn { display: flex; align-items: center; justify-content: center; text-decoration: none; }
 a.btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+#howSheet:focus { outline: none; }
+.how { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.how li { display: flex; align-items: flex-start; gap: 12px; background: var(--tint); border-radius: var(--r-ui); padding: 12px 14px; }
+.how li span { flex: none; font-size: 24px; line-height: 1.2; }
+.how li p { font-size: 16px; line-height: 1.4; }
+.how b { color: var(--sun); font-weight: 700; }
 .btn.alt { background: var(--tint); color: var(--ink); box-shadow: 0 5px 0 var(--line); }
 .btn.alt:active { box-shadow: 0 1px 0 var(--line); }
 .msg.ok { color: var(--muted); text-align: center; }
@@ -172,6 +178,18 @@ a.btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
     <a class="btn" id="smsBtn" href="#">Share Your Results</a>
     <button class="btn alt" type="button" id="copyBtn">Copy to clipboard</button>
     <p class="msg ok" id="sheetMsg" role="status"></p>
+  </div>
+</div>
+<div class="veil" id="howVeil" hidden>
+  <div class="sheet" id="howSheet" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="howTitle">
+    <button class="close-x" type="button" id="howClose" aria-label="Close">&times;</button>
+    <h2 id="howTitle">How to play</h2>
+    <ul class="how">
+      <li><span aria-hidden="true">💡</span><p>Every day has a <b>theme</b>, picked from something that happened on today's date.</p></li>
+      <li><span aria-hidden="true">🧩</span><p>Crack the <b>picture puzzle</b> to unlock it. That part is just for fun, no points.</p></li>
+      <li><span aria-hidden="true">🎯</span><p>Then answer <b>5 trivia questions</b> on the theme. Every answer is a number, and the closer you land, the more you score.</p></li>
+    </ul>
+    <button class="btn" type="button" id="howGo">Let's go!</button>
   </div>
 </div>
 <script src="puzzles.js"></script>
@@ -679,6 +697,20 @@ function selectShare() {
   var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
 }
 
+// ---------- how to play, shown once to a new player ----------
+// A new player is a browser that has never closed this popup and has never played before (no saved device ID).
+var howVeil = document.getElementById("howVeil");
+function closeHow() { howVeil.hidden = true; saved("spitball.howto", "1"); }
+function maybeShowHow() {
+  if (saved("spitball.howto") === "1" || saved("spitball.device")) { return; }
+  howVeil.hidden = false;
+  document.getElementById("howSheet").focus({ preventScroll: true });
+}
+document.getElementById("howGo").addEventListener("click", closeHow);
+document.getElementById("howClose").addEventListener("click", closeHow);
+howVeil.addEventListener("click", function (e) { if (e.target === howVeil) { closeHow(); } });
+document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !howVeil.hidden) { closeHow(); } });
+
 if (PUZZLE) {
   document.getElementById("dateLabel").textContent = PUZZLE.date;
   var back = loadProgress();
@@ -690,6 +722,7 @@ if (PUZZLE) {
   } else {
     reset();
     render();
+    maybeShowHow();     // must run before trackStart, which saves the device ID
     trackStart();
   }
 } else {
