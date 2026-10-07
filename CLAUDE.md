@@ -17,8 +17,22 @@ Pushing to `main` publishes to both addresses automatically within a minute or t
 - `index.html`: the whole game. Layout, styling, scoring, share popup and keyboard handling are all in this one file.
 - `puzzles.js`: the puzzles, one per day, keyed by date (`YYYY-MM-DD`).
 - `README.md`: how to add a puzzle and the writing rules.
+- `admin.html`: the private admin page with the analytics charts. It lives at `/admin.html` on the live site and needs the admin login.
+- `supabase/setup.sql`: the database setup (tables, locks and the one function the game calls). Safe to run again.
 
-There is no backend yet. Nothing a player does is saved anywhere.
+## Analytics
+
+The game sends one anonymous record per round to a small Supabase database (free plan, project `ynvrlordngosyrxebsqr`, owned by Jai). There is no login for players and no name: just a random ID saved on the device.
+
+- The game's public key (in `index.html` and `admin.html`) can only call `log_round`, which adds or updates one round. It cannot read anything. It is meant to be public.
+- Reading the data needs a Supabase login that is listed in the `admins` table. Jai's login is the only one.
+- Never put the database password or a secret key in this repository. It is public.
+- The game sends the whole round so far after each step, and the database keeps the fullest version. Every send is fire-and-forget: if it fails, the game carries on.
+- A device's second round on the same day is marked `replay` once it has seen the theme screen. The admin page leaves replays out of guesses, scores and rebus answers, because the player already knows the answers.
+- Copies opened on `localhost` do not report, so test runs stay out of the numbers.
+- The admin page downloads every round and adds the numbers up in the browser. That is fine for thousands of rounds. If the game grows far past that, move the adding-up into the database.
+- "Text your results" is tracked by a listener on the page as a whole, not on the link, so the link stays a plain `sms:` link.
+- Supabase pauses a free project after about a week with no activity.
 
 ## How a day works
 
@@ -108,7 +122,7 @@ Do not make the rebus screen smaller to solve keyboard problems. Jai likes its c
 
 ## Roadmap, in Jai's order
 
-1. **Analytics and a private admin page.** Needs a small database (Supabase free tier was the suggestion; Jai creates the account). The game sends one anonymous record per round, keyed by a random ID saved on the device, with no login. Collect:
+1. **Analytics and a private admin page.** Built in October 2026 (see Analytics above). Original brief: needs a small database (Supabase free tier was the suggestion; Jai creates the account). The game sends one anonymous record per round, keyed by a random ID saved on the device, with no login. Collect:
    - daily unique players (bar per day)
    - hour of day played (bar chart: hour across the bottom, players up the side)
    - average closeness per question (five bars per day)

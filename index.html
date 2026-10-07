@@ -312,6 +312,72 @@ var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: redu
 
 function face(score) { return score === 100 ? "👑" : score >= 90 ? "🤏" : score >= 75 ? "👌" : score >= 60 ? "👍" : score >= 40 ? "🤷" : score >= 20 ? "🫣" : score >= 10 ? "🙈" : "💩"; }
 function total() { return S.guesses.reduce(function (s, r, i) { return s + r.score * WEIGHTS[i]; }, 0); }
+
+// ---------- anonymous analytics ----------
+// One record per round goes to a small database (Supabase), so the admin page can show how people play.
+// There is no login and no name: just a random ID saved on this device. Every send is fire-and-forget.
+// If a send fails for any reason, the game carries on exactly as before.
+var TRACK_URL = "https://ynvrlordngosyrxebsqr.supabase.co/rest/v1/rpc/log_round";
+var TRACK_KEY = "sb_publishable_aiC17fTnMEHssqYo7Lp6EA_5xb2cUDk";   // public by design: it can add a round and read nothing
+var T = null;
+function saved(key, value) {               // read (one argument) or write (two) device storage, never throwing
+  try {
+    if (arguments.length === 1) { return window.localStorage.getItem(key); }
+    window.localStorage.setItem(key, value);
+  } catch (err) {}
+  return null;
+}
+function randomId() {
+  try { if (window.crypto && crypto.randomUUID) { return crypto.randomUUID(); } } catch (err) {}
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    var n = Math.floor(Math.random() * 16);
+    return (c === "x" ? n : (n & 3) | 8).toString(16);
+  });
+}
+function dayNotes() {                      // what this device has done on each recent puzzle day
+  try { return JSON.parse(saved("spitball.days") || "{}") || {}; } catch (err) { return {}; }
+}
+function saveDayNote(change) {
+  var notes = dayNotes(), mine = notes[PUZZLE.day] || { n: 0, seen: false };
+  change(mine);
+  notes[PUZZLE.day] = mine;
+  Object.keys(notes).sort().slice(0, -7).forEach(function (old) { delete notes[old]; });   // keep one week
+  saved("spitball.days", JSON.stringify(notes));
+  return mine;
+}
+function trackStart() {
+  var host = window.location.hostname;
+  if (!host || host === "localhost" || host === "127.0.0.1") { return; }   // test copies do not report
+  var device = saved("spitball.device");
+  if (!/^[0-9a-f-]{36}$/.test(device || "")) { device = randomId(); saved("spitball.device", device); }
+  var before = dayNotes()[PUZZLE.day] || { n: 0, seen: false };
+  var note = saveDayNote(function (m) { m.n += 1; });
+  T = { id: randomId(), device_id: device, day: PUZZLE.day, play_number: note.n, replay: !!before.seen,
+    local_hour: new Date().getHours(), rebus_wrong: [], rebus_result: null, rebus_try: null, started: false,
+    guesses: [], scores: [], total: null, finished: false, share_opened: false, shared_text: false, shared_copy: false };
+  track();
+}
+// Sends the whole round so far. The database keeps the fullest version it has seen.
+function track(change) {
+  if (!T) { return; }
+  try {
+    if (change) { change(T); }
+    T.guesses = S.guesses.map(function (r) { return r.g; });
+    T.scores = S.guesses.map(function (r) { return r.score; });
+    T.finished = S.guesses.length === 5;
+    T.total = T.finished ? total() : null;
+    fetch(TRACK_URL, {
+      method: "POST", keepalive: true,
+      headers: { "Content-Type": "application/json", "apikey": TRACK_KEY, "Authorization": "Bearer " + TRACK_KEY },
+      body: JSON.stringify({ r: T })
+    }).catch(function () {});
+  } catch (err) {}
+}
+// Once the theme screen has been shown, any later round today on this device is a replay (the player knows the answers).
+function trackRebus(result) {
+  track(function (t) { t.rebus_result = result; t.rebus_try = S.solvedOn; });
+  if (T) { saveDayNote(function (m) { m.seen = true; }); }
+}
 function rebusLine() {
   if (S.solvedOn) { return "Try " + S.solvedOn; }
   return S.gaveUp ? "Revealed" : "Not solved";
@@ -503,9 +569,10 @@ stage.addEventListener("submit", function (e) {
   if (e.target.id === "rebusForm") {
     var val = document.getElementById("rebusInput").value;
     if (!norm(val)) { S.msg = "Type a guess first."; nudgeRebus(false); return; }
-    if (rebusMatches(val)) { S.solvedOn = S.wrong + 1; S.msg = ""; S.stage = "theme"; S.anim = "rise"; render(); return; }
+    if (rebusMatches(val)) { S.solvedOn = S.wrong + 1; S.msg = ""; S.stage = "theme"; S.anim = "rise"; trackRebus("solved"); render(); return; }
     S.wrong += 1;
-    if (S.wrong >= 3) { S.msg = ""; S.stage = "theme"; S.anim = "rise"; }
+    track(function (t) { t.rebus_wrong.push(String(val).trim().slice(0, 60)); });
+    if (S.wrong >= 3) { S.msg = ""; S.stage = "theme"; S.anim = "rise"; trackRebus("failed"); }
     else { S.msg = S.wrong === 2 ? "Not it. Here is a hint for your last try." : "Not it. 2 tries left."; nudgeRebus(true); return; }
     render();
   } else if (e.target.id === "numForm") {
@@ -516,6 +583,7 @@ stage.addEventListener("submit", function (e) {
     var sc = closeness(q, n);
     S.guesses[S.qi] = { g: n, score: sc, react: reaction(sc) };
     S.answered = true;
+    track();
     if (document.activeElement && document.activeElement.blur) { document.activeElement.blur(); }
     render();
   }
@@ -525,8 +593,8 @@ stage.addEventListener("click", function (e) {
   if (!b) { return; }
   S.touched = true;
   var act = b.getAttribute("data-act");
-  if (act === "giveup") { S.gaveUp = true; S.msg = ""; S.stage = "theme"; S.anim = "rise"; render(); }
-  else if (act === "start") { S.stage = "q"; S.qi = 0; S.answered = false; S.anim = "rise"; render(); }
+  if (act === "giveup") { S.gaveUp = true; S.msg = ""; S.stage = "theme"; S.anim = "rise"; trackRebus("revealed"); render(); }
+  else if (act === "start") { S.stage = "q"; S.qi = 0; S.answered = false; S.anim = "rise"; track(function (t) { t.started = true; }); render(); }
   else if (act === "next") {
     if (S.qi === 4) { S.stage = "done"; } else { S.qi += 1; S.answered = false; }
     S.anim = "rise"; render();
@@ -543,6 +611,7 @@ function openShare() {
   document.getElementById("smsBtn").href = "sms:?&body=" + encodeURIComponent(text);
   sheetMsg.textContent = "";
   veil.hidden = false;
+  if (T && !T.share_opened) { track(function (t) { t.share_opened = true; }); }
   document.getElementById("sheetClose").focus({ preventScroll: true });
 }
 function closeShare() { veil.hidden = true; }
@@ -550,8 +619,12 @@ document.getElementById("sheetClose").addEventListener("click", closeShare);
 veil.addEventListener("click", function (e) { if (e.target === veil) { closeShare(); } });
 document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !veil.hidden) { closeShare(); } });
 // "Text your results" is a plain link with no script attached, so the phone treats the tap as a direct request
-// to open Messages.
+// to open Messages. Analytics only watches taps from the page as a whole and never touches the link or the tap itself.
+document.addEventListener("click", function (e) {
+  if (e.target.closest && e.target.closest("#smsBtn") && T && !T.shared_text) { track(function (t) { t.shared_text = true; }); }
+}, { capture: true, passive: true });
 document.getElementById("copyBtn").addEventListener("click", function () {
+  if (T && !T.shared_copy) { track(function (t) { t.shared_copy = true; }); }
   var ok = function () { sheetMsg.textContent = "Copied. Paste it anywhere."; };
   var no = function () { selectShare(); sheetMsg.textContent = "Could not copy automatically. The text is selected, so copy it from there."; };
   try { navigator.clipboard.writeText(shareText()).then(ok, no); } catch (err) { no(); }
@@ -566,6 +639,7 @@ if (PUZZLE) {
   document.getElementById("dateLabel").textContent = PUZZLE.date;
   reset();
   render();
+  trackStart();
 } else {
   document.getElementById("dateLabel").hidden = true;
   stage.innerHTML = '<section class="card"><p class="eyebrow"><span>Coming soon</span></p><h2>The first puzzle is not out yet.</h2><p class="muted">Check back tomorrow.</p></section>';

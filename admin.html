@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Spitball admin</title>
+<meta name="theme-color" content="#150B2E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23150B2E'/%3E%3Ccircle cx='32' cy='32' r='17' fill='%23FF3D9A'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%2336E6FF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Figtree:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* The admin page wears the same Arcade look as the game: dark field, cyan-outlined cards, hot pink for the data. */
+:root {
+  --bg: #150B2E; --bg-deep: #0A0518; --card: #24134F; --ink: #F4EEFF; --muted: #B6A6E8; --line: #3D2A7A; --tint: #2F1B66;
+  --sun: #FF3D9A; --sun-deep: #B81F68; --on-sun: #1A0730; --edge: #36E6FF; --err: #FF8E9E; --chip: rgba(255,255,255,0.10);
+  --display: "Chakra Petch", "Trebuchet MS", sans-serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "DM Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+[hidden] { display: none !important; }
+html { background: var(--bg); }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; padding: 18px 16px 48px; -webkit-font-smoothing: antialiased; }
+p, h1, h2, h3, ul, ol { margin: 0; }
+.app { max-width: 760px; margin-inline: auto; display: flex; flex-direction: column; gap: 16px; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.brand { font-family: var(--display); font-weight: 700; font-size: 28px; line-height: 1.1; white-space: nowrap; }
+.brand mark { display: inline-block; background: var(--sun); color: var(--on-sun); padding: 0 0.16em 0.04em; border-radius: 8px; transform: rotate(-3deg); }
+.brand small { font-family: var(--mono); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-left: 8px; }
+.tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.pill { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; min-height: 40px; padding: 8px 14px; border: 0; border-radius: 99px; background: var(--chip); color: var(--ink); cursor: pointer; }
+select.pill { appearance: none; -webkit-appearance: none; padding-right: 30px; background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%); background-position: calc(100% - 16px) 50%, calc(100% - 11px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
+.pill:focus-visible, .btn:focus-visible, input:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.card { background: var(--card); border-radius: 14px; padding: 20px 18px 22px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 0 0 2px var(--edge), 0 8px 0 var(--bg-deep); min-width: 0; }
+.card.plain { box-shadow: 0 0 0 1px var(--line); }
+h2 { font-family: var(--display); font-weight: 700; font-size: 21px; line-height: 1.15; }
+h3 { font-family: var(--display); font-weight: 700; font-size: 17px; line-height: 1.25; }
+.lbl { font-family: var(--mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.muted { color: var(--muted); font-size: 14px; }
+.section { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); padding-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.msg { font-size: 14px; font-weight: 700; color: var(--err); }
+.msg:empty { display: none; }
+
+form { display: flex; flex-direction: column; gap: 12px; }
+label { display: flex; flex-direction: column; gap: 6px; }
+input { font: inherit; color: var(--ink); background: var(--tint); border: 2px solid var(--line); border-radius: 8px; padding: 13px 14px; min-width: 0; }
+.btn { font-family: var(--display); font-weight: 700; font-size: 18px; text-transform: uppercase; letter-spacing: 0.05em; min-height: 54px; border: 0; border-radius: 8px; padding: 12px 18px; background: var(--sun); color: var(--on-sun); box-shadow: 0 5px 0 var(--sun-deep); cursor: pointer; }
+.btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--sun-deep); }
+
+/* Headline numbers */
+.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.tile { background: var(--tint); border-radius: 8px; padding: 12px 14px; min-width: 0; }
+.tile b { display: block; font-family: var(--display); font-weight: 700; font-size: 30px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.tile span { font-size: 12px; color: var(--muted); }
+@media (max-width: 560px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+
+/* Upright bars: one pink series, thin marks, a faint baseline. Tap or hover a bar to read it out below. */
+.bars { display: flex; align-items: flex-end; gap: 2px; height: 170px; border-bottom: 1px solid var(--line); }
+.col { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; background: none; border: 0; padding: 0; color: inherit; font: inherit; cursor: pointer; }
+.col i { display: block; width: 100%; max-width: 36px; min-height: 2px; background: var(--sun); border-radius: 4px 4px 0 0; }
+.col.zero i { background: var(--line); }
+.col:hover i, .col:focus-visible i, .col.on i { background: var(--edge); }
+.col:focus-visible { outline: none; }
+.col em { font-style: normal; font-family: var(--mono); font-size: 11px; color: var(--ink); line-height: 1; font-variant-numeric: tabular-nums; }
+.axis { display: flex; gap: 2px; margin-top: 6px; }
+.axis span { flex: 1; min-width: 0; text-align: center; font-family: var(--mono); font-size: 10px; color: var(--muted); white-space: nowrap; overflow: visible; }
+.readout { font-family: var(--mono); font-size: 12px; color: var(--muted); min-height: 18px; }
+.ytitle { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+
+/* Sideways bars for steps and splits */
+.hbars { display: flex; flex-direction: column; gap: 10px; }
+.hb { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: baseline; }
+.hb .name { font-size: 14px; font-weight: 600; }
+.hb .val { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+.hb .val small { color: var(--muted); font-size: 12px; }
+.hb .rail { grid-column: 1 / -1; height: 12px; background: var(--tint); border-radius: 4px; overflow: hidden; }
+.hb .rail i { display: block; height: 100%; background: var(--sun); border-radius: 0 4px 4px 0; min-width: 2px; }
+.hb.zero .rail i { background: transparent; min-width: 0; }
+
+/* Question cards and the rebus table */
+.qs { display: flex; flex-direction: column; gap: 14px; }
+.qcard { background: var(--tint); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted); }
+.facts b { color: var(--ink); font-family: var(--mono); font-weight: 500; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chips span { font-family: var(--mono); font-size: 12px; background: var(--chip); border-radius: 6px; padding: 2px 7px; font-variant-numeric: tabular-nums; }
+.chips span small { color: var(--muted); margin-left: 5px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; font-family: var(--mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 6px 0; }
+td { padding: 8px 0; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
+td.n, th.n { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 12px; }
+td .tag { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-left: 8px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 680px) { .grid2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <h1 class="brand">Spit<mark>ball</mark><small>Admin</small></h1>
+    <div class="tools" id="tools" hidden>
+      <button class="pill" type="button" id="refreshBtn">Refresh</button>
+      <button class="pill" type="button" id="outBtn">Sign out</button>
+    </div>
+  </header>
+
+  <section class="card" id="loginCard" hidden>
+    <h2>Sign in</h2>
+    <p class="muted">This page is private. The numbers only load for the admin login.</p>
+    <form id="loginForm">
+      <label><span class="lbl">Email</span><input id="email" type="email" autocomplete="username" required></label>
+      <label><span class="lbl">Password</span><input id="password" type="password" autocomplete="current-password" required></label>
+      <p class="msg" role="alert" id="loginMsg"></p>
+      <button class="btn" type="submit">Sign in</button>
+    </form>
+  </section>
+
+  <p class="muted" id="status" role="status"></p>
+  <main id="dash" hidden></main>
+</div>
+
+<script src="puzzles.js"></script>
+<script>
+// Spitball admin: signs in to Supabase, downloads every round, and adds the numbers up in the browser.
+// The key below is the same public key the game uses. On its own it can read nothing: the data only comes back
+// for a signed-in login that is on the admins list in the database.
+var BASE = "https://ynvrlordngosyrxebsqr.supabase.co";
+var KEY = "sb_publishable_aiC17fTnMEHssqYo7Lp6EA_5xb2cUDk";
+var PUZZLES = window.SPITBALL_PUZZLES || {};
+var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var WEIGHTS = [1, 1, 2, 3, 3];
+var session = null, ROUNDS = [], pickedDay = null;
+var $ = function (id) { return document.getElementById(id); };
+
+function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+function plain(html) { var d = document.createElement("div"); d.innerHTML = html; return d.textContent; }
+function num(n, digits) { return Number(n).toLocaleString("en-US", { maximumFractionDigits: digits === undefined ? 0 : digits }); }
+function pct(a, b) { return b ? Math.round(a / b * 100) + "%" : "0%"; }
+function dayLabel(day) { var p = day.split("-"); return MONTHS[Number(p[1]) - 1] + " " + Number(p[2]); }
+function hourLabel(h) { return (h % 12 === 0 ? 12 : h % 12) + (h < 12 ? " AM" : " PM"); }
+function median(list) {
+  if (!list.length) { return null; }
+  var s = list.slice().sort(function (a, b) { return a - b; }), m = Math.floor(s.length / 2);
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+}
+
+// ---------- signing in ----------
+function loadSession() { try { session = JSON.parse(localStorage.getItem("spitball.admin") || "null"); } catch (err) { session = null; } }
+function saveSession(tok) {
+  session = tok ? { access: tok.access_token, refresh: tok.refresh_token, until: Date.now() + (tok.expires_in - 60) * 1000 } : null;
+  try { if (session) { localStorage.setItem("spitball.admin", JSON.stringify(session)); } else { localStorage.removeItem("spitball.admin"); } } catch (err) {}
+}
+function auth(grant, body) {
+  return fetch(BASE + "/auth/v1/token?grant_type=" + grant, {
+    method: "POST", headers: { "Content-Type": "application/json", "apikey": KEY }, body: JSON.stringify(body)
+  }).then(function (res) {
+    return res.json().catch(function () { return {}; }).then(function (data) {
+      if (!res.ok || !data.access_token) { throw new Error(data.error_description || data.msg || data.message || "Could not sign in."); }
+      saveSession(data);
+    });
+  });
+}
+function freshSession() {
+  if (!session) { return Promise.reject(new Error("signed out")); }
+  if (Date.now() < session.until) { return Promise.resolve(); }
+  return auth("refresh_token", { refresh_token: session.refresh });
+}
+function api(path, extra) {
+  var headers = { "apikey": KEY, "Authorization": "Bearer " + session.access };
+  Object.keys(extra || {}).forEach(function (k) { headers[k] = extra[k]; });
+  return fetch(BASE + "/rest/v1/" + path, { headers: headers }).then(function (res) {
+    if (!res.ok) { throw new Error("The database said no (" + res.status + ")."); }
+    return res.json();
+  });
+}
+function fetchRounds() {            // the database hands back at most 1,000 rows at a time, so ask page by page
+  var all = [], size = 1000;
+  function page(from) {
+    return api("rounds?select=*&order=opened_at.asc,id.asc", { "Range-Unit": "items", "Range": from + "-" + (from + size - 1) }).then(function (rows) {
+      all = all.concat(rows);
+      return rows.length === size ? page(from + size) : all;
+    });
+  }
+  return page(0);
+}
+function showLogin(message) {
+  $("loginCard").hidden = false; $("dash").hidden = true; $("tools").hidden = true; $("status").textContent = "";
+  $("loginMsg").textContent = message || "";
+}
+function load() {
+  $("loginCard").hidden = true; $("status").textContent = "Loading the numbers...";
+  return freshSession().then(function () { return api("admins?select=user_id"); }).then(function (mine) {
+    if (!mine.length) { saveSession(null); showLogin("That login works, but it is not on the admin list."); return null; }
+    return fetchRounds();
+  }).then(function (rows) {
+    if (!rows) { return; }
+    ROUNDS = rows;
+    $("tools").hidden = false; $("dash").hidden = false;
+    $("status").textContent = "";
+    draw();
+  }).catch(function (err) {
+    if (err.message === "signed out") { showLogin(""); return; }
+    if (/refresh|token|JWT|sign in/i.test(err.message)) { saveSession(null); showLogin("Please sign in again."); return; }
+    $("status").textContent = err.message + " Try Refresh.";
+    $("tools").hidden = false;
+  });
+}
+$("loginForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  $("loginMsg").textContent = "";
+  auth("password", { email: $("email").value.trim(), password: $("password").value }).then(function () {
+    $("password").value = "";
+    return load();
+  }).catch(function (err) { $("loginMsg").textContent = /invalid/i.test(err.message) ? "Wrong email or password." : err.message; });
+});
+$("outBtn").addEventListener("click", function () { saveSession(null); ROUNDS = []; $("dash").innerHTML = ""; showLogin(""); });
+$("refreshBtn").addEventListener("click", load);
+
+// ---------- adding it up ----------
+// A "player" is one device on one puzzle day. If the same device opened the game more than once that day,
+// its rounds are merged: the furthest it got counts for the steps, and its first full round counts for scores.
+function byDay(rows) {
+  var days = {};
+  rows.forEach(function (r) {
+    var d = days[r.puzzle_day] || (days[r.puzzle_day] = { day: r.puzzle_day, players: {}, firsts: [] });
+    var p = d.players[r.device_id] || (d.players[r.device_id] = { hour: r.local_hour, solved: false, past: false, started: false, finished: false, opened: false, text: false, copy: false });
+    if (p.hour === null || p.hour === undefined) { p.hour = r.local_hour; }
+    p.solved = p.solved || r.rebus_result === "solved";
+    p.past = p.past || !!r.rebus_result;
+    p.started = p.started || r.started || r.guesses.length > 0;
+    p.finished = p.finished || r.finished;
+    p.text = p.text || r.shared_text;
+    p.copy = p.copy || r.shared_copy;
+    if (!r.replay) { d.firsts.push(r); }       // rounds played before this device had seen the answers
+  });
+  return days;
+}
+function percentOff(q, g) {        // the same measure the game scores on
+  if (q.type === "year") { return Math.abs(g - q.a) / Math.max(20, new Date().getFullYear() - q.a) * 100; }
+  if (g <= 0) { return Infinity; }
+  return (Math.max(g / q.a, q.a / g) - 1) * 100;
+}
+
+// ---------- drawing ----------
+function bars(id, items, opts) {   // items: [{ label, value, tip }]
+  var max = Math.max.apply(null, items.map(function (x) { return x.value; }).concat([opts.max || 1]));
+  var every = opts.every || 1, showValues = items.length <= 14;
+  var cols = items.map(function (x, i) {
+    var h = Math.round(x.value / max * 138);
+    return '<button type="button" class="col' + (x.value ? "" : " zero") + '" data-tip="' + esc(x.tip) + '" aria-label="' + esc(x.tip) + '">' +
+      (showValues ? "<em>" + esc(x.shown === undefined ? num(x.value) : x.shown) + "</em>" : "") + '<i style="height:' + h + 'px"></i></button>';
+  }).join("");
+  var axis = items.map(function (x, i) { return "<span>" + (i % every === 0 ? esc(x.label) : "") + "</span>"; }).join("");
+  return '<div class="chart" id="' + id + '"><p class="ytitle">' + esc(opts.y) + '</p><div class="bars">' + cols + '</div><div class="axis">' + axis +
+    '</div><p class="readout" aria-live="polite">' + esc(opts.hint || "Tap a bar for the exact number.") + "</p></div>";
+}
+function hbars(rows) {             // rows: [{ name, value, of, note }]
+  var max = Math.max.apply(null, rows.map(function (r) { return r.of || r.value; }).concat([1]));
+  return '<div class="hbars">' + rows.map(function (r) {
+    return '<div class="hb' + (r.value ? "" : " zero") + '"><span class="name">' + esc(r.name) + '</span><span class="val">' + num(r.value) +
+      (r.of ? " <small>" + pct(r.value, r.of) + (r.note ? " " + esc(r.note) : "") + "</small>" : "") +
+      '</span><div class="rail"><i style="width:' + (r.value / max * 100) + '%"></i></div></div>';
+  }).join("") + "</div>";
+}
+function draw() {
+  var dash = $("dash"), days = byDay(ROUNDS), dayKeys = Object.keys(days).sort();
+  if (!dayKeys.length) {
+    dash.innerHTML = '<section class="card"><h2>No rounds yet</h2><p class="muted">As soon as someone opens the game, their round shows up here. Play one yourself, then tap Refresh.</p></section>';
+    return;
+  }
+  if (!pickedDay || !days[pickedDay]) { pickedDay = dayKeys[dayKeys.length - 1]; }
+  var recent = dayKeys.slice(-30);
+
+  // Across all days
+  var seenBefore = {}, perDay = dayKeys.map(function (k) {
+    var ids = Object.keys(days[k].players), back = ids.filter(function (id) { return seenBefore[id]; }).length;
+    ids.forEach(function (id) { seenBefore[id] = true; });
+    return { day: k, players: ids.length, back: back };
+  }).slice(-30);
+  var hours = []; for (var h = 0; h < 24; h++) { hours.push(0); }
+  dayKeys.forEach(function (k) { Object.keys(days[k].players).forEach(function (id) { var hr = days[k].players[id].hour; if (hr >= 0 && hr < 24) { hours[hr] += 1; } }); });
+
+  var every = Math.ceil(recent.length / 8);
+  var html = '<p class="section"><span>Every day</span><span>' + num(ROUNDS.length) + " rounds from " + num(Object.keys(seenBefore).length) + " devices</span></p>" +
+    '<section class="card"><h2>Players per day</h2><p class="muted">One device counts once per day, however many times it opened the game.</p>' +
+    bars("cPlayers", perDay.map(function (d) { return { label: dayLabel(d.day), value: d.players, tip: dayLabel(d.day) + ": " + num(d.players) + (d.players === 1 ? " player" : " players") }; }), { y: "Players", every: every }) + "</section>" +
+    '<div class="grid2"><section class="card plain"><h2>Returning players</h2><p class="muted">Players that day who had also played on an earlier day.</p>' +
+    bars("cBack", perDay.map(function (d) { return { label: dayLabel(d.day), value: d.back, tip: dayLabel(d.day) + ": " + num(d.back) + " of " + num(d.players) + " came back (" + pct(d.back, d.players) + ")" }; }), { y: "Returning players", every: every }) + "</section>" +
+    '<section class="card plain"><h2>Hour of day played</h2><p class="muted">On each player\'s own clock, all days together.</p>' +
+    bars("cHours", hours.map(function (n, i) { return { label: hourLabel(i).replace(" ", "").toLowerCase().replace("m", ""), value: n, tip: hourLabel(i) + ": " + num(n) + (n === 1 ? " player" : " players") }; }), { y: "Players", every: 3 }) + "</section></div>";
+
+  // One day
+  var D = days[pickedDay], P = PUZZLES[pickedDay], ids = Object.keys(D.players), list = ids.map(function (id) { return D.players[id]; });
+  var count = function (key) { return list.filter(function (p) { return p[key]; }).length; };
+  var opened = list.length, solved = count("solved"), finished = count("finished");
+  var text = count("text"), copy = count("copy"), shared = list.filter(function (p) { return p.text || p.copy; }).length;
+  var firstDone = D.firsts.filter(function (r) { return r.finished && r.total !== null; });
+  var totals = firstDone.map(function (r) { return r.total; });
+  var avgTotal = totals.length ? totals.reduce(function (a, b) { return a + b; }, 0) / totals.length : null;
+  var options = dayKeys.slice().reverse().map(function (k) { return '<option value="' + k + '"' + (k === pickedDay ? " selected" : "") + ">" + dayLabel(k) + (PUZZLES[k] ? " · " + esc(PUZZLES[k].theme) : "") + "</option>"; }).join("");
+
+  html += '<p class="section"><span>One day at a time</span><select class="pill" id="dayPick" aria-label="Puzzle day">' + options + "</select></p>" +
+    '<section class="card"><h2>' + dayLabel(pickedDay) + (P ? ": " + esc(P.theme) : "") + '</h2><div class="tiles">' +
+    '<div class="tile"><b>' + num(opened) + "</b><span>players</span></div>" +
+    '<div class="tile"><b>' + pct(finished, opened) + "</b><span>finished all five</span></div>" +
+    '<div class="tile"><b>' + pct(shared, finished) + "</b><span>of finishers shared</span></div>" +
+    '<div class="tile"><b>' + (avgTotal === null ? "n/a" : num(avgTotal)) + "</b><span>average score</span></div></div></section>";
+
+  html += '<div class="grid2"><section class="card plain"><h2>Drop-off</h2><p class="muted">How far players got, as a share of everyone who opened the game.</p>' +
+    hbars([{ name: "Opened", value: opened, of: opened }, { name: "Solved the rebus", value: solved, of: opened }, { name: "Finished all five", value: finished, of: opened }, { name: "Shared", value: shared, of: opened }]) +
+    '<p class="muted">' + num(count("past") - solved) + " got past the rebus without solving it (gave up or ran out of tries). " + num(count("started")) + " started the questions.</p></section>" +
+    '<section class="card plain"><h2>Share rate</h2><p class="muted">Of the ' + num(finished) + " who finished. A player who did both counts in both bars.</p>" +
+    hbars([{ name: "Shared either way", value: shared, of: finished }, { name: "Text your results", value: text, of: finished }, { name: "Copy to clipboard", value: copy, of: finished }]) + "</section></div>";
+
+  // Closeness and score spread use first plays only, so a second go with the answers known does not flatter the numbers.
+  var perQ = [0, 1, 2, 3, 4].map(function (i) {
+    var rows = D.firsts.filter(function (r) { return r.guesses.length > i && r.scores.length > i; });
+    var scores = rows.map(function (r) { return r.scores[i]; });
+    return { guesses: rows.map(function (r) { return { g: r.guesses[i], s: r.scores[i] }; }), avg: scores.length ? scores.reduce(function (a, b) { return a + b; }, 0) / scores.length : 0, n: scores.length };
+  });
+  var buckets = []; for (var b = 0; b < 10; b++) { buckets.push(0); }
+  totals.forEach(function (t) { buckets[Math.min(9, Math.floor(t / 100))] += 1; });
+
+  html += '<div class="grid2"><section class="card plain"><h2>Average closeness per question</h2><p class="muted">Out of 100. First plays only.</p>' +
+    bars("cClose", perQ.map(function (q, i) { return { label: "Q" + (i + 1), value: Math.round(q.avg), tip: "Question " + (i + 1) + ": average closeness " + num(q.avg, 1) + " from " + num(q.n) + (q.n === 1 ? " answer" : " answers") }; }), { y: "Closeness", max: 100 }) + "</section>" +
+    '<section class="card plain"><h2>Spread of total scores</h2><p class="muted">Finished first plays, in bands of 100 points.</p>' +
+    bars("cTotals", buckets.map(function (n, i) { var lo = i * 100, hi = i === 9 ? 1000 : lo + 99; return { label: String(lo), value: n, tip: num(lo) + " to " + num(hi) + ": " + num(n) + (n === 1 ? " player" : " players") }; }), { y: "Players", every: 2 }) + "</section></div>";
+
+  // Every guess, with a plain suggestion for the spread
+  html += '<section class="card"><h2>Every guess, question by question</h2><p class="muted">First plays only, lowest guess to highest, with the closeness each one earned. "Typical miss" is how far off the middle player was, on the same percent scale the spread uses. Setting the spread to that number would give the middle player 50.</p><div class="qs">' +
+    perQ.map(function (q, i) {
+      var def = P && P.questions[i], gs = q.guesses.slice().sort(function (a, b) { return a.g - b.g; });
+      var head = "<h3>Q" + (i + 1) + (def ? ". " + esc(plain(def.q)) : "") + "</h3>";
+      if (!gs.length) { return '<div class="qcard">' + head + '<p class="muted">No answers yet.</p></div>'; }
+      var facts = "<span>Answers <b>" + num(gs.length) + "</b></span>";
+      var show = function (v) { return def && def.type === "year" ? String(Math.round(v)) : num(v, 2); };
+      if (def) {
+        var offs = gs.map(function (x) { return percentOff(def, x.g); }), mid = median(offs);
+        facts += "<span>Right answer <b>" + show(def.a) + "</b></span><span>Middle guess <b>" + show(median(gs.map(function (x) { return x.g; }))) + "</b></span>" +
+          "<span>Spread now <b>" + num(def.spread || (def.type === "year" ? 35 : 43)) + "</b></span><span>Typical miss <b>" + (isFinite(mid) ? num(mid) + "%" : "n/a") + "</b></span>";
+      }
+      return '<div class="qcard">' + head + '<div class="facts">' + facts + '</div><div class="chips">' +
+        gs.map(function (x) { return "<span>" + show(x.g) + "<small>" + x.s + "</small></span>"; }).join("") + "</div></div>";
+    }).join("") + "</div></section>";
+
+  // Wrong rebus answers, grouped the way the game compares them (case and spacing ignored)
+  var wrong = {}, tries = 0;
+  D.firsts.forEach(function (r) { r.rebus_wrong.forEach(function (w) {
+    var key = String(w).toLowerCase().replace(/\s+/g, " ").trim();
+    if (key) { wrong[key] = (wrong[key] || 0) + 1; tries += 1; }
+  }); });
+  var wrongRows = Object.keys(wrong).sort(function (a, b) { return wrong[b] - wrong[a] || (a < b ? -1 : 1); });
+  html += '<section class="card"><h2>Wrong rebus answers</h2><p class="muted">' + (P ? 'The answer shown was "' + esc(P.rebus.display) + '". ' : "") + "What people typed that the game did not accept. Anything that shows up a lot and reads as fair is worth accepting.</p>" +
+    (wrongRows.length ? '<table><thead><tr><th>Typed</th><th class="n">Times</th></tr></thead><tbody>' + wrongRows.map(function (w) { return "<tr><td>" + esc(w) + '</td><td class="n">' + num(wrong[w]) + "</td></tr>"; }).join("") + "</tbody></table>" : '<p class="muted">None yet.</p>') + "</section>";
+
+  dash.innerHTML = html;
+  $("dayPick").addEventListener("change", function (e) { pickedDay = e.target.value; draw(); });
+}
+// Tap or hover any bar to read its exact number under the chart.
+function readOut(e) {
+  var col = e.target.closest ? e.target.closest(".col") : null;
+  if (!col) { return; }
+  var chart = col.closest(".chart");
+  Array.prototype.forEach.call(chart.querySelectorAll(".col.on"), function (c) { c.classList.remove("on"); });
+  col.classList.add("on");
+  chart.querySelector(".readout").textContent = col.getAttribute("data-tip");
+}
+$("dash").addEventListener("click", readOut);
+$("dash").addEventListener("mouseover", readOut);
+$("dash").addEventListener("focusin", readOut);
+
+loadSession();
+if (session) { load(); } else { showLogin(""); }
+</script>
+</body>
+</html>
