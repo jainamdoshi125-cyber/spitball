@@ -282,9 +282,16 @@ function byDay(rows) {
   });
   return days;
 }
-function percentOff(q, g) {        // the same measure the game scores on
+// Puzzles from October 8, 2026 score by plain distance from the answer, with a range set by difficulty level.
+var DISTANCE_FROM = "2026-10-08";
+var LEVEL_RANGE = { "Easy": 40, "Easy-medium": 47, "Medium": 55, "Medium-hard": 63, "Hard": 70 };
+function spreadNow(q, day) {
+  if (q.type === "year") { return q.spread || 35; }
+  return q.spread || (day >= DISTANCE_FROM ? LEVEL_RANGE[q.level] || 55 : 43);
+}
+function percentOff(q, g, day) {   // the same measure the game scores on
   if (q.type === "year") { return Math.abs(g - q.a) / Math.max(20, new Date().getFullYear() - q.a) * 100; }
-  if (q.by === "distance") { return Math.abs(g - q.a) / q.a * 100; }
+  if (q.by === "distance" || day >= DISTANCE_FROM) { return Math.abs(g - q.a) / q.a * 100; }
   if (g <= 0) { return Infinity; }
   return (Math.max(g / q.a, q.a / g) - 1) * 100;
 }
@@ -393,9 +400,9 @@ function draw() {
       var facts = "<span>Answers <b>" + num(gs.length) + "</b></span>";
       var show = function (v) { return def && def.type === "year" ? String(Math.round(v)) : num(v, 2); };
       if (def) {
-        var offs = gs.map(function (x) { return percentOff(def, x.g); }), mid = median(offs);
+        var offs = gs.map(function (x) { return percentOff(def, x.g, pickedDay); }), mid = median(offs);
         facts += "<span>Right answer <b>" + show(def.a) + "</b></span><span>Middle guess <b>" + show(median(gs.map(function (x) { return x.g; }))) + "</b></span>" +
-          "<span>Spread now <b>" + num(def.spread || (def.type === "year" ? 35 : 43)) + "</b></span><span>Typical miss <b>" + (isFinite(mid) ? num(mid) + "%" : "n/a") + "</b></span>";
+          "<span>Spread now <b>" + num(spreadNow(def, pickedDay)) + "</b></span><span>Typical miss <b>" + (isFinite(mid) ? num(mid) + "%" : "n/a") + "</b></span>";
       }
       return '<div class="qcard">' + head + '<div class="facts">' + facts + '</div><div class="chips">' +
         gs.map(function (x) { return "<span>" + show(x.g) + "<small>" + x.s + "</small></span>"; }).join("") + "</div></div>";

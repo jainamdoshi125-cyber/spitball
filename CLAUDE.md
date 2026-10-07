@@ -49,7 +49,7 @@ The puzzle changes for everyone at 12:01 AM Eastern time. If a day has no puzzle
 
 ## Daily puzzle workflow
 
-Jai asks for the next day's puzzle the day before. Send him the hook, rebus, theme, snippet, five questions, answers, spreads and a source for every fact. Publish only after he approves.
+Jai asks for the next day's puzzle the day before. Send him the hook, rebus, theme, snippet, five questions, answers, levels (and any spread that breaks from its level) and a source for every fact. Publish only after he approves.
 
 `puzzles.js` is public, so anyone can read it. Add a puzzle the evening before it goes live, never weeks ahead.
 
@@ -70,11 +70,17 @@ Jai asks for the next day's puzzle the day before. Send him the hook, rebus, the
 Each question gives a closeness score from 0 to 100. An exact answer is 100, and anything else caps at 99.
 
 - Weights: questions 1 and 2 count once, question 3 counts double, questions 4 and 5 count triple. A perfect day is 1,000.
-- Numbers: percent off is `max(guess/answer, answer/guess) - 1`, so half and double count the same. Closeness is `100 / (1 + (percentOff / spread)^1.5)`. The default spread is 43, which makes 10% off worth 90.
-- Years: percent off is years off divided by how long ago the event was (treated as at least 20 years), then the same curve. The default spread is 35.
-- Whole-number answers also score by steps away (`105 - 20 * steps`: one away is 85, two away is 65), and the player keeps the higher of the two scores.
-- One-off option: a question marked `by: "distance"` scores by plain distance from the answer (as a percent of it) instead of by how many times off. Jai asked for this on the Saturn's moons question (October 7, 2026), where the answer is far bigger than anyone expects and scoring by multiples gave a guess of 1,000 more than a guess of 60. Low guesses can never score below a floor this way, so use it only when Jai asks.
-- `spread` is how far off earns 50. Set it by how guessable the answer is: about 30 for anchored facts, about 50 for things you can reason toward, 80 to 100 for shots in the dark.
+
+Distance scoring applies to every puzzle from October 8, 2026 (Jai's design):
+
+- Numbers score by plain distance from the answer, in either direction. On an answer of 20, a guess of 10 and a guess of 30 score the same. Percent off is `|guess - answer| / answer`, and closeness is `100 / (1 + (percentOff / range)^1.5)`.
+- The range is how far off earns 50, and it comes from the question's `level`: Easy 40, Easy-medium 47, Medium 55, Medium-hard 63, Hard 70. Easy is tightest and hard is loosest, so the same miss costs more on an easy question. Jai set the two ends: two away on an answer of 12 scores 79, and 150,000 on an answer of 238,855 scores 69.
+- A question only needs `spread` when it should break from its level's range. Leave it out otherwise.
+- Lowball rule: a guess of 0 to 5 on an answer of 50 or more keeps only a quarter of its score. Without it a throwaway low guess would still earn about a third, because a guess can never be more than 100% too low.
+- Whole-number answers also score by steps away (`100 - 15 * steps`: one away is 85, two away is 70, three is 55), and the player keeps the higher of the two scores.
+- Years are unchanged: percent off is years off divided by how long ago the event was (treated as at least 20 years), then the same curve. The default spread is 35.
+
+Puzzles dated October 7, 2026 and earlier keep the old rules in the code (scored by multiples, default spread 43, steps `105 - 20 * steps`, and the one-off `by: "distance"` on the Saturn question). Do not reuse those for new puzzles.
 
 Jai's preferences on scoring: avoid giving 0 unless a guess is far off, and do not make scoring so generous that everyone lands in the same range.
 

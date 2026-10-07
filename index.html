@@ -275,6 +275,24 @@ function rebusMatches(guess) {
 // Numbers: spread is a percent off (half and double count the same). At the standard 43, 10% off = 90.
 // Years: spread is also a percent, of how many years ago the event happened (standard 35).
 var NOW_YEAR = new Date().getFullYear();
+// Distance scoring, for puzzles from October 8, 2026 onward. Earlier days keep the rules they were played under.
+// What counts is how far the guess is from the answer, in either direction: on an answer of 20, a guess of 10 and
+// a guess of 30 score the same. Each difficulty level has a range: how far off (as a percent of the answer) earns 50.
+// Easy questions have the tightest range and hard ones the loosest, so the same miss costs more on an easy question.
+// A question can still set its own range with "spread".
+var DISTANCE_FROM = "2026-10-08";
+var LEVEL_RANGE = { "Easy": 40, "Easy-medium": 47, "Medium": 55, "Medium-hard": 63, "Hard": 70 };
+function distanceRules() { return PUZZLE.day >= DISTANCE_FROM; }
+function rangeFor(q) { return q.spread || LEVEL_RANGE[q.level] || 55; }
+function distanceScore(q, g) {
+  if (g < 0 || !q.a) { return 0; }
+  var off = Math.abs(g - q.a) / Math.abs(q.a) * 100;
+  var s = 100 / (1 + Math.pow(off / rangeFor(q), 1.5));
+  // A guess can never be more than 100% too low, so a throwaway lowball would still earn a fair score.
+  // Guesses of 0 to 5 on an answer of 50 or more keep only a quarter of it.
+  if (g <= 5 && q.a >= 50) { s = s / 4; }
+  return Math.round(s);
+}
 function ratioScore(q, g) {
   if (q.type === "year") {
     // Years score like other numbers: by percent off, measured against how long ago the event was.
@@ -283,6 +301,7 @@ function ratioScore(q, g) {
     var yp = Math.abs(g - q.a) / age * 100;
     return Math.round(100 / (1 + Math.pow(yp / (q.spread || 35), 1.5)));
   }
+  if (distanceRules()) { return distanceScore(q, g); }
   if (q.by === "distance") {
     // One-off for answers far bigger than anyone expects: score by plain distance from the answer
     // (as a percent of it) rather than by how many times off. A guess of 60 then beats a guess of 1,000 on 293.
@@ -293,9 +312,11 @@ function ratioScore(q, g) {
   var pct = Math.max(g / q.a, q.a / g) - 1;
   return Math.round(100 / (1 + Math.pow(pct * 100 / (q.spread || 43), 1.5)));
 }
-// Whole-number answers also score by how many steps away you are: 1 away = 85, 2 = 65, 3 = 45, 4 = 25.
+// Whole-number answers also score by how many steps away you are, and the player keeps the higher score.
+// From October 8, 2026: 1 away = 85, 2 = 70, 3 = 55, 4 = 40. Before that: 1 away = 85, 2 = 65, 3 = 45, 4 = 25.
 function stepScore(q, g) {
   if (q.type === "year" || q.a % 1 !== 0) { return 0; }
+  if (distanceRules()) { return Math.max(0, Math.round(100 - 15 * Math.abs(g - q.a))); }
   return Math.max(0, Math.round(105 - 20 * Math.abs(g - q.a)));
 }
 function closeness(q, g) {
