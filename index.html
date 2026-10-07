@@ -353,6 +353,36 @@ function saveDayNote(change) {
   saved("spitball.days", JSON.stringify(notes));
   return mine;
 }
+// ---------- one play per day ----------
+// Where the player is in today's round is saved on this device after every step. Coming back later the same
+// day (a refresh, a second tap on the link) picks up exactly where they left off: mid-round, or on the final
+// score if they finished. Nothing is saved if the browser blocks storage, and the game then plays as before.
+// For testing: opening the game with ?reset on the end of the address starts today's round over.
+function saveProgress() {
+  if (!PUZZLE || !S) { return; }
+  try {
+    saved("spitball.progress", JSON.stringify({ day: PUZZLE.day, t: T,
+      s: { stage: S.stage, wrong: S.wrong, solvedOn: S.solvedOn, gaveUp: S.gaveUp, qi: S.qi, guesses: S.guesses, answered: S.answered } }));
+  } catch (err) {}
+}
+function loadProgress() {
+  try {
+    if (/[?&]reset\b/.test(window.location.search)) { return null; }
+    var p = JSON.parse(saved("spitball.progress") || "null");
+    if (!p || p.day !== PUZZLE.day || !p.s) { return null; }
+    var s = p.s, n = PUZZLE.questions.length;
+    if (["rebus", "theme", "q", "done"].indexOf(s.stage) < 0 || !Array.isArray(s.guesses) || s.guesses.length > n) { return null; }
+    var clean = s.guesses.every(function (r) { return r && typeof r.g === "number" && typeof r.score === "number" && r.score >= 0 && r.score <= 100; });
+    var qi = Number(s.qi) || 0, answered = !!s.answered;
+    if (!clean || qi < 0 || qi >= n) { return null; }
+    if (s.stage === "done" && s.guesses.length !== n) { return null; }
+    if (s.stage === "q" && s.guesses.length !== qi + (answered ? 1 : 0)) { return null; }
+    if ((s.stage === "rebus" || s.stage === "theme") && s.guesses.length) { return null; }
+    return { t: p.t && typeof p.t === "object" ? p.t : null,
+      s: { stage: s.stage, wrong: Math.max(0, Math.min(3, Number(s.wrong) || 0)), solvedOn: s.solvedOn || null, gaveUp: !!s.gaveUp, msg: "", qi: qi,
+        guesses: s.guesses.map(function (r) { return { g: r.g, score: r.score, react: String(r.react || "") }; }), answered: answered, anim: "" } };
+  } catch (err) { return null; }
+}
 function trackStart() {
   var host = window.location.hostname;
   if (!host || host === "localhost" || host === "127.0.0.1") { return; }   // test copies do not report
@@ -368,7 +398,7 @@ function trackStart() {
 }
 // Sends the whole round so far. The database keeps the fullest version it has seen.
 function track(change) {
-  if (!T) { return; }
+  if (!T) { saveProgress(); return; }
   try {
     if (change) { change(T); }
     T.guesses = S.guesses.map(function (r) { return r.g; });
@@ -381,6 +411,7 @@ function track(change) {
       body: JSON.stringify({ r: T })
     }).catch(function () {});
   } catch (err) {}
+  saveProgress();
 }
 // Once the theme screen has been shown, any later round today on this device is a replay (the player knows the answers).
 function trackRebus(result) {
@@ -438,6 +469,7 @@ function nudgeRebus(clear) {
   document.getElementById("triesBox").innerHTML = triesHtml();
   document.getElementById("hintBox").hidden = S.wrong < 2;
   document.getElementById("rebusMsg").textContent = S.msg;
+  saveProgress();
   if (clear) { input.value = ""; }
   card.classList.remove("rise", "shake"); void card.offsetWidth; card.classList.add("shake");
   input.focus({ preventScroll: true });
@@ -550,6 +582,7 @@ function render() {
   }
   stage.innerHTML = h;
   S.anim = "";
+  saveProgress();
 
   var view = S.stage + S.qi + S.answered;
   var willType = S.touched && (S.stage === "rebus" || (S.stage === "q" && !S.answered));
@@ -648,9 +681,17 @@ function selectShare() {
 
 if (PUZZLE) {
   document.getElementById("dateLabel").textContent = PUZZLE.date;
-  reset();
-  render();
-  trackStart();
+  var back = loadProgress();
+  if (back) {
+    // Same round as before, so analytics keeps adding to the same record and no new round is counted.
+    S = back.s;
+    if (back.t && back.t.day === PUZZLE.day && window.location.hostname && saved("spitball.notrack") !== "1") { T = back.t; }
+    render();
+  } else {
+    reset();
+    render();
+    trackStart();
+  }
 } else {
   document.getElementById("dateLabel").hidden = true;
   stage.innerHTML = '<section class="card"><p class="eyebrow"><span>Coming soon</span></p><h2>The first puzzle is not out yet.</h2><p class="muted">Check back tomorrow.</p></section>';

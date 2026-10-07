@@ -43,6 +43,8 @@ The game sends one anonymous record per round to a small Supabase database (free
 3. Five number questions, easy to hard.
 4. Final score, a per-question breakdown, and a share popup.
 
+One play per day: the round is saved on the device after every step (`spitball.progress` in its storage). Opening the game again the same day picks up where the player left off, or shows the final score if they finished. It never starts over, and the share popup does not reopen by itself (the "Share my result" button still works). A return visit carries on the same analytics record, so it is not counted as a new round. For testing, add `?reset` to the address (`spitball.uk/?reset`) to start today's round over on that device; analytics marks that round as a replay.
+
 The puzzle changes for everyone at 12:01 AM Eastern time. If a day has no puzzle, the most recent earlier one is shown.
 
 ## Daily puzzle workflow
@@ -139,7 +141,7 @@ Do not make the rebus screen smaller to solve keyboard problems. Jai likes its c
    - how many different days each player has played so far (added at Jai's request, next to returning players)
    - the spread of total scores
 2. **Custom domain.** Done in October 2026: `spitball.uk`. Original brief: Jai will buy one. Attach it in Vercel, then add the address as its own line in the shared text so it becomes a tappable link.
-3. **Saved results and streaks.** One play per day, saved on the device first, accounts later if needed.
+3. **Saved results and streaks.** One play per day, saved on the device, was built in October 2026 (see How a day works). Still to do: streaks, and accounts later if needed.
 4. **Smaller upgrades and mobile polish** as Jai reports them.
 
 ## Things to keep in mind
