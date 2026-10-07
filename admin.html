@@ -314,7 +314,7 @@ function draw() {
     hbars([{ name: "Opened", value: opened, of: opened }, { name: "Solved the rebus", value: solved, of: opened }, { name: "Finished all five", value: finished, of: opened }, { name: "Shared", value: shared, of: opened }]) +
     '<p class="muted">' + num(count("past") - solved) + " got past the rebus without solving it (gave up or ran out of tries). " + num(count("started")) + " started the questions.</p></section>" +
     '<section class="card plain"><h2>Share rate</h2><p class="muted">Of the ' + num(finished) + " who finished. A player who did both counts in both bars.</p>" +
-    hbars([{ name: "Shared either way", value: shared, of: finished }, { name: "Text your results", value: text, of: finished }, { name: "Copy to clipboard", value: copy, of: finished }]) + "</section></div>";
+    hbars([{ name: "Shared either way", value: shared, of: finished }, { name: "Share Your Results (text)", value: text, of: finished }, { name: "Copy to clipboard", value: copy, of: finished }]) + "</section></div>";
 
   // Closeness and score spread use first plays only, so a second go with the answers known does not flatter the numbers.
   var perQ = [0, 1, 2, 3, 4].map(function (i) {

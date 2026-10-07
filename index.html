@@ -167,7 +167,7 @@ a.btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
     <button class="close-x" type="button" id="sheetClose" aria-label="Close">&times;</button>
     <h2 id="sheetTitle">Share your score</h2>
     <pre class="share" id="sheetText"></pre>
-    <a class="btn" id="smsBtn" href="#">Text your results</a>
+    <a class="btn" id="smsBtn" href="#">Share Your Results</a>
     <button class="btn alt" type="button" id="copyBtn">Copy to clipboard</button>
     <p class="msg ok" id="sheetMsg" role="status"></p>
   </div>
@@ -618,7 +618,7 @@ function closeShare() { veil.hidden = true; }
 document.getElementById("sheetClose").addEventListener("click", closeShare);
 veil.addEventListener("click", function (e) { if (e.target === veil) { closeShare(); } });
 document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !veil.hidden) { closeShare(); } });
-// "Text your results" is a plain link with no script attached, so the phone treats the tap as a direct request
+// "Share Your Results" (it opens a text message) is a plain link with no script attached, so the phone treats the tap as a direct request
 // to open Messages. Analytics only watches taps from the page as a whole and never touches the link or the tap itself.
 document.addEventListener("click", function (e) {
   if (e.target.closest && e.target.closest("#smsBtn") && T && !T.shared_text) { track(function (t) { t.shared_text = true; }); }

@@ -29,6 +29,7 @@ Add an entry to `puzzles.js` under the new date. Each entry has:
   - about 50 for things you can reason toward (the speed of a train)
   - 80 to 100 for shots in the dark (stations in a subway system)
 - For years, `spread` is a percent of how long ago the event was (35 is standard).
+- End every `fact` with one emoji that fits it, after the final period.
 - Check every fact against a source before publishing.
 
 ## Scoring

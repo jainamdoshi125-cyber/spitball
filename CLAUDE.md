@@ -31,7 +31,7 @@ The game sends one anonymous record per round to a small Supabase database (free
 - A device's second round on the same day is marked `replay` once it has seen the theme screen. The admin page leaves replays out of guesses, scores and rebus answers, because the player already knows the answers.
 - Copies opened on `localhost` do not report, so test runs stay out of the numbers.
 - The admin page downloads every round and adds the numbers up in the browser. That is fine for thousands of rounds. If the game grows far past that, move the adding-up into the database.
-- "Text your results" is tracked by a listener on the page as a whole, not on the link, so the link stays a plain `sms:` link.
+- "Share Your Results" (the text message button) is tracked by a listener on the page as a whole, not on the link, so the link stays a plain `sms:` link.
 - Supabase pauses a free project after about a week with no activity.
 
 ## How a day works
@@ -58,6 +58,7 @@ Jai asks for the next day's puzzle the day before. Send him the hook, rebus, the
 - The snippet must not give away any answer, including the year if a question asks for it.
 - The rebus can be loose and does not need to be exact. Accept reasonable alternative readings in `answers` (lowercase, no spaces).
 - Each puzzle carries three themed `hype` lines and three themed `oof` lines for great and terrible guesses.
+- Every fun fact ends with one emoji that fits the fact, after the final period.
 - Check every fact against a source before publishing.
 
 ## Scoring
@@ -77,7 +78,7 @@ Jai's preferences on scoring: avoid giving 0 unless a guess is far off, and do n
 - After each answer: a themed reaction line, a bar showing where the guess landed, "You said" and "Answer", a fun fact, and the points. Only a true 0 touches the end of the bar.
 - The final screen shows the score as a number only (no "out of 1,000"), a verdict badge and the breakdown.
 - Never show "Play again" or "How scoring works".
-- The share popup opens just after the final score appears. It has "Text your results", "Copy to clipboard" and a close button.
+- The share popup opens just after the final score appears. It has "Share Your Results" (opens a text message with the result filled in), "Copy to clipboard" and a close button.
 
 The shared text is exactly this shape:
 
@@ -91,7 +92,7 @@ Oct-6-26
 - The score digits are Unicode bold digits, because text messages cannot carry real bold.
 - The text starts with an invisible zero-width space. Without it, iPhones read "Spitball:" as a web address and paste the result percent-encoded. Do not remove it.
 - Emoji by closeness: 100 👑, 90+ 🤏, 75+ 👌, 60+ 👍, 40+ 🤷, 20+ 🫣, 10+ 🙈, under 10 💩.
-- "Text your results" is a plain `sms:` link with no script attached. Keep it that way.
+- "Share Your Results" is a plain `sms:` link with no script attached. Keep it that way.
 
 ## Design
 
