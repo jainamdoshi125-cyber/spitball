@@ -6,7 +6,8 @@ Jai is a product manager, not an engineer. Explain changes in plain language, sa
 
 ## Where it lives
 
-- Live game: https://spitball-kappa.vercel.app/ (Vercel, free Hobby plan)
+- Live game: https://spitball.uk/ (bought October 2026 at Cloudflare Registrar, pointed at Vercel with DNS-only CNAME records; `www` redirects to it)
+- Original Vercel address, still working: https://spitball-kappa.vercel.app/ (Vercel, free Hobby plan)
 - Second copy: https://jainamdoshi125-cyber.github.io/spitball/ (GitHub Pages)
 - Code: https://github.com/jainamdoshi125-cyber/spitball, branch `main`
 
@@ -87,8 +88,10 @@ Spitball: 421
 🧩Rebus: Try 2
 100👑 12🙈 87👌 45🤷 0💩
 Oct-6-26
+spitball.uk
 ```
 
+- The last line is the game's address on its own line, so phones make it a tappable link.
 - The score digits are Unicode bold digits, because text messages cannot carry real bold.
 - The text starts with an invisible zero-width space. Without it, iPhones read "Spitball:" as a web address and paste the result percent-encoded. Do not remove it.
 - Emoji by closeness: 100 👑, 90+ 🤏, 75+ 👌, 60+ 👍, 40+ 🤷, 20+ 🫣, 10+ 🙈, under 10 💩.
@@ -134,12 +137,13 @@ Do not make the rebus screen smaller to solve keyboard problems. Jai likes its c
    - returning players day over day
    - how many different days each player has played so far (added at Jai's request, next to returning players)
    - the spread of total scores
-2. **Custom domain.** Jai will buy one. Attach it in Vercel, then add the address as its own line in the shared text so it becomes a tappable link.
+2. **Custom domain.** Done in October 2026: `spitball.uk`. Original brief: Jai will buy one. Attach it in Vercel, then add the address as its own line in the shared text so it becomes a tappable link.
 3. **Saved results and streaks.** One play per day, saved on the device first, accounts later if needed.
 4. **Smaller upgrades and mobile polish** as Jai reports them.
 
 ## Things to keep in mind
 
-- The name "Spitball" passed one web search for existing games. It has not been checked against the trademark database, and no domain has been bought.
+- The name "Spitball" passed one web search for existing games. It has not been checked against the trademark database. The domain is `spitball.uk`.
+- The anonymous device ID is saved per web address, so the same phone counts as a different player on `spitball.uk`, the Vercel address and the GitHub Pages copy.
 - Vercel's free plan is for personal, non-commercial use. If the game ever makes money, it needs a paid plan or a different host.
 - Earlier names were Ballpark Daily, The More You Know, and Give or Take. "Give or Take" and "Ballpark" are existing daily estimation games, which is why they were dropped.
