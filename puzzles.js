@@ -50,5 +50,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Earth has one moon. How many does Saturn have?", a: 293, type: "ratio", by: "distance", spread: 68, unit: "moons",
         fact: "293 confirmed, more than every other planet combined. Astronomers keep finding more, so the count keeps climbing. 🪐" }
     ]
+  },
+  "2026-10-08": {
+    rebus: {
+      tiles: [{ e: "💨" }, { e: "🚤" }],
+      alt: "Rebus: a puff of rushing air, plus a small boat",
+      answers: ["speedboat", "speedboats", "fastboat", "motorboat", "powerboat", "jetboat"],
+      display: "Speedboat",
+      hint: "One word. The puff of air means going fast. The second half floats."
+    },
+    theme: "Speed",
+    hype: ["Blazing fast!", "Pedal to the metal!", "Photo finish!"],
+    oof: ["Stuck in first gear.", "Flat tire.", "Stalled at the start."],
+    snippet: "On this day in 1978, <strong>Ken Warby</strong> drove a speedboat he built in his backyard to 317 miles per hour on a lake in Australia. Nobody has gone faster on water since. So today is all about speed.",
+    questions: [
+      { level: "Easy", q: "What was Usain Bolt's top speed, in miles per hour?", a: 28, type: "ratio", unit: "mph",
+        fact: "About 28 miles per hour, clocked partway through his world record 100 meters in 2009. 🏃" },
+      { level: "Easy-medium", q: "What is the highest posted speed limit in the United States, in miles per hour?", a: 85, type: "ratio", unit: "mph",
+        fact: "85, on a stretch of toll road outside Austin, Texas. 🤠" },
+      { level: "Medium", q: "How fast is the world's fastest roller coaster, in miles per hour?", a: 155, type: "ratio", unit: "mph",
+        fact: "155 miles per hour. Falcons Flight in Saudi Arabia took the record when it opened at the end of 2025. 🎢" },
+      { level: "Medium-hard", q: "How fast does sound travel through the air, in miles per hour?", a: 767, type: "ratio", unit: "mph",
+        fact: "About 767 miles per hour on a mild day. Sound slows down as the air gets colder. 🔊" },
+      { level: "Hard", q: "What is the fastest anyone has gone on a bicycle, in miles per hour?", a: 184, type: "ratio", unit: "mph",
+        fact: "184 miles per hour. Denise Mueller-Korenek did it in 2018, tucked in behind a race car on Utah's salt flats. 🚴" }
+    ]
   }
 };
