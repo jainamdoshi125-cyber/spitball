@@ -88,6 +88,16 @@ Jai's preferences on scoring: avoid giving 0 unless a guess is far off, and do n
 
 A browser that has never played sees a "How to play" popup once, over the rebus screen. It has three short points (the theme comes from today's date, the picture puzzle is just for fun, then five number questions where closer scores more), a "Let's go!" button and a close button. Closing it either way saves `spitball.howto` on the device so it never shows again. Browsers that already have a saved device ID or a round in progress are treated as returning players and never see it.
 
+## Today's high score
+
+The final screen shows today's high score under the verdict badge, and gives a big green congrats when the player sets it.
+
+- The game calls the database function `day_high` with the puzzle day and the player's device ID. It gets back numbers only (the best finished score from other players, the best overall, and how many finished), so the rest of the data stays private.
+- The game compares the other players' best with the player's own score: nobody else finished yet shows "You're in first!", beating it shows "New high score!", matching it shows a tie, and otherwise a plain "Today's high score: 912". Jai chose not to show the high score before the player has finished.
+- It asks again every time the player comes back to the page, so someone checking later in the day sees the current number, or "You hold today's high score" if they still lead.
+- Only first plays count: a `?reset` replay cannot set it. Devices in `ignored_devices` (Jai's own) never set it either, though they still see the congrats on their own screen.
+- It can be faked by someone technical, because scoring happens in the browser and the answers are in a public file. Fixing that properly means scoring on the server.
+
 ## Result screens and sharing
 
 - After each answer: a themed reaction line, a bar showing where the guess landed, "You said" and "Answer", a fun fact, and the points. Only a true 0 touches the end of the bar.

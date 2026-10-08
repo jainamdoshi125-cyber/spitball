@@ -121,6 +121,12 @@ button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 
 .total { font-family: var(--display); font-weight: 800; font-size: clamp(76px, 27vw, 116px); line-height: 0.85; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
 .verdict { align-self: flex-start; font-family: var(--display); font-weight: 800; font-size: 22px; background: var(--sun); color: var(--on-sun); padding: 6px 13px 7px; border-radius: 14px; transform: rotate(-2deg); }
+.high { background: var(--tint); border-radius: var(--r-ui); padding: 10px 14px; font-size: 15px; font-weight: 600; }
+.high b { font-family: var(--display); font-weight: 800; font-size: 19px; font-variant-numeric: tabular-nums; }
+.high.win { background: var(--hit-bg); color: var(--hit-fg); padding: 14px 16px 15px; animation: pop 0.45s cubic-bezier(.3,1.5,.5,1) backwards; transform: rotate(-1deg); }
+.high.win strong { display: block; font-family: var(--display); font-weight: 800; font-size: 27px; line-height: 1.1; margin-bottom: 4px; }
+.high.win b { font-size: inherit; font-family: inherit; }
+@media (prefers-reduced-motion: reduce) { .high.win { animation: none; } }
 .rows { list-style: none; padding: 0; display: flex; flex-direction: column; }
 .rows li { display: flex; align-items: center; gap: 12px; padding-block: 11px; border-top: 1px solid var(--line); }
 .rows .sq { flex: none; width: 26px; font-size: 22px; line-height: 1; text-align: center; }
@@ -615,6 +621,7 @@ function render() {
       '<p class="eyebrow"><span>' + PUZZLE.theme + " · " + PUZZLE.shortDate + "</span></p>" +
       '<div class="total" data-count="' + t + '">' + t.toLocaleString("en-US") + "</div>" +
       '<p class="verdict">' + label + "</p>" +
+      '<div class="high" id="highBox" role="status" hidden></div>' +
       '<ul class="rows">' + rows + "</ul>" +
       '<button class="btn" type="button" data-act="share" id="shareBtn">Share my result</button>' +
       "</section>";
@@ -644,6 +651,7 @@ function render() {
     }); });
   }
   Array.prototype.forEach.call(stage.querySelectorAll("[data-count]"), countUp);
+  paintHigh();
 }
 
 stage.addEventListener("submit", function (e) {
@@ -681,10 +689,57 @@ stage.addEventListener("click", function (e) {
   else if (act === "next") {
     if (S.qi === 4) { S.stage = "done"; } else { S.qi += 1; S.answered = false; }
     S.anim = "rise"; render();
+    if (S.stage === "done") { fetchHigh(); }
     if (S.stage === "done") { var mine = S; setTimeout(function () { if (S === mine && S.stage === "done") { openShare(); } }, calm ? 0 : 800); }
   }
   else if (act === "share") { openShare(); }
 });
+
+// ---------- today's high score ----------
+// On the final screen the game asks the database for the best finished score today from OTHER players and gets back
+// that one number, nothing else. It compares it with this player's own score here, so the result shows right away
+// even before this round has finished saving. Only first plays count, and Jai's own devices never set it.
+// It asks again whenever the player comes back to the page, so the number keeps up through the day.
+var HIGH_URL = "https://ynvrlordngosyrxebsqr.supabase.co/rest/v1/rpc/day_high";
+var HIGH = null, CAME_BACK = false;
+function fetchHigh() {
+  if (!PUZZLE || !S || S.stage !== "done") { return; }
+  try {
+    var me = saved("spitball.device");
+    fetch(HIGH_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "apikey": TRACK_KEY, "Authorization": "Bearer " + TRACK_KEY },
+      body: JSON.stringify({ d: PUZZLE.day, me: /^[0-9a-f-]{36}$/.test(me || "") ? me : null })
+    }).then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (data) { if (data && typeof data === "object") { HIGH = data; paintHigh(); } })
+      .catch(function () {});
+  } catch (err) {}
+}
+function paintHigh() {
+  var box = document.getElementById("highBox");
+  if (!box || !HIGH || S.stage !== "done") { return; }
+  var mine = total(), best = typeof HIGH.others_best === "number" ? HIGH.others_best : null;
+  var counts = !(T && T.replay);          // a second go at today's puzzle cannot set the high score
+  var n = function (x) { return "<b>" + x.toLocaleString("en-US") + "</b>"; };
+  var win = "", plain = "";
+  if (best === null) {
+    if (counts) { win = "<strong>🥇 You're in first!</strong>You set today's high score. " + n(mine) + " is the score to beat."; }
+  } else if (counts && mine > best) {
+    win = CAME_BACK ? "<strong>🏆 You hold today's high score</strong>Still on top. The next best is " + n(best) + "."
+      : "<strong>🏆 New high score!</strong>You beat " + n(best) + ". Today's high score is yours.";
+  } else if (counts && mine === best) {
+    win = "<strong>🤝 You tied the high score!</strong>" + n(best) + " is today's best, and you matched it.";
+  } else {
+    plain = "🏆 Today's high score: " + n(Math.max(best, counts ? mine : 0));
+  }
+  var html = win || plain, was = box.getAttribute("data-shown");
+  if (html === was) { return; }
+  box.setAttribute("data-shown", html);
+  box.className = "high" + (win ? " win" : "");
+  box.innerHTML = html;
+  box.hidden = !html;
+}
+document.addEventListener("visibilitychange", function () { if (!document.hidden && S && S.stage === "done") { CAME_BACK = true; fetchHigh(); } });
 
 // ---------- share popup ----------
 var veil = document.getElementById("veil"), sheetMsg = document.getElementById("sheetMsg");
@@ -740,6 +795,7 @@ if (PUZZLE) {
     S = back.s;
     if (back.t && back.t.day === PUZZLE.day && window.location.hostname && saved("spitball.notrack") !== "1") { T = back.t; }
     render();
+    if (S.stage === "done") { CAME_BACK = true; fetchHigh(); }
   } else {
     reset();
     render();

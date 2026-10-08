@@ -143,3 +143,28 @@ create policy "admins manage ignored devices" on public.ignored_devices
   for all to authenticated
   using (exists (select 1 from public.admins a where a.user_id = (select auth.uid())))
   with check (exists (select 1 from public.admins a where a.user_id = (select auth.uid())));
+
+-- Today's high score. The public game may ask for the best finished score on one puzzle day and gets back numbers
+-- only: the best score from other players (so the game can tell this player whether they beat it), the best overall,
+-- and how many players finished. Second goes at the same day (replays) and Jai's own devices never count.
+create or replace function public.day_high(d date, me uuid default null)
+returns jsonb
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select jsonb_build_object(
+    'others_best', max(r.total) filter (where me is null or r.device_id <> me),
+    'best', max(r.total),
+    'finishers', count(distinct r.device_id)
+  )
+  from public.rounds r
+  where r.puzzle_day = d
+    and r.finished
+    and r.total is not null
+    and not r.replay
+    and not exists (select 1 from public.ignored_devices i where i.device_id = r.device_id);
+$$;
+revoke all on function public.day_high(date, uuid) from public;
+grant execute on function public.day_high(date, uuid) to anon, authenticated;
