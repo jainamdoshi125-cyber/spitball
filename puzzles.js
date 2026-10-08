@@ -75,5 +75,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "What is the fastest anyone has gone on a bicycle, in miles per hour?", a: 184, type: "ratio", unit: "mph",
         fact: "184 miles per hour. Denise Mueller-Korenek did it in 2018, tucked in behind a race car on Utah's salt flats. 🚴" }
     ]
+  },
+  "2026-10-09": {
+    rebus: {
+      tiles: [{ e: "💍" }, { e: "🎵" }],
+      alt: "Rebus: a diamond ring, plus musical notes",
+      answers: ["ringtone", "ringtones", "ringtune", "ringsong"],
+      display: "Ringtone",
+      hint: "One word, and your phone plays one when someone calls. The first part goes on a finger."
+    },
+    theme: "Phones",
+    hype: ["Loud and clear!", "Full bars!", "You're on the line!"],
+    oof: ["Dropped call.", "Wrong number.", "No signal."],
+    snippet: "On this day in 1876, <strong>Alexander Graham Bell</strong> and his assistant Thomas Watson held the first two-way phone conversation over outdoor wires. One was in Boston and the other in Cambridge. So today is all about phones.",
+    questions: [
+      { level: "Easy", q: "How many digits are in a US phone number, including the area code?", a: 10, type: "ratio", unit: "digits",
+        fact: "Ten: a three-digit area code, then seven more. 📞" },
+      { level: "Easy-medium", q: "How much did the first iPhone cost when it came out in 2007, in dollars?", a: 499, type: "ratio", unit: "dollars",
+        fact: "$499 for the smaller model and $599 for the bigger one, with a two-year contract. Ten weeks later, Apple cut the price by $200. 📱" },
+      { level: "Medium", q: "How many miles apart were Bell and Watson on that first two-way call?", a: 2, type: "ratio", unit: "miles",
+        fact: "About two miles. They talked for around three hours, and both sides were written down and published. ☎️" },
+      { level: "Medium-hard", q: "The first handheld cell phone came out in the 1980s. How many minutes could you talk before its battery died?", a: 30, type: "ratio", unit: "minutes",
+        fact: "About 30 minutes, and then it needed roughly 10 hours to recharge. 🔋" },
+      { level: "Hard", q: "How much did that first handheld cell phone cost when it went on sale, in dollars?", a: 3995, type: "ratio", unit: "dollars",
+        fact: "$3,995 in 1984, which is more than $12,000 in today's money. It was 10 inches long and earned the nickname \"the brick.\" 🧱" }
+    ]
   }
 };
