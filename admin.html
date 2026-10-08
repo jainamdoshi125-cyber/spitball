@@ -88,6 +88,8 @@ input { font: inherit; color: var(--ink); background: var(--tint); border: 2px s
 .facts b { color: var(--ink); font-family: var(--mono); font-weight: 500; }
 .chips { display: flex; flex-wrap: wrap; gap: 5px; }
 .chips span { font-family: var(--mono); font-size: 12px; background: var(--chip); border-radius: 6px; padding: 2px 7px; font-variant-numeric: tabular-nums; }
+.chips span b { font-weight: 500; }
+.chips span em { font-style: normal; font-weight: 500; color: var(--on-sun); background: var(--sun); border-radius: 4px; padding: 0 4px; margin-left: 5px; }
 .chips span small { color: var(--muted); margin-left: 5px; }
 table { width: 100%; border-collapse: collapse; font-size: 14px; }
 th { text-align: left; font-family: var(--mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 6px 0; }
@@ -289,6 +291,15 @@ function spreadNow(q, day) {
   if (q.type === "year") { return q.spread || 35; }
   return q.spread || (day >= DISTANCE_FROM ? LEVEL_RANGE[q.level] || 55 : 43);
 }
+// Same guess from several players becomes one entry with a count. The list arrives sorted by guess.
+function grouped(gs) {
+  var out = [];
+  gs.forEach(function (x) {
+    var last = out[out.length - 1];
+    if (last && last.g === x.g) { last.n += 1; } else { out.push({ g: x.g, s: x.s, n: 1 }); }
+  });
+  return out;
+}
 function percentOff(q, g, day) {   // the same measure the game scores on
   if (q.type === "year") { return Math.abs(g - q.a) / Math.max(20, new Date().getFullYear() - q.a) * 100; }
   if (q.by === "distance" || day >= DISTANCE_FROM) { return Math.abs(g - q.a) / q.a * 100; }
@@ -392,7 +403,7 @@ function draw() {
     bars("cTotals", buckets.map(function (n, i) { var lo = i * 100, hi = i === 9 ? 1000 : lo + 99; return { label: String(lo), value: n, tip: num(lo) + " to " + num(hi) + ": " + num(n) + (n === 1 ? " player" : " players") }; }), { y: "Players", every: 2 }) + "</section></div>";
 
   // Every guess, with a plain suggestion for the spread
-  html += '<section class="card"><h2>Every guess, question by question</h2><p class="muted">First plays only, lowest guess to highest, with the closeness each one earned. "Typical miss" is how far off the middle player was, on the same percent scale the spread uses. Setting the spread to that number would give the middle player 50.</p><div class="qs">' +
+  html += '<section class="card"><h2>Every guess, question by question</h2><p class="muted">First plays only, lowest guess to highest. Each box is one guess: the number guessed, how many players gave it (×7 means seven, and no mark means one), then in grey the closeness it earned. "Typical miss" is how far off the middle player was, on the same percent scale the spread uses. Setting the spread to that number would give the middle player 50.</p><div class="qs">' +
     perQ.map(function (q, i) {
       var def = P && P.questions[i], gs = q.guesses.slice().sort(function (a, b) { return a.g - b.g; });
       var head = "<h3>Q" + (i + 1) + (def ? ". " + esc(plain(def.q)) : "") + "</h3>";
@@ -405,7 +416,7 @@ function draw() {
           "<span>Spread now <b>" + num(spreadNow(def, pickedDay)) + "</b></span><span>Typical miss <b>" + (isFinite(mid) ? num(mid) + "%" : "n/a") + "</b></span>";
       }
       return '<div class="qcard">' + head + '<div class="facts">' + facts + '</div><div class="chips">' +
-        gs.map(function (x) { return "<span>" + show(x.g) + "<small>" + x.s + "</small></span>"; }).join("") + "</div></div>";
+        grouped(gs).map(function (x) { return "<span" + (x.n > 1 ? ' class="many"' : "") + ' title="' + show(x.g) + ": guessed by " + x.n + (x.n === 1 ? " player" : " players") + ", closeness " + x.s + '"><b>' + show(x.g) + "</b>" + (x.n > 1 ? "<em>×" + num(x.n) + "</em>" : "") + "<small>" + x.s + "</small></span>"; }).join("") + "</div></div>";
     }).join("") + "</div></section>";
 
   // Wrong rebus answers, grouped the way the game compares them (case and spacing ignored)
