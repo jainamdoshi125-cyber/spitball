@@ -109,11 +109,13 @@ The shared text is exactly this shape:
 
 ```
 spitball.uk: 421
+🏆 Today's top score
 🧩Rebus: Try 2
 100👑 12🙈 87👌 45🤷 0💩
 Oct-6-26
 ```
 
+- The second line only appears for a player who stands out today (Jai's design): "🥇 First to finish today" (nobody else had finished when they did; remembered on the device as `spitball.first`), "🏆 Today's top score" (beat everyone so far), or "🤝 Tied for the top score". Everyone else gets no line. It follows the same rules as the high score box, so replays never get one. If the high score answer arrives after the share popup has opened, the popup text and link update in place.
 - The first line starts with the game's address (`spitball.uk`, lowercase) in place of the name, so phones make it a tappable link. Jai chose this over a separate address line.
 - The score digits are Unicode bold digits, because text messages cannot carry real bold.
 - The text starts with an invisible zero-width space. Without it, iPhones read the opening word and colon as a web address and paste the result percent-encoded. Do not remove it.

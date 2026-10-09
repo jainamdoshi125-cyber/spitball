@@ -477,7 +477,8 @@ function boldDigits(str) {
 // ("spitball.uk:"), which iPhones read as a web address (like "https:") and then paste with every space and emoji
 // turned into %20-style codes.
 function shareText() {
-  return "\u200Bspitball.uk: " + boldDigits(total().toLocaleString("en-US")) + "\n🧩Rebus: " + rebusLine() + "\n" +
+  var brag = highLine();
+  return "\u200Bspitball.uk: " + boldDigits(total().toLocaleString("en-US")) + (brag ? "\n" + brag : "") + "\n🧩Rebus: " + rebusLine() + "\n" +
     S.guesses.map(function (r) { return r.score + face(r.score); }).join(" ") + "\n" + PUZZLE.shareDate;
 }
 
@@ -715,7 +716,22 @@ function fetchHigh() {
       .catch(function () {});
   } catch (err) {}
 }
+// Where this player stands today: "first" (nobody else had finished), "top" (beat everyone so far), "tie", or "".
+// Being first is remembered on the device, so it can still be claimed after others finish.
+function highStatus() {
+  if (!HIGH || !S || S.stage !== "done" || (T && T.replay)) { return ""; }
+  var mine = total(), best = typeof HIGH.others_best === "number" ? HIGH.others_best : null;
+  if (best === null) { saved("spitball.first", PUZZLE.day); return "first"; }
+  if (mine > best) { return "top"; }
+  if (mine === best) { return "tie"; }
+  return saved("spitball.first") === PUZZLE.day ? "first" : "";
+}
+// The extra line in the shared text, straight under the score. Everyone else gets no line.
+function highLine() {
+  return { first: "🥇 First to finish today", top: "🏆 Today's top score", tie: "🤝 Tied for the top score" }[highStatus()] || "";
+}
 function paintHigh() {
+  fillShare();
   var box = document.getElementById("highBox");
   if (!box || !HIGH || S.stage !== "done") { return; }
   var mine = total(), best = typeof HIGH.others_best === "number" ? HIGH.others_best : null;
@@ -743,10 +759,16 @@ document.addEventListener("visibilitychange", function () { if (!document.hidden
 
 // ---------- share popup ----------
 var veil = document.getElementById("veil"), sheetMsg = document.getElementById("sheetMsg");
-function openShare() {
+// Fills the popup's text and the Share Your Results link. Runs again if the high score answer arrives while the
+// popup is already open, so the brag line is never missed. The link itself stays a plain sms: link.
+function fillShare() {
+  if (!S || S.stage !== "done") { return; }
   var text = shareText();
   document.getElementById("sheetText").textContent = text;
   document.getElementById("smsBtn").href = "sms:?&body=" + encodeURIComponent(text);
+}
+function openShare() {
+  fillShare();
   sheetMsg.textContent = "";
   veil.hidden = false;
   if (T && !T.share_opened) { track(function (t) { t.share_opened = true; }); }
