@@ -100,5 +100,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "How much did that first handheld cell phone cost when it went on sale, in dollars?", a: 3995, type: "ratio", unit: "dollars",
         fact: "$3,995 in 1984, which is more than $12,000 in today's money. It was 10 inches long and earned the nickname \"the brick.\" 🧱" }
     ]
+  },
+  "2026-10-10": {
+    rebus: {
+      tiles: [{ e: "🌍" }, { e: "💿" }],
+      alt: "Rebus: the globe, plus a disc",
+      answers: ["worldrecord", "worldrecords", "globalrecord", "earthrecord"],
+      display: "World Record",
+      hint: "Two words. Every Olympian dreams of breaking one. The first picture is the whole planet."
+    },
+    theme: "The Olympics",
+    hype: ["Going for gold!", "On the podium!", "Gold medal guess!"],
+    oof: ["False start.", "Disqualified!", "Didn't make the podium."],
+    snippet: "On this day in 1964, the <strong>Tokyo Olympics</strong> opened, the first Games ever held in Asia. The runner who lit the cauldron was a 19-year-old born in Hiroshima on the day the atomic bomb fell. So today is all about the Olympics.",
+    questions: [
+      { level: "Easy", q: "How long is a marathon, in miles?", a: 26.2, type: "ratio", unit: "miles",
+        fact: "26.2 miles. The odd length comes from the 1908 London Olympics, where the course ran from Windsor Castle to finish in front of the royal box. 🏃" },
+      { level: "Easy-medium", q: "How many Olympic medals has Michael Phelps won in total?", a: 28, type: "ratio", unit: "medals",
+        fact: "28, including 23 golds. Both are the most of any Olympian ever. 🏊" },
+      { level: "Medium", q: "How many steps did Usain Bolt take to run his 100 meter world record?", a: 41, type: "ratio", unit: "steps",
+        fact: "41 steps, in 9.58 seconds, in Berlin in 2009. 👟" },
+      { level: "Medium-hard", q: "How old was the oldest person ever to win an Olympic medal?", a: 72, type: "ratio", unit: "years old",
+        fact: "72. Oscar Swahn of Sweden won a silver medal in shooting at the 1920 Games. 🎯" },
+      { level: "Hard", q: "Jesse Owens' 1936 gold medal is the most expensive Olympic medal ever sold at auction. How much did it go for, in dollars?", a: 1466574, type: "ratio", unit: "dollars",
+        fact: "$1,466,574 in 2013, the most ever paid for any piece of Olympic memorabilia. Owens won four golds in Berlin. 🥇" }
+    ]
   }
 };
