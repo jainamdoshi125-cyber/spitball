@@ -33,7 +33,7 @@ The game sends one anonymous record per round to a small Supabase database (free
 - Copies opened on `localhost` do not report, so test runs stay out of the numbers.
 - Jai's own devices are left out. Signing in on the admin page marks that browser (`spitball.notrack` in its storage), so the game stops reporting from it, and adds its device ID to the `ignored_devices` table, so rounds it already sent are filtered out of every chart. This is per browser and per web address. A button at the bottom of the admin page switches it back.
 - The admin page downloads every round and adds the numbers up in the browser. That is fine for thousands of rounds. If the game grows far past that, move the adding-up into the database.
-- "Share Your Results" (the text message button) is tracked by a listener on the page as a whole, not on the link, so the link stays a plain `sms:` link.
+- "Share Your Results" is recorded as `shared_text` when a share goes through (or when the text message fallback opens). A share sheet that is opened and closed without sharing is not recorded. Which app they picked is not visible to the page.
 - Supabase pauses a free project after about a week with no activity.
 
 ## How a day works
@@ -103,7 +103,7 @@ The final screen shows today's high score under the verdict badge, and gives a b
 - After each answer: a themed reaction line, a bar showing where the guess landed, "You said" and "Answer", a fun fact, and the points. Only a true 0 touches the end of the bar.
 - The final screen shows the score as a number only (no "out of 1,000"), a verdict badge and the breakdown.
 - Never show "Play again" or "How scoring works".
-- The share popup opens just after the final score appears. It has "Share Your Results" (opens a text message with the result filled in), "Copy to clipboard" and a close button.
+- The share popup opens just after the final score appears. It has "Share Your Results" (opens the phone's share sheet with the result filled in), "Copy to clipboard" and a close button.
 
 The shared text is exactly this shape:
 
@@ -120,7 +120,7 @@ Oct-6-26
 - The score digits are Unicode bold digits, because text messages cannot carry real bold.
 - The text starts with an invisible zero-width space. Without it, iPhones read the opening word and colon as a web address and paste the result percent-encoded. Do not remove it.
 - Emoji by closeness: 100 👑, 90+ 🤏, 75+ 👌, 60+ 👍, 40+ 🤷, 20+ 🫣, 10+ 🙈, under 10 💩.
-- "Share Your Results" is a plain `sms:` link with no script attached. Keep it that way.
+- "Share Your Results" opens the phone's own share sheet (iMessage, WhatsApp, Messenger and so on) using the browser's share feature, with the text only and no separate web address. Jai asked for this in October 2026, replacing the earlier rule that it stay a plain `sms:` link. The button is still an `sms:` link underneath: where there is no share sheet (some desktop browsers, some in-app browsers) the tap falls through to it and opens a text message. If the share sheet refuses, it opens a text message too; if the player closes the sheet, nothing happens.
 
 ## Design
 

@@ -778,11 +778,23 @@ function closeShare() { veil.hidden = true; }
 document.getElementById("sheetClose").addEventListener("click", closeShare);
 veil.addEventListener("click", function (e) { if (e.target === veil) { closeShare(); } });
 document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !veil.hidden) { closeShare(); } });
-// "Share Your Results" (it opens a text message) is a plain link with no script attached, so the phone treats the tap as a direct request
-// to open Messages. Analytics only watches taps from the page as a whole and never touches the link or the tap itself.
-document.addEventListener("click", function (e) {
-  if (e.target.closest && e.target.closest("#smsBtn") && T && !T.shared_text) { track(function (t) { t.shared_text = true; }); }
-}, { capture: true, passive: true });
+// "Share Your Results" opens the phone's own share sheet (Messages, WhatsApp, Messenger and the rest) on browsers
+// that have one, which is Safari on iPhone and Chrome on Android. Elsewhere the tap falls through to the link's
+// plain sms: address and opens a text message, as before. Only the text is shared, no separate web address, so the
+// result looks the same in every app.
+function markShared() { if (T && !T.shared_text) { track(function (t) { t.shared_text = true; }); } }
+document.getElementById("smsBtn").addEventListener("click", function (e) {
+  var text = shareText(), data = { text: text };
+  var sheet = false;
+  try { sheet = !!navigator.share && (!navigator.canShare || navigator.canShare(data)); } catch (err) { sheet = false; }
+  if (!sheet) { markShared(); return; }      // no share sheet here: let the link open a text message
+  e.preventDefault();
+  navigator.share(data).then(markShared, function (err) {
+    if (err && err.name === "AbortError") { return; }     // the player closed the share sheet
+    markShared();
+    window.location.href = "sms:?&body=" + encodeURIComponent(text);   // the share sheet refused: open a text instead
+  });
+});
 document.getElementById("copyBtn").addEventListener("click", function () {
   if (T && !T.shared_copy) { track(function (t) { t.shared_copy = true; }); }
   var ok = function () { sheetMsg.textContent = "Copied. Paste it anywhere."; };
