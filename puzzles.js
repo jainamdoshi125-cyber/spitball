@@ -150,5 +150,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "In what year did the first official TV commercial air?", a: 1941, type: "year", unit: "year",
         fact: "1941. A Bulova watch ad aired in New York before a baseball game, and it cost $9. ⌚" }
     ]
+  },
+  "2026-10-12": {
+    rebus: {
+      tiles: [{ e: "⚪" }, { e: "🏠" }],
+      alt: "Rebus: a white circle, plus a house",
+      answers: ["whitehouse", "whitehouses", "whitehome"],
+      display: "White House",
+      hint: "Two words. The most famous address in America. A color, plus where you live."
+    },
+    theme: "Homes",
+    hype: ["Right at home!", "Move-in ready!", "Home run!"],
+    oof: ["Wrong address.", "Needs a fixer-upper.", "Back to the drawing board."],
+    snippet: "On this day in 1901, <strong>Theodore Roosevelt</strong> made it official: the president's house would be called the White House. Before that, most people called it the Executive Mansion. So today is all about homes.",
+    questions: [
+      { level: "Easy", q: "How many years long is a standard US home mortgage?", a: 30, type: "ratio", unit: "years",
+        fact: "30 years, though 15-year loans are popular too. 🏡" },
+      { level: "Easy-medium", q: "How many bathrooms are in the White House?", a: 35, type: "ratio", unit: "bathrooms",
+        fact: "35 bathrooms, spread over six floors. 🛁" },
+      { level: "Medium", q: "How many hotels does Disney own and run at Walt Disney World in Florida?", a: 31, type: "ratio", unit: "hotels",
+        fact: "31 Disney hotels, with about 23,000 rooms between them. The whole resort is bigger than Manhattan. 🏰" },
+      { level: "Medium-hard", q: "How many rooms are in the White House?", a: 132, type: "ratio", unit: "rooms",
+        fact: "132 rooms, plus 412 doors, 147 windows and 28 fireplaces. 🇺🇸" },
+      { level: "Hard", q: "How many trees are in the gardens of Versailles?", a: 200000, type: "ratio", unit: "trees",
+        fact: "About 200,000 trees, spread across roughly 2,000 acres of gardens. 🌳" }
+    ]
   }
 };
