@@ -125,5 +125,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Jesse Owens' 1936 gold medal is the most expensive Olympic medal ever sold at auction. How much did it go for, in dollars?", a: 1466574, type: "ratio", unit: "dollars",
         fact: "$1,466,574 in 2013, the most ever paid for any piece of Olympic memorabilia. Owens won four golds in Berlin. 🥇" }
     ]
+  },
+  "2026-10-11": {
+    rebus: {
+      tiles: [{ e: "🛋️" }, { e: "🥔" }],
+      alt: "Rebus: a couch, plus a potato",
+      answers: ["couchpotato", "couchpotatoes", "couchpotatos", "sofapotato"],
+      display: "Couch Potato",
+      hint: "Two words for someone who watches TV all day. Where you sit, plus a vegetable."
+    },
+    theme: "TV",
+    hype: ["Must-see TV!", "Instant classic!", "Renewed for another season!"],
+    oof: ["Cue the laugh track.", "Change the channel.", "Canceled after one episode."],
+    snippet: "On this day in 1975, <strong>Saturday Night Live</strong> aired for the first time, with George Carlin as host. So today is all about TV.",
+    questions: [
+      { level: "Easy", q: "How many seasons of Friends were there?", a: 10, type: "ratio", unit: "seasons",
+        fact: "10 seasons and 236 episodes, from 1994 to 2004. ☕" },
+      { level: "Easy-medium", q: "How old was the youngest person ever to host Saturday Night Live?", a: 7, type: "ratio", unit: "years old",
+        fact: "7. Drew Barrymore hosted in 1982, months after E.T. came out, and still holds the record. 🎬" },
+      { level: "Medium", q: "How many Jeopardy! games in a row did Ken Jennings win?", a: 74, type: "ratio", unit: "games",
+        fact: "74 wins in a row in 2004, worth $2,520,700. Today he hosts the show. 🧠" },
+      { level: "Medium-hard", q: "NBC begged Jerry Seinfeld to make one more season of Seinfeld, and he said no. How much did they offer him per episode, in millions of dollars?", a: 5, type: "ratio", unit: "million dollars",
+        fact: "$5 million an episode, and he walked away anyway. The show ended in 1998 while it was the top-rated show on TV. 💸" },
+      { level: "Hard", q: "In what year did the first official TV commercial air?", a: 1941, type: "year", unit: "year",
+        fact: "1941. A Bulova watch ad aired in New York before a baseball game, and it cost $9. ⌚" }
+    ]
   }
 };
