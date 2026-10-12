@@ -175,5 +175,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "How many trees are in the gardens of Versailles?", a: 200000, type: "ratio", unit: "trees",
         fact: "About 200,000 trees, spread across roughly 2,000 acres of gardens. 🌳" }
     ]
+  },
+  "2026-10-13": {
+    rebus: {
+      tiles: [{ e: "⏰" }, { e: "🦉" }],
+      alt: "Rebus: an alarm clock, plus an owl",
+      answers: ["clockwise", "clockwize", "clockwyse"],
+      display: "Clockwise",
+      hint: "One word for the direction a clock's hands turn. The second picture is a very wise bird."
+    },
+    theme: "Time",
+    hype: ["Right on time!", "Like clockwork!", "Perfect timing!"],
+    oof: ["Fashionably late.", "Wrong time zone.", "Time to try again."],
+    snippet: "On this day in 1884, countries meeting in Washington voted to make <strong>Greenwich, England</strong> the starting line for the world's clocks. So today is all about time.",
+    questions: [
+      { level: "Easy", q: "How many hours ahead of New York is London?", a: 5, type: "ratio", unit: "hours",
+        fact: "5 hours for most of the year. For a few weeks each spring and about a week each fall it's 4, because the US and UK change their clocks on different dates. 🇬🇧" },
+      { level: "Easy-medium", q: "How many time zones do the 50 US states cover?", a: 6, type: "ratio", unit: "time zones",
+        fact: "6: Eastern, Central, Mountain, Pacific, Alaska and Hawaii-Aleutian. Count the US territories too and it's 9. 🗺️" },
+      { level: "Medium", q: "How many US states skip daylight saving time and never change their clocks?", a: 2, type: "ratio", unit: "states",
+        fact: "2: Hawaii and Arizona. Inside Arizona, though, the Navajo Nation does change its clocks. ☀️" },
+      { level: "Medium-hard", q: "How many times a day do the hour and minute hands on a clock line up exactly?", a: 22, type: "ratio", unit: "times",
+        fact: "22. They meet about every 65 minutes, so it happens 11 times every 12 hours, not 12. 🕰️" },
+      { level: "Hard", q: "The world's earliest and latest time zones are far apart. At any moment, how many hours apart can two places on Earth be?", a: 26, type: "ratio", unit: "hours",
+        fact: "26. Kiribati's Line Islands run 14 hours ahead of Greenwich, while tiny, empty Baker Island sits 12 hours behind. 🌐" }
+    ]
   }
 };
