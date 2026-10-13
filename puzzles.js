@@ -200,5 +200,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "The world's earliest and latest time zones are far apart. At any moment, how many hours apart can two places on Earth be?", a: 26, type: "ratio", unit: "hours",
         fact: "26. Kiribati's Line Islands run 14 hours ahead of Greenwich, while tiny, empty Baker Island sits 12 hours behind. 🌐" }
     ]
+  },
+  "2026-10-14": {
+    rebus: {
+      tiles: [{ e: "📦" }, { e: "🏢" }],
+      alt: "Rebus: a cardboard box, plus an office building",
+      answers: ["boxoffice", "boxoffices", "boxofice"],
+      display: "Box Office",
+      hint: "Two words. Where a movie's ticket sales get counted. A cardboard container, plus a work building."
+    },
+    theme: "The Movies",
+    hype: ["Oscar-worthy!", "That's a wrap!", "Blockbuster guess!"],
+    oof: ["Straight to DVD.", "Cut from the final edit.", "Box office flop."],
+    snippet: "On this day in 1888, <strong>Louis Le Prince</strong> filmed a few people strolling around a garden in Leeds, England. It lasts about two seconds, and it is the oldest film that still survives. So today is all about the movies.",
+    questions: [
+      { level: "Easy", q: "How many Harry Potter movies are there?", a: 8, type: "ratio", unit: "movies",
+        fact: "8 movies, from 2001 to 2011. The last book was split into two films. ⚡" },
+      { level: "Easy-medium", q: "How many movies are in the main Star Wars \"Skywalker saga\"?", a: 9, type: "ratio", unit: "movies",
+        fact: "9, from the first film in 1977 to The Rise of Skywalker in 2019. 🌌" },
+      { level: "Medium", q: "Meryl Streep holds the record for the most Oscar nominations by any actor. How many has she had?", a: 21, type: "ratio", unit: "nominations",
+        fact: "21 nominations, and she won 3 of them. 🏆" },
+      { level: "Medium-hard", q: "How many official James Bond movies have been made?", a: 25, type: "ratio", unit: "movies",
+        fact: "25 official films, from Dr. No in 1962 to No Time to Die in 2021. 🍸" },
+      { level: "Hard", q: "The movie Titanic cost more to make than the real ship did back in 1912. How much did the movie cost, in millions of dollars?", a: 200, type: "ratio", unit: "million dollars",
+        fact: "$200 million, the most expensive movie ever made at the time. The real ship cost about $7.5 million to build. 🚢" }
+    ]
   }
 };
