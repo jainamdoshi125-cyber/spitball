@@ -168,3 +168,35 @@ as $$
 $$;
 revoke all on function public.day_high(date, uuid) from public;
 grant execute on function public.day_high(date, uuid) to anon, authenticated;
+
+-- A player's own stats, for the final screen. The game sends its own device ID and today's puzzle day, and gets back
+-- numbers for that device only, from days BEFORE today (the game adds today's score itself): its best finished score,
+-- how many days it has finished, and the count and sum of its scores over the 6 days before today (so with today
+-- that makes a 7-day window). Only first plays count, one per day.
+create or replace function public.my_stats(me uuid, today date)
+returns jsonb
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  with mine as (
+    select distinct on (r.puzzle_day) r.puzzle_day, r.total
+    from public.rounds r
+    where r.device_id = me
+      and r.puzzle_day < today
+      and r.finished
+      and r.total is not null
+      and not r.replay
+    order by r.puzzle_day, r.opened_at
+  )
+  select jsonb_build_object(
+    'best', max(total),
+    'games', count(*),
+    'games7', count(*) filter (where puzzle_day >= today - 6),
+    'sum7', coalesce(sum(total) filter (where puzzle_day >= today - 6), 0)
+  )
+  from mine;
+$$;
+revoke all on function public.my_stats(uuid, date) from public;
+grant execute on function public.my_stats(uuid, date) to anon, authenticated;

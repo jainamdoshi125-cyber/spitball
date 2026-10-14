@@ -127,6 +127,9 @@ button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 .high.win strong { display: block; font-family: var(--display); font-weight: 800; font-size: 27px; line-height: 1.1; margin-bottom: 4px; }
 .high.win b { font-size: inherit; font-family: inherit; }
 @media (prefers-reduced-motion: reduce) { .high.win { animation: none; } }
+.mine { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 14px; color: var(--muted); }
+.mine b { color: var(--ink); font-family: var(--display); font-weight: 800; font-size: 17px; font-variant-numeric: tabular-nums; }
+.mine .pb { color: var(--hit-bg); font-weight: 700; }
 .rows { list-style: none; padding: 0; display: flex; flex-direction: column; }
 .rows li { display: flex; align-items: center; gap: 12px; padding-block: 11px; border-top: 1px solid var(--line); }
 .rows .sq { flex: none; width: 26px; font-size: 22px; line-height: 1; text-align: center; }
@@ -623,6 +626,7 @@ function render() {
       '<div class="total" data-count="' + t + '">' + t.toLocaleString("en-US") + "</div>" +
       '<p class="verdict">' + label + "</p>" +
       '<div class="high" id="highBox" role="status" hidden></div>' +
+      '<p class="mine" id="statsBox" hidden></p>' +
       '<ul class="rows">' + rows + "</ul>" +
       '<button class="btn" type="button" data-act="share" id="shareBtn">Share my result</button>' +
       "</section>";
@@ -703,7 +707,42 @@ stage.addEventListener("click", function (e) {
 // It asks again whenever the player comes back to the page, so the number keeps up through the day.
 var HIGH_URL = "https://ynvrlordngosyrxebsqr.supabase.co/rest/v1/rpc/day_high";
 var HIGH = null, CAME_BACK = false;
+// ---------- the player's own stats ----------
+// Under the final score: this player's best ever and their average over the last 7 days, counting only days they
+// played. The database returns their finished first plays from BEFORE today (best, games, and the 7-day sum), and
+// today's score is added here, so the line is right even before today's round has finished saving. It stays hidden
+// until the player's second game, and for a ?reset replay.
+var STATS_URL = "https://ynvrlordngosyrxebsqr.supabase.co/rest/v1/rpc/my_stats";
+var STATS = null;
+function fetchStats() {
+  if (!PUZZLE || !S || S.stage !== "done") { return; }
+  var me = saved("spitball.device");
+  if (!/^[0-9a-f-]{36}$/.test(me || "")) { return; }
+  try {
+    fetch(STATS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "apikey": TRACK_KEY, "Authorization": "Bearer " + TRACK_KEY },
+      body: JSON.stringify({ me: me, today: PUZZLE.day })
+    }).then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (data) { if (data && typeof data === "object") { STATS = data; paintStats(); } })
+      .catch(function () {});
+  } catch (err) {}
+}
+function paintStats() {
+  var box = document.getElementById("statsBox");
+  if (!box || !STATS || S.stage !== "done" || (T && T.replay)) { return; }
+  var mine = total(), before = Number(STATS.games) || 0;
+  if (before < 1) { box.hidden = true; return; }          // first game ever: today stays about today's score
+  var oldBest = Number(STATS.best) || 0, best = Math.max(oldBest, mine);
+  var games7 = (Number(STATS.games7) || 0) + 1, avg7 = Math.round(((Number(STATS.sum7) || 0) + mine) / games7);
+  var n = function (x) { return "<b>" + x.toLocaleString("en-US") + "</b>"; };
+  box.innerHTML = (mine > oldBest ? '<span class="pb">🎉 New personal best</span>' : "") +
+    "<span>Your best " + n(best) + "</span>" +
+    "<span>7-day average " + n(avg7) + " (" + games7 + (games7 === 1 ? " game" : " games") + ")</span>";
+  box.hidden = false;
+}
 function fetchHigh() {
+  fetchStats();
   if (!PUZZLE || !S || S.stage !== "done") { return; }
   try {
     var me = saved("spitball.device");
@@ -732,6 +771,7 @@ function highLine() {
 }
 function paintHigh() {
   fillShare();
+  paintStats();
   var box = document.getElementById("highBox");
   if (!box || !HIGH || S.stage !== "done") { return; }
   var mine = total(), best = typeof HIGH.others_best === "number" ? HIGH.others_best : null;

@@ -98,6 +98,15 @@ The final screen shows today's high score under the verdict badge, and gives a b
 - Only first plays count: a `?reset` replay cannot set it. Devices in `ignored_devices` (Jai's own) never set it either, though they still see the congrats on their own screen.
 - It can be faked by someone technical, because scoring happens in the browser and the answers are in a public file. Fixing that properly means scoring on the server.
 
+## The player's own stats
+
+Under the high score on the final screen: "Your best 884 · 7-day average 612 (5 games)", plus "🎉 New personal best" when today beats it (Jai's design, October 2026).
+
+- "Your best" is all-time. The 7-day average covers today and the 6 days before, counting only days the player finished, so skipped days do not drag it down.
+- The game calls the database function `my_stats` with its own device ID and the puzzle day. It returns that device's numbers from before today (best, games, and the count and sum over the previous 6 days), and the game adds today's score itself.
+- It stays hidden on a player's first game ever and on a `?reset` replay. Only first plays count, one per day.
+- A "player" is one browser on one device at one web address, so a new phone or cleared browser data starts fresh.
+
 ## Result screens and sharing
 
 - After each answer: a themed reaction line, a bar showing where the guess landed, "You said" and "Answer", a fun fact, and the points. Only a true 0 touches the end of the bar.
