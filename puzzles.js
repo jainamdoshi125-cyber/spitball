@@ -225,5 +225,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "The movie Titanic cost more to make than the real ship did back in 1912. How much did the movie cost, in millions of dollars?", a: 200, type: "ratio", unit: "million dollars",
         fact: "$200 million, the most expensive movie ever made at the time. The real ship cost about $7.5 million to build. 🚢" }
     ]
+  },
+  "2026-10-15": {
+    rebus: {
+      tiles: [{ e: "☀️" }, { e: "💡" }],
+      alt: "Rebus: a shining sun, plus a light bulb",
+      answers: ["brightidea", "brightideas", "sunlight", "brightlight"],
+      display: "Bright Idea",
+      hint: "Two words for a clever thought. Something very shiny, plus what a light bulb means over someone's head."
+    },
+    theme: "Light",
+    hype: ["Bright idea!", "Lit!", "Shining bright!"],
+    oof: ["Lights out.", "Total blackout.", "Blown fuse."],
+    snippet: "On this day in 1878, <strong>Thomas Edison</strong> started the Edison Electric Light Company to bring electric light into people's homes. So today is all about light.",
+    questions: [
+      { level: "Easy", q: "How many colors are in a rainbow?", a: 7, type: "ratio", unit: "colors",
+        fact: "7: red, orange, yellow, green, blue, indigo and violet. Isaac Newton picked seven to match the notes of a musical scale. 🌈" },
+      { level: "Easy-medium", q: "How many minutes does sunlight take to reach Earth?", a: 8, type: "ratio", unit: "minutes",
+        fact: "About 8 minutes, plus a few seconds. The sunshine on your face left the sun before you started this puzzle. ☀️" },
+      { level: "Medium", q: "Every night, the Eiffel Tower sparkles for five minutes at the top of each hour. How many light bulbs make it sparkle?", a: 20000, type: "ratio", unit: "bulbs",
+        fact: "20,000 bulbs. The sparkle first lit up at midnight on New Year's Eve 1999. ✨" },
+      { level: "Medium-hard", q: "How fast does light travel, in miles per second?", a: 186282, type: "ratio", unit: "miles per second",
+        fact: "About 186,282 miles per second. That's fast enough to circle the Earth more than 7 times in one second. ⚡" },
+      { level: "Hard", q: "Lightning strikes somewhere on Earth constantly. About how many times per second?", a: 44, type: "ratio", unit: "strikes per second",
+        fact: "About 44 times a second, or roughly 1.4 billion flashes a year. The stormiest spot on Earth is a lake in Venezuela. 🌩️" }
+    ]
   }
 };
