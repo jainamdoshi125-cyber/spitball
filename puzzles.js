@@ -250,5 +250,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Lightning strikes somewhere on Earth constantly. About how many times per second?", a: 44, type: "ratio", unit: "strikes per second",
         fact: "About 44 times a second, or roughly 1.4 billion flashes a year. The stormiest spot on Earth is a lake in Venezuela. 🌩️" }
     ]
+  },
+  "2026-10-16": {
+    rebus: {
+      tiles: [{ e: "🚗" }, { e: "🎵" }],
+      alt: "Rebus: a car, plus musical notes",
+      answers: ["cartoon", "cartoons", "cartune", "cartunes"],
+      display: "Cartoon",
+      hint: "One word for an animated show. Say a car and a tune together, fast."
+    },
+    theme: "Cartoons",
+    hype: ["That's all, folks!", "Animated genius!", "Toon-tastic!"],
+    oof: ["Back to the drawing board.", "Cartoon logic.", "Sufferin' succotash!"],
+    snippet: "On this day in 1923, brothers <strong>Walt and Roy Disney</strong> started a little cartoon studio in Los Angeles. You might have heard of it. So today is all about cartoons.",
+    questions: [
+      { level: "Easy", q: "How many members are in Scooby-Doo's Mystery Inc. gang, counting Scooby?", a: 5, type: "ratio", unit: "members",
+        fact: "5: Fred, Daphne, Velma, Shaggy and Scooby. 🐶" },
+      { level: "Easy-medium", q: "How many Disney theme parks are there around the world?", a: 12, type: "ratio", unit: "parks",
+        fact: "12 parks across six resorts: Florida, California, Tokyo, Paris, Hong Kong and Shanghai. 🏰" },
+      { level: "Medium", q: "How old was Walt Disney when Mickey Mouse made his big screen debut in 1928?", a: 26, type: "ratio", unit: "years old",
+        fact: "26. Walt also did Mickey's voice himself until 1947. 🐭" },
+      { level: "Medium-hard", q: "Lightning McQueen's race number in Cars is a secret nod to the year Toy Story came out. What number is painted on his car?", a: 95, type: "ratio", unit: "",
+        fact: "95, for 1995, the year Toy Story came out. It was almost 57, the birth year of director John Lasseter. 🏎️" },
+      { level: "Hard", q: "Toy Story 3 was the first animated movie ever to pass a big box office milestone. How much did it make worldwide, in millions of dollars?", a: 1067, type: "ratio", unit: "million dollars",
+        fact: "About $1,067 million, just over a billion dollars. It was the first animated movie to pass the billion-dollar mark. 🤠" }
+    ]
   }
 };
