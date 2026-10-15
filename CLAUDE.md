@@ -106,7 +106,7 @@ Under the high score on the final screen: "Your best 884 · 7-day average 612 (5
 - The game calls the database function `my_stats` with its own device ID and the puzzle day. It returns that device's numbers from before today (best, games, and the count and sum over the previous 6 days), and the game adds today's score itself.
 - It stays hidden on a player's first game ever and on a `?reset` replay. Only first plays count, one per day.
 - A "player" is one browser on one device at one web address, so a new phone or cleared browser data starts fresh.
-- Pending as of October 14, 2026: the `my_stats` function in `supabase/setup.sql` has not been run in Supabase yet, so the line is still hidden for everyone. Run that block in the Supabase SQL editor (through the browser pane on Jai's computer), then remove this note.
+- The `my_stats` function was added to Supabase on October 14, 2026.
 
 ## Result screens and sharing
 
