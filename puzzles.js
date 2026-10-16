@@ -275,5 +275,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Toy Story 3 was the first animated movie ever to pass a big box office milestone. How much did it make worldwide, in millions of dollars?", a: 1067, type: "ratio", unit: "million dollars",
         fact: "About $1,067 million, just over a billion dollars. It was the first animated movie to pass the billion-dollar mark. 🤠" }
     ]
+  },
+  "2026-10-17": {
+    rebus: {
+      tiles: [{ e: "🧠" }, { e: "⛈️" }],
+      alt: "Rebus: a brain, plus a thunderstorm",
+      answers: ["brainstorm", "brainstorms", "brainstorming"],
+      display: "Brainstorm",
+      hint: "One word for coming up with lots of ideas. A thinking organ, plus wild weather."
+    },
+    theme: "The Human Body",
+    hype: ["Big brain energy!", "Genius!", "Nailed it, Einstein!"],
+    oof: ["Brain freeze.", "Funny bone.", "Skipped a beat."],
+    snippet: "On this day in 1933, <strong>Albert Einstein</strong> arrived in America to start a new life. His brain was so famous that after he died, a doctor kept it to study. So today is all about the human body.",
+    questions: [
+      { level: "Easy", q: "How many teeth does an adult have, counting wisdom teeth?", a: 32, type: "ratio", unit: "teeth",
+        fact: "32, including 4 wisdom teeth. Kids have just 20 baby teeth. 🦷" },
+      { level: "Easy-medium", q: "How many bones are in the adult human body?", a: 206, type: "ratio", unit: "bones",
+        fact: "206. Babies are born with about 270, and some fuse together as they grow. 🦴" },
+      { level: "Medium", q: "About how many pounds does an adult human brain weigh?", a: 3, type: "ratio", unit: "pounds",
+        fact: "About 3 pounds. Einstein's weighed about 2.7, a little under average. 🧠" },
+      { level: "Medium-hard", q: "The oldest person ever recorded was a French woman named Jeanne Calment. How old did she live to be?", a: 122, type: "ratio", unit: "years old",
+        fact: "122 years and 164 days. She kept riding her bicycle until she turned 100. 🚲" },
+      { level: "Hard", q: "About how many times does your heart beat in one day?", a: 100000, type: "ratio", unit: "beats",
+        fact: "About 100,000 beats a day, or around 3 billion over a lifetime. ❤️" }
+    ]
   }
 };
