@@ -300,5 +300,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "About how many times does your heart beat in one day?", a: 100000, type: "ratio", unit: "beats",
         fact: "About 100,000 beats a day, or around 3 billion over a lifetime. ❤️" }
     ]
+  },
+  "2026-10-18": {
+    rebus: {
+      tiles: [{ e: "🧊" }, { e: "📦" }],
+      alt: "Rebus: an ice cube, plus a cardboard box",
+      answers: ["icebox", "iceboxes", "icechest"],
+      display: "Icebox",
+      hint: "One word: an old name for a fridge, and what critics called Alaska. Frozen water, plus a container."
+    },
+    theme: "The 50 States",
+    hype: ["Coast to coast!", "State champion!", "All-American!"],
+    oof: ["Lost on the map.", "Wrong turn at Albuquerque.", "Missed the exit."],
+    snippet: "On this day in 1867, the US officially took over <strong>Alaska</strong>, bought from Russia. Critics called it a frozen waste of money. So today is all about the 50 states.",
+    questions: [
+      { level: "Easy", q: "How many US states touch the Pacific Ocean?", a: 5, type: "ratio", unit: "states",
+        fact: "5: Washington, Oregon, California, Alaska and Hawaii. 🌊" },
+      { level: "Easy-medium", q: "How many US states share a border with Canada?", a: 13, type: "ratio", unit: "states",
+        fact: "13, from Alaska and Washington all the way to Maine. 🍁" },
+      { level: "Medium", q: "How much did the US pay Russia for Alaska, in millions of dollars?", a: 7.2, type: "ratio", unit: "million dollars",
+        fact: "$7.2 million, which works out to about 2 cents an acre. 💰" },
+      { level: "Medium-hard", q: "Alaska is the biggest state by far. About how many times bigger is it than Texas?", a: 2.5, type: "ratio", unit: "times bigger",
+        fact: "About 2.5 times: roughly 665,000 square miles to Texas's 269,000. 🐻" },
+      { level: "Hard", q: "How many national parks does the United States have?", a: 63, type: "ratio", unit: "national parks",
+        fact: "63, and California has the most with 9. 🏞️" }
+    ]
   }
 };
