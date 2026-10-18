@@ -140,6 +140,8 @@ button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 .rankbox .fine { font-size: 13px; font-weight: 400; opacity: 0.85; }
 .rankbox .msg { color: inherit; font-weight: 700; }
 .rankbox .link { color: inherit; padding: 0; align-self: flex-start; font-size: 14px; }
+.rankbox .link[data-act="rename"] { font-weight: 800; font-size: 15px; }
+.sheet [hidden] { display: none !important; }
 .board { display: flex; flex-direction: column; gap: 8px; }
 .btn.sm { min-height: 46px; font-size: 16px; }
 .rankbox.win .btn.alt { background: var(--card); color: var(--ink); box-shadow: 0 4px 0 var(--hit-fg); }
@@ -217,6 +219,7 @@ a.btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
     <pre class="share" id="sheetText"></pre>
     <a class="btn" id="smsBtn" href="#">Share Your Results</a>
     <button class="btn alt" type="button" id="copyBtn">Copy to clipboard</button>
+    <button class="btn alt" type="button" id="sheetBoard" hidden>🏅 See leaderboard</button>
     <p class="msg ok" id="sheetMsg" role="status"></p>
   </div>
 </div>
@@ -1021,12 +1024,15 @@ function fillShare() {
 function openShare() {
   fillShare();
   sheetMsg.textContent = "";
+  // The popup also offers the way to the leaderboard, except when it was opened from the leaderboard page itself.
+  document.getElementById("sheetBoard").hidden = !boardView.hidden || !S || S.stage !== "done";
   veil.hidden = false;
   if (T && !T.share_opened) { track(function (t) { t.share_opened = true; }); }
   document.getElementById("sheetClose").focus({ preventScroll: true });
 }
 function closeShare() { veil.hidden = true; }
 document.getElementById("sheetClose").addEventListener("click", closeShare);
+document.getElementById("sheetBoard").addEventListener("click", function () { closeShare(); openBoard(); });
 veil.addEventListener("click", function (e) { if (e.target === veil) { closeShare(); } });
 document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !veil.hidden) { closeShare(); } });
 // "Share Your Results" opens the phone's own share sheet (Messages, WhatsApp, Messenger and the rest) on browsers
