@@ -148,6 +148,7 @@ button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 .board li { display: flex; align-items: center; gap: 12px; padding: 9px 2px; border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; }
 .board li .rk { flex: none; width: 30px; font-family: var(--mono); font-size: 14px; color: var(--muted); }
 .board li .nm { flex: 1; min-width: 0; font-weight: 600; overflow-wrap: anywhere; }
+.board li .nm.auto { font-weight: 400; font-style: italic; color: var(--muted); }
 .board li .sc { font-family: var(--display); font-weight: 800; font-size: 18px; }
 .board li.me { background: var(--tint); border-radius: var(--r-ui); border-top-color: transparent; padding-inline: 10px; }
 .board li.me + li { border-top-color: transparent; }
@@ -824,7 +825,9 @@ function paintBoard() {
   var at = standing();
   if (at) { var pk = peakRank(); if (!pk || at.rank < pk) { saved("spitball.peak", JSON.stringify({ day: PUZZLE.day, rank: at.rank })); } }
   var peak = peakRank(), canName = !!(T && !T.replay);   // only a tracked first play can go on the board
-  var mineOnBoard = BOARD ? BOARD.top.filter(function (r) { return r.mine; })[0] : null;
+  var mineRow = BOARD ? BOARD.top.filter(function (r) { return r.mine; })[0] : null;
+  var mineOnBoard = mineRow && !mineRow.auto ? mineRow : null;       // on the board under a name they chose
+  var mineAuto = mineRow && mineRow.auto ? mineRow : null;           // on the board under a stand-in nickname
   var inTop = at && at.rank <= BOARD_SIZE;
   var of = at ? " of " + at.players.toLocaleString("en-US") + " today" : "";
   var dropped = at && !inTop && peak && peak <= BOARD_SIZE && peak < at.rank;
@@ -836,7 +839,7 @@ function paintBoard() {
     var line = "", win = false;
     if (!at) { line = ""; }
     else if (inTop && mineOnBoard) { win = true; line = "<strong>✅ You're #" + at.rank + " on the leaderboard</strong>"; }
-    else if (inTop && canName) { win = true; line = "<strong>🎉 You're #" + at.rank + " today!</strong><span>Add your name to the leaderboard.</span>"; }
+    else if (inTop && canName) { win = true; line = "<strong>🎉 You're #" + at.rank + " today!</strong><span>" + (mineAuto ? "You're on the leaderboard as " + esc(mineAuto.name) + ". Add your own name?" : "Add your name to the leaderboard.") + "</span>"; }
     else if (dropped) { line = "<span>You're now #" + at.rank + of + ". You were #" + peak + " earlier.</span>"; }
     else { line = "<span>You're #" + at.rank + of + ".</span>"; }
     rankBox.className = "rankbox" + (win ? " win" : "");
@@ -858,7 +861,7 @@ function paintBoard() {
       good = true;
       var last = mineOnBoard ? mineOnBoard.name : (BOARD.my_name || saved("spitball.name") || "");
       html = "<strong>" + (mineOnBoard ? "Change your name" : "🎉 You're #" + at.rank + " today!") + "</strong>" +
-        (mineOnBoard ? "" : "<span>Put your name on the leaderboard.</span>") +
+        (mineOnBoard ? "" : mineAuto ? "<span>You're on the board as " + esc(mineAuto.name) + ". Put your own name instead?</span>" : "<span>Put your name on the leaderboard.</span>") +
         '<form id="nameForm" autocomplete="off"><div class="field"><input id="nameInput" type="text" maxlength="16" placeholder="Your name" aria-label="Your name" value="' + esc(last) + '" autocapitalize="words" autocorrect="off" spellcheck="false" enterkeyhint="done"><button class="go" type="submit">Submit</button></div>' +
         '<p class="msg" role="status">' + esc(NAME_MSG) + '</p><span class="fine">Shown to everyone who plays today.</span></form>';
     } else if (inTop && mineOnBoard) {
@@ -875,7 +878,7 @@ function paintBoard() {
     viewRank.hidden = !html;
   }
   var rowsHtml = BOARD.top.map(function (r) {
-    return '<li' + (r.mine ? ' class="me"' : "") + '><span class="rk">#' + r.rank + '</span><span class="nm">' + esc(r.name) + (r.mine ? " (you)" : "") +
+    return '<li' + (r.mine ? ' class="me"' : "") + '><span class="rk">#' + r.rank + '</span><span class="nm' + (r.auto ? " auto" : "") + '">' + esc(r.name) + (r.mine ? " (you)" : "") +
       '</span><span class="sc">' + Number(r.score).toLocaleString("en-US") + "</span></li>";
   }).join("");
   viewList.innerHTML = rowsHtml ? "<ol>" + rowsHtml + "</ol>" : '<p class="muted">No names on the board yet. Finish in the top ' + BOARD_SIZE + " to be the first.</p>";
@@ -967,17 +970,14 @@ function highStatus() {
   return saved("spitball.first") === PUZZLE.day ? "first" : "";
 }
 // The extra line in the shared text, straight under the score. Everyone else gets no line.
-// The second line of the shared text: where the player stands on today's leaderboard so far.
+// The second line of the shared text, for a player who stands out today: first to finish, the top score, a tie for
+// the top, or a place on the leaderboard. Everyone else gets no line.
 function highLine() {
-  var at = standing(), st = highStatus();
-  if (at) {
-    var of = " of " + at.players.toLocaleString("en-US") + " so far";
-    if (at.players === 1) { return "🥇 First to finish today"; }
-    if (st === "first" && at.rank > 1) { return "🥇 First to finish, now #" + at.rank + of; }
-    if (at.rank === 1) { return (st === "tie" ? "🤝 Tied for #1" : "🏆 #1") + of; }
-    return "🏅 #" + at.rank + of;
-  }
-  return { first: "🥇 First to finish today", top: "🏆 Today's top score", tie: "🤝 Tied for the top score" }[st] || "";
+  var st = highStatus(), at = standing();
+  var line = { first: "🥇 First to finish today", top: "🏆 Today's top score", tie: "🤝 Tied for the top score" }[st];
+  if (line) { return line; }
+  if (at && at.rank <= BOARD_SIZE) { return "🏅 #" + at.rank + " on today's leaderboard"; }
+  return "";
 }
 function paintHigh() {
   fillShare();

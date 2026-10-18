@@ -116,7 +116,7 @@ The leaderboard has its own page, opened with "🏅 See leaderboard" on the fina
 
 - The final screen only shows one short line about where the player stands ("🎉 You're #4 today! Add your name to the leaderboard.", "✅ You're #4 on the leaderboard", "You're #34 of 120 today." or "You're now #18 of 140. You were #4 earlier.") and the See leaderboard button.
 - The leaderboard page shows the player's line again, the name box when they can use it, the named top 15, a "Share my result" button and "Back to my score".
-- The board lists the named top 15: players whose current rank is 15 or better and who added a name. Each row shows the true rank among everyone who finished, so there can be gaps (a top-15 player who skipped the name). Ties share a rank.
+- The board lists the top 15: players whose current rank is 15 or better. Each row shows the true rank among everyone who finished, and ties share a rank. From the October 18, 2026 puzzle onward (Jai's call, while the game is small) every top-15 player is listed: one who skipped adding a name gets a playful stand-in nickname such as "Lucky Otter" (`board_nickname` in the database, always the same for a device), shown in a lighter italic style, and the game invites them to add their own. Before that date only named players were listed, so there could be gaps.
 - A player in the top 15 can add a name on the leaderboard page. The box is pre-filled with the last name used on that device (`spitball.name`), so returning players submit in one tap. Names are optional, public ("Shown to everyone who plays today"), at most 16 characters, with a small bad-word filter in the game. After submitting it says "✅ You're #4 on the leaderboard" with a "Change name" link.
 - Ranks can only go down during the day, because scores never change once someone finishes. The rank is worked out again whenever the player returns; the best rank they reached is remembered on the device (`spitball.peak`), so someone pushed out of the top 15 sees where they were.
 - Database: the `board_names` table (one name per device per day, plus a `hidden` flag), `day_board` (the named top 15, how many finished, how many scored above a given score, and the asking device's own name) and `board_submit` (checks the round is that device's finished first play and still in the top 15). The public key cannot read the names table directly.
@@ -135,13 +135,13 @@ The shared text is exactly this shape:
 
 ```
 spitball.uk: 421
-🏅 #4 of 38 so far
+🏆 Today's top score
 🧩Rebus: Try 2
 100👑 12🙈 87👌 45🤷 0💩
 Oct-6-26
 ```
 
-- The second line is where the player stands on today's leaderboard so far (Jai's design): "🏅 #4 of 38 so far", "🏆 #1 of 38 so far", "🤝 Tied for #1 of 38 so far", "🥇 First to finish today" (the only finisher so far) or "🥇 First to finish, now #6 of 40 so far" (being first is remembered on the device as `spitball.first`). It is worked out when the text is made, so a later share shows the later rank. Replays get no line. If the rank arrives after the share popup has opened, the popup text and link update in place. If the leaderboard cannot be reached, it falls back to the older lines ("🏆 Today's top score" and so on) or no line.
+- The second line only appears for a player who stands out today (Jai's design): "🥇 First to finish today" (nobody else had finished when they did; remembered on the device as `spitball.first`), "🏆 Today's top score" (beat everyone so far), "🤝 Tied for the top score", or "🏅 #4 on today's leaderboard" (anyone else in the top 15). Everyone else gets no line. Jai tried "#4 of 38 so far" for everyone on October 17, 2026 and went back to this while the game is small. It is worked out when the text is made, replays never get one, and if the answer arrives after the share popup has opened, the popup text and link update in place.
 - The first line starts with the game's address (`spitball.uk`, lowercase) in place of the name, so phones make it a tappable link. Jai chose this over a separate address line.
 - The score digits are Unicode bold digits, because text messages cannot carry real bold.
 - The text starts with an invisible zero-width space. Without it, iPhones read the opening word and colon as a web address and paste the result percent-encoded. Do not remove it.

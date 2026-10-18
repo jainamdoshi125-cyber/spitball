@@ -226,9 +226,28 @@ create policy "admins hide board names" on public.board_names
   using (exists (select 1 from public.admins a where a.user_id = (select auth.uid())))
   with check (exists (select 1 from public.admins a where a.user_id = (select auth.uid())));
 
--- The board for one day. Returns the named top 15 (rank, name, score), how many finished, how many finished above
--- the given score (so the game can work out the player's rank from its own score), and the asking device's own
--- board entry, if it has one. No device IDs leave the database.
+-- A playful stand-in name for a top-15 player who has not added one, used from the October 18, 2026 puzzle onward
+-- (Jai's call). The same device always gets the same nickname, and the game shows these in a lighter style.
+create or replace function public.board_nickname(dev uuid)
+returns text
+language sql
+immutable
+set search_path = ''
+as $$
+  select (array['Lucky','Sneaky','Mighty','Clever','Speedy','Jolly','Brave','Zippy','Witty','Cosmic','Turbo','Fuzzy',
+                'Groovy','Sunny','Bold','Swift','Daring','Cheeky','Breezy','Plucky','Snappy','Peppy','Mystery','Stealthy'])
+           [1 + abs(hashtext(dev::text)) % 24]
+      || ' ' ||
+         (array['Otter','Moose','Panda','Falcon','Badger','Llama','Gecko','Koala','Walrus','Puffin','Lynx','Narwhal',
+                'Beaver','Toucan','Yak','Ferret','Bison','Lemur','Owl','Hippo','Raccoon','Penguin','Fox','Hedgehog'])
+           [1 + abs(hashtext(reverse(dev::text))) % 24];
+$$;
+
+-- The board for one day. Returns the top 15 (rank, name, score, whether the name is a stand-in, whether it is the
+-- asking device), how many finished, how many finished above the given score (so the game can work out the player's
+-- rank from its own score), and the asking device's own chosen name, if any. Before October 18, 2026 only players who
+-- added a name are listed; from then on every top-15 player is, with a stand-in name if they skipped it.
+-- A name Jai has hidden takes that player off the board entirely. No device IDs leave the database.
 create or replace function public.day_board(d date, me uuid default null, score integer default null)
 returns jsonb
 language sql
@@ -248,14 +267,22 @@ as $$
   ),
   ranked as (
     select f.device_id, f.total, rank() over (order by f.total desc) as rk from f
+  ),
+  shown as (
+    select x.rk, x.total, x.device_id, b.name, b.updated_at,
+           (b.name is null) as auto
+    from ranked x
+    left join public.board_names b on b.device_id = x.device_id and b.puzzle_day = d
+    where x.rk <= 15
+      and coalesce(b.hidden, false) = false
+      and (b.name is not null or d >= date '2026-10-18')
   )
   select jsonb_build_object(
     'top', coalesce((
-      select jsonb_agg(jsonb_build_object('rank', x.rk, 'name', b.name, 'score', x.total, 'mine', x.device_id = me)
-                       order by x.rk, b.updated_at)
-      from ranked x
-      join public.board_names b on b.device_id = x.device_id and b.puzzle_day = d and not b.hidden
-      where x.rk <= 15), '[]'::jsonb),
+      select jsonb_agg(jsonb_build_object('rank', s.rk, 'name', coalesce(s.name, public.board_nickname(s.device_id)),
+                                          'score', s.total, 'auto', s.auto, 'mine', s.device_id = me)
+                       order by s.rk, s.auto, s.updated_at)
+      from shown s), '[]'::jsonb),
     'finishers', (select count(*) from f),
     'above', case when score is null then null else (select count(*) from f where f.total > score) end,
     'my_name', (select b.name from public.board_names b where b.device_id = me and b.puzzle_day = d)
