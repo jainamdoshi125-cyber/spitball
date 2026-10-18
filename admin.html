@@ -190,7 +190,7 @@ function api(path, extra, method, body) {
 // Signing in here marks this browser as yours: the game stops reporting from it, and the rounds it already sent
 // are left out of every number on this page. The list of left-out devices lives in the database, so it applies
 // whichever device you open this page on. The button at the bottom of the page switches it back.
-var IGNORED = {}, HIDDEN = 0;
+var IGNORED = {}, HIDDEN = 0, NAMES = null;
 function keep(key, value) {
   try { if (arguments.length === 1) { return localStorage.getItem(key); } localStorage.setItem(key, value); } catch (err) {}
   return null;
@@ -237,7 +237,10 @@ function load() {
   $("loginCard").hidden = true; $("status").textContent = "Loading the numbers...";
   return freshSession().then(function () { return api("admins?select=user_id"); }).then(function (mine) {
     if (!mine.length) { saveSession(null); showLogin("That login works, but it is not on the admin list."); return null; }
-    return syncDevice().then(fetchRounds);
+    return syncDevice().then(fetchRounds).then(function (rows) {
+      // Leaderboard names. If that table is not set up yet, the page carries on without it.
+      return api("board_names?select=*").then(function (n) { NAMES = n; }, function () { NAMES = null; }).then(function () { return rows; });
+    });
   }).then(function (rows) {
     if (!rows) { return; }
     ROUNDS = rows.filter(function (r) { return !IGNORED[r.device_id]; });
@@ -263,6 +266,13 @@ $("loginForm").addEventListener("submit", function (e) {
 });
 $("outBtn").addEventListener("click", function () { saveSession(null); ROUNDS = []; $("dash").innerHTML = ""; showLogin(""); });
 $("refreshBtn").addEventListener("click", load);
+$("dash").addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest("[data-hide]") : null;
+  if (!b) { return; }
+  b.disabled = true;
+  api("board_names?device_id=eq." + b.getAttribute("data-hide") + "&puzzle_day=eq." + pickedDay, null, "PATCH", { hidden: b.getAttribute("data-to") === "true" })
+    .then(load, function () { b.disabled = false; $("status").textContent = "Could not change that name. Try Refresh."; });
+});
 $("deviceBtn").addEventListener("click", function () { keep("spitball.notrack", keep("spitball.notrack") === "0" ? "1" : "0"); load(); });
 
 // ---------- adding it up ----------
@@ -429,6 +439,19 @@ function draw() {
   html += '<section class="card"><h2>Wrong rebus answers</h2><p class="muted">' + (P ? 'The answer shown was "' + esc(P.rebus.display) + '". ' : "") + "What people typed that the game did not accept. Anything that shows up a lot and reads as fair is worth accepting.</p>" +
     (wrongRows.length ? '<table><thead><tr><th>Typed</th><th class="n">Times</th></tr></thead><tbody>' + wrongRows.map(function (w) { return "<tr><td>" + esc(w) + '</td><td class="n">' + num(wrong[w]) + "</td></tr>"; }).join("") + "</tbody></table>" : '<p class="muted">None yet.</p>') + "</section>";
 
+  // Leaderboard names for this day, with a hide button for anything offensive or obviously faked
+  if (NAMES) {
+    var byRound = {};
+    ROUNDS.forEach(function (r) { byRound[r.id] = r; });
+    var dayNames = NAMES.filter(function (n) { return n.puzzle_day === pickedDay; }).map(function (n) {
+      var r = byRound[n.round_id]; return { n: n, score: r && typeof r.total === "number" ? r.total : null };
+    }).sort(function (a, b) { return (b.score || 0) - (a.score || 0); });
+    html += '<section class="card"><h2>Leaderboard names</h2><p class="muted">Every name players added for this day, highest score first. Hide one and it disappears from the board for everyone. A hidden name stays hidden even if the player changes it.</p>' +
+      (dayNames.length ? '<table><thead><tr><th>Name</th><th class="n">Score</th><th class="n"></th></tr></thead><tbody>' + dayNames.map(function (x) {
+        return "<tr><td>" + esc(x.n.name) + (x.n.hidden ? '<span class="tag">hidden</span>' : "") + '</td><td class="n">' + (x.score === null ? "n/a" : num(x.score)) +
+          '</td><td class="n"><button class="pill" type="button" data-hide="' + esc(x.n.device_id) + '" data-to="' + (x.n.hidden ? "false" : "true") + '">' + (x.n.hidden ? "Show" : "Hide") + "</button></td></tr>";
+      }).join("") + "</tbody></table>" : '<p class="muted">No names yet for this day.</p>') + "</section>";
+  }
   dash.innerHTML = html;
   $("dayPick").addEventListener("change", function (e) { pickedDay = e.target.value; draw(); });
 }

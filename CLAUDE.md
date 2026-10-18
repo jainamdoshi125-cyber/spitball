@@ -110,6 +110,17 @@ Under the high score on the final screen: "Your best 884 · 7-day average 612 (5
 - A "player" is one browser on one device at one web address, so a new phone or cleared browser data starts fresh.
 - The `my_stats` function was added to Supabase on October 14, 2026.
 
+## Today's leaderboard
+
+The final screen shows "🏅 Today's leaderboard" (under the breakdown) and the player's own rank (under their stats). Jai's design, October 2026.
+
+- The board lists the named top 10: players whose current rank is 10 or better and who added a name. Each row shows the true rank among everyone who finished, so there can be gaps (a top-10 player who skipped the name). Ties share a rank.
+- A player in the top 10 sees "🎉 You're #4 today!" with a name box and Submit. The box is pre-filled with the last name used on that device (`spitball.name`), so returning players submit in one tap. Names are optional, public ("Shown to everyone who plays today"), at most 16 characters, with a small bad-word filter in the game. After submitting it says "✅ You're #4 on the leaderboard" with a "Change name" link.
+- Everyone else sees "You're #34 of 120 today." Ranks can only go down during the day, because scores never change once someone finishes. The rank is worked out again whenever the player returns; the best rank they reached is remembered on the device (`spitball.peak`), so someone pushed out of the top 10 sees "You're now #12 of 140. You were #4 earlier today, so your name has dropped off the board."
+- Database: the `board_names` table (one name per device per day, plus a `hidden` flag), `day_board` (the named top 10, how many finished, how many scored above a given score, and the asking device's own name) and `board_submit` (checks the round is that device's finished first play and still in the top 10). The public key cannot read the names table directly.
+- Only first plays count, and devices in `ignored_devices` (Jai's) never appear or submit; on them the game still shows the board and a rank.
+- The admin page lists each day's names with a Hide button. A hidden name stays hidden even if the player changes it. Jai accepts that scores could be faked.
+
 ## Result screens and sharing
 
 - After each answer: a themed reaction line, a bar showing where the guess landed, "You said" and "Answer", a fun fact, and the points. Only a true 0 touches the end of the bar.
