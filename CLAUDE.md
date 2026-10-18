@@ -120,6 +120,7 @@ The final screen shows "🏅 Today's leaderboard" (under the breakdown) and the 
 - Database: the `board_names` table (one name per device per day, plus a `hidden` flag), `day_board` (the named top 10, how many finished, how many scored above a given score, and the asking device's own name) and `board_submit` (checks the round is that device's finished first play and still in the top 10). The public key cannot read the names table directly.
 - Only first plays count, and devices in `ignored_devices` (Jai's) never appear or submit; on them the game still shows the board and a rank.
 - The admin page lists each day's names with a Hide button. A hidden name stays hidden even if the player changes it. Jai accepts that scores could be faked.
+- The leaderboard table and functions were added to Supabase on October 17, 2026.
 
 ## Result screens and sharing
 
