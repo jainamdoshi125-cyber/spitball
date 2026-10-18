@@ -201,8 +201,8 @@ $$;
 revoke all on function public.my_stats(uuid, date) from public;
 grant execute on function public.my_stats(uuid, date) to anon, authenticated;
 
--- Today's leaderboard (Jai's design, October 2026). Players who finish in the top 10 may add a name. The board shows
--- named entries whose current rank is 10 or better, with their true rank among everyone who finished (ties share a
+-- Today's leaderboard (Jai's design, October 2026). Players who finish in the top 15 may add a name. The board shows
+-- named entries whose current rank is 15 or better, with their true rank among everyone who finished (ties share a
 -- rank). Names are public by design, at most 16 characters, and Jai can hide one from the admin page.
 create table if not exists public.board_names (
   device_id  uuid not null,
@@ -226,7 +226,7 @@ create policy "admins hide board names" on public.board_names
   using (exists (select 1 from public.admins a where a.user_id = (select auth.uid())))
   with check (exists (select 1 from public.admins a where a.user_id = (select auth.uid())));
 
--- The board for one day. Returns the named top 10 (rank, name, score), how many finished, how many finished above
+-- The board for one day. Returns the named top 15 (rank, name, score), how many finished, how many finished above
 -- the given score (so the game can work out the player's rank from its own score), and the asking device's own
 -- board entry, if it has one. No device IDs leave the database.
 create or replace function public.day_board(d date, me uuid default null, score integer default null)
@@ -255,7 +255,7 @@ as $$
                        order by x.rk, b.updated_at)
       from ranked x
       join public.board_names b on b.device_id = x.device_id and b.puzzle_day = d and not b.hidden
-      where x.rk <= 10), '[]'::jsonb),
+      where x.rk <= 15), '[]'::jsonb),
     'finishers', (select count(*) from f),
     'above', case when score is null then null else (select count(*) from f where f.total > score) end,
     'my_name', (select b.name from public.board_names b where b.device_id = me and b.puzzle_day = d)
@@ -264,7 +264,7 @@ $$;
 revoke all on function public.day_board(date, uuid, integer) from public;
 grant execute on function public.day_board(date, uuid, integer) to anon, authenticated;
 
--- Add or change a name on the board. Only a finished first play in the current top 10 can, from the device that
+-- Add or change a name on the board. Only a finished first play in the current top 15 can, from the device that
 -- played it. A name Jai has hidden stays hidden even if it is changed.
 create or replace function public.board_submit(r uuid, me uuid, nm text)
 returns jsonb
@@ -292,7 +292,7 @@ begin
     where x.puzzle_day = v_day and x.finished and x.total is not null and not x.replay
       and x.total > v_total and x.device_id <> me
       and not exists (select 1 from public.ignored_devices i where i.device_id = x.device_id);
-  if v_above >= 10 then return jsonb_build_object('ok', false, 'why', 'rank'); end if;
+  if v_above >= 15 then return jsonb_build_object('ok', false, 'why', 'rank'); end if;
   insert into public.board_names (device_id, puzzle_day, name, round_id)
     values (me, v_day, v_name, r)
     on conflict (device_id, puzzle_day) do update
