@@ -53,6 +53,8 @@ Jai asks for the next day's puzzle the day before. Send him the hook, rebus, the
 
 `puzzles.js` is public, so anyone can read it. Add a puzzle the evening before it goes live, never weeks ahead.
 
+Planning ahead: Jai can approve several days at once. Approved puzzles that are not live yet wait in a private claude.ai Project doc (`claude/spitball-puzzle-queue.md` in the Spitball project), never in this repository. For each one, a one-time scheduled task adds it to `puzzles.js` at 7:30 PM Eastern the evening before and pushes, so answers still only go public the night before. The nightly 7:58 PM reminder task checks that tomorrow's puzzle is in and pings Jai if it is not.
+
 ## Puzzle writing rules
 
 - The hook is a real event that happened on that calendar date. Verify the date with a web search.
