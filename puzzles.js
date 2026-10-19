@@ -325,5 +325,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "How many national parks does the United States have?", a: 63, type: "ratio", unit: "national parks",
         fact: "63, and California has the most with 9. 🏞️" }
     ]
+  },
+  "2026-10-19": {
+    rebus: {
+      tiles: [{ e: "🐂" }, { e: "🛒" }],
+      alt: "Rebus: a bull, plus a shopping cart",
+      answers: ["bullmarket", "bullmarkets"],
+      display: "Bull Market",
+      hint: "Two words for when stocks keep going up. A big horned animal, plus where you shop for groceries."
+    },
+    theme: "Money",
+    hype: ["Cha-ching!", "Money in the bank!", "Jackpot!"],
+    oof: ["Bankrupt.", "Overdrawn.", "Two cents short."],
+    snippet: "On this day in 1987, the stock market had its worst day ever, a crash known as <strong>Black Monday</strong>. So today is all about money.",
+    questions: [
+      { level: "Easy", q: "In Monopoly, how much money do you collect when you pass Go?", a: 200, type: "ratio", unit: "dollars",
+        fact: "$200 every time. Each player starts the game with $1,500. 🎩" },
+      { level: "Easy-medium", q: "How many quarters come in a standard bank roll?", a: 40, type: "ratio", unit: "quarters",
+        fact: "40 quarters, so a roll is worth $10. 🪙" },
+      { level: "Medium", q: "Counting old bills that are no longer made, how many different dollar amounts has the US ever printed bills in, from $1 up?", a: 12, type: "ratio", unit: "amounts",
+        fact: "12, from $1 all the way to $100,000. The big bills were last printed in 1945, and the $100,000 one was only ever used between banks. 💵" },
+      { level: "Medium-hard", q: "How many European countries use the euro as their money?", a: 21, type: "ratio", unit: "countries",
+        fact: "21. Bulgaria became the newest member in January 2026. 💶" },
+      { level: "Hard", q: "In 2010, a programmer made the first known purchase with bitcoin: two pizzas. How many bitcoins did he pay?", a: 10000, type: "ratio", unit: "bitcoins",
+        fact: "10,000 bitcoins, on May 22, 2010. Fans now celebrate it every year as Bitcoin Pizza Day. 🍕" }
+    ]
   }
 };
