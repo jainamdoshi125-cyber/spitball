@@ -350,5 +350,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "In 2010, a programmer made the first known purchase with bitcoin: two pizzas. How many bitcoins did he pay?", a: 10000, type: "ratio", unit: "bitcoins",
         fact: "10,000 bitcoins, on May 22, 2010. Fans now celebrate it every year as Bitcoin Pizza Day. 🍕" }
     ]
+  },
+  "2026-10-20": {
+    rebus: {
+      tiles: [{ e: "📖" }, { e: "🪱" }],
+      alt: "Rebus: an open book, plus a worm",
+      answers: ["bookworm", "bookworms", "bookwurm"],
+      display: "Bookworm",
+      hint: "One word for someone who loves to read. Something you read, plus a wiggly creature."
+    },
+    theme: "Books",
+    hype: ["Page turner!", "By the book!", "A real bookworm!"],
+    oof: ["Lost the plot.", "Back to the library.", "Plot twist."],
+    snippet: "On this day in 1955, <strong>The Return of the King</strong> was published, finishing The Lord of the Rings. So today is all about books.",
+    questions: [
+      { level: "Easy", q: "How many books are in The Chronicles of Narnia?", a: 7, type: "ratio", unit: "books",
+        fact: "7, starting with The Lion, the Witch and the Wardrobe in 1950. 🦁" },
+      { level: "Easy-medium", q: "Dr. Seuss wrote Green Eggs and Ham on a bet that he couldn't write a book using only a small number of different words. How many words?", a: 50, type: "ratio", unit: "words",
+        fact: "50 words, on a $50 bet with his editor. Seuss won. 🥚" },
+      { level: "Medium", q: "In The Hobbit, Bilbo sets off on an adventure with a band of dwarves. How many dwarves?", a: 13, type: "ratio", unit: "dwarves",
+        fact: "13 dwarves, led by Thorin Oakenshield. Not to be confused with Snow White's seven. ⛏️" },
+      { level: "Medium-hard", q: "Agatha Christie is the best-selling novelist of all time. How many detective novels did she write?", a: 66, type: "ratio", unit: "novels",
+        fact: "66 detective novels, plus 14 collections of short stories. Her books have sold more than two billion copies. 🔍" },
+      { level: "Hard", q: "The most overdue library book ever was finally returned to a college in England. How many years late was it?", a: 288, type: "ratio", unit: "years",
+        fact: "288 years. It was borrowed around 1667 and returned in the 1950s, and the college charged no late fee. 📚" }
+    ]
   }
 };
