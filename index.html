@@ -144,6 +144,12 @@ button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 .sheet [hidden] { display: none !important; }
 .board { display: flex; flex-direction: column; gap: 8px; }
 .btn.sm { min-height: 46px; font-size: 16px; }
+.namebtns { display: flex; flex-direction: column; gap: 6px; }
+.rankbox.win .btn.sm:not(.alt) { background: var(--card); color: var(--ink); box-shadow: 0 4px 0 var(--hit-fg); }
+.sheet .rankbox strong { font-size: 18px; }
+.sheet .rankbox { padding: 10px 12px; gap: 8px; }
+/* While someone types a name in the share popup, the popup moves to the top so the keyboard cannot cover it. */
+.veil.typing { align-items: flex-start; }
 .rankbox.win .btn.alt { background: var(--card); color: var(--ink); box-shadow: 0 4px 0 var(--hit-fg); }
 .board h3 { font-family: var(--display); font-weight: 800; font-size: 20px; margin: 0; }
 .board ol { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; }
@@ -154,6 +160,9 @@ button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 .board li .sc { font-family: var(--display); font-weight: 800; font-size: 18px; }
 .board li.me { background: var(--tint); border-radius: var(--r-ui); border-top-color: transparent; padding-inline: 10px; }
 .board li.me + li { border-top-color: transparent; }
+.board li.tap { cursor: pointer; box-shadow: inset 0 0 0 2px var(--sun); }
+.board li.tap:active { transform: translateY(1px); }
+.board li .pen { font-size: 14px; margin-left: 4px; }
 .board .muted { font-size: 14px; }
 .rows { list-style: none; padding: 0; display: flex; flex-direction: column; }
 .rows li { display: flex; align-items: center; gap: 12px; padding-block: 11px; border-top: 1px solid var(--line); }
@@ -216,6 +225,7 @@ a.btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
     <button class="close-x" type="button" id="sheetClose" aria-label="Close">&times;</button>
     <h2 id="sheetTitle">Share your score</h2>
+    <div class="rankbox win" id="sheetName" role="status" hidden></div>
     <pre class="share" id="sheetText"></pre>
     <a class="btn" id="smsBtn" href="#">Share Your Results</a>
     <button class="btn alt" type="button" id="copyBtn">Copy to clipboard</button>
@@ -836,13 +846,16 @@ function paintBoard() {
   var dropped = at && !inTop && peak && peak <= BOARD_SIZE && peak < at.rank;
   var seeBtn = '<button class="btn alt sm" type="button" data-act="board">🏅 See leaderboard</button>';
 
+  var st = nameState(), savedName = cleanName(saved("spitball.name"));
+
   // On the final screen: one short line about where they stand, and the way to the leaderboard page.
   var rankBox = document.getElementById("rankBox");
   if (rankBox && BOARD && S.stage === "done") {
     var line = "", win = false;
     if (!at) { line = ""; }
-    else if (inTop && mineOnBoard) { win = true; line = "<strong>✅ You're #" + at.rank + " on the leaderboard</strong>"; }
-    else if (inTop && canName) { win = true; line = "<strong>🎉 You're #" + at.rank + " today!</strong><span>" + (mineAuto ? "You're on the leaderboard as " + esc(mineAuto.name) + ". Add your own name?" : "Add your name to the leaderboard.") + "</span>"; }
+    else if (st === "on" || st === "edit") { win = true; line = "<strong>✅ You're #" + at.rank + " on the leaderboard</strong>"; }
+    else if (st === "quick") { win = true; line = "<strong>🎉 You're #" + at.rank + " today!</strong><span>Add to the leaderboard as " + esc(savedName) + "?</span>"; }
+    else if (st === "ask") { win = true; line = "<strong>🎉 You're #" + at.rank + " today!</strong><span>" + (mineAuto ? "You're on the leaderboard as " + esc(mineAuto.name) + ". Add your own name?" : "Add your name to the leaderboard.") + "</span>"; }
     else if (dropped) { line = "<span>You're now #" + at.rank + of + ". You were #" + peak + " earlier.</span>"; }
     else { line = "<span>You're #" + at.rank + of + ".</span>"; }
     rankBox.className = "rankbox" + (win ? " win" : "");
@@ -850,42 +863,71 @@ function paintBoard() {
     rankBox.hidden = false;
   }
 
+  // In the share popup: the name strip, only for a top-15 player who can add or change a name.
+  paintNameBox(document.getElementById("sheetName"), st ? nameBlock(st) : "", !!st);
+
   // On the leaderboard page.
   var viewRank = document.getElementById("viewRank"), viewList = document.getElementById("viewList");
   if (!viewRank || !viewList) { return; }
   if (!BOARD) { viewList.innerHTML = '<p class="muted">Loading the leaderboard...</p>'; viewRank.hidden = true; return; }
-  // Left alone while they are typing a name, so a refresh never wipes it.
-  var input = viewRank.querySelector("input");
-  var typing = input && (document.activeElement === input || input.value !== input.defaultValue);
-  if (!typing) {
-    var html = "", good = false;
-    if (!at) { html = ""; }
-    else if (inTop && canName && (NAME_EDIT || !mineOnBoard)) {
-      good = true;
-      var last = mineOnBoard ? mineOnBoard.name : (BOARD.my_name || saved("spitball.name") || "");
-      html = "<strong>" + (mineOnBoard ? "Change your name" : "🎉 You're #" + at.rank + " today!") + "</strong>" +
-        (mineOnBoard ? "" : mineAuto ? "<span>You're on the board as " + esc(mineAuto.name) + ". Put your own name instead?</span>" : "<span>Put your name on the leaderboard.</span>") +
-        '<form id="nameForm" autocomplete="off"><div class="field"><input id="nameInput" type="text" maxlength="16" placeholder="Your name" aria-label="Your name" value="' + esc(last) + '" autocapitalize="words" autocorrect="off" spellcheck="false" enterkeyhint="done"><button class="go" type="submit">Submit</button></div>' +
-        '<p class="msg" role="status">' + esc(NAME_MSG) + '</p><span class="fine">Shown to everyone who plays today.</span></form>';
-    } else if (inTop && mineOnBoard) {
-      good = true;
-      html = "<strong>✅ You're #" + at.rank + " on the leaderboard</strong><span>As " + esc(mineOnBoard.name) + ". Nice work.</span>" +
-        '<button class="link" type="button" data-act="rename">Change name</button>';
-    } else if (dropped) {
-      html = "<span>You're now #" + at.rank + of + ". You were #" + peak + " earlier today" + (BOARD.my_name ? ", so your name has dropped off the board." : ".") + "</span>";
-    } else {
-      html = "<span>You're #" + at.rank + of + ".</span>" + (inTop ? "" : '<span class="fine">Finish in the top ' + BOARD_SIZE + " to get your name on the board.</span>");
-    }
-    viewRank.className = "rankbox" + (good ? " win" : "");
-    viewRank.innerHTML = html;
-    viewRank.hidden = !html;
-  }
+  var other = !at ? "" : dropped ? "<span>You're now #" + at.rank + of + ". You were #" + peak + " earlier today" + (BOARD.my_name ? ", so your name has dropped off the board." : ".") + "</span>"
+    : "<span>You're #" + at.rank + of + ".</span>" + (inTop ? "" : '<span class="fine">Finish in the top ' + BOARD_SIZE + " to get your name on the board.</span>");
+  paintNameBox(viewRank, st ? nameBlock(st) : other, !!st);
+  var tappable = !!st;      // the player's own row opens the name box when they can add or change a name
   var rowsHtml = BOARD.top.map(function (r) {
-    return '<li' + (r.mine ? ' class="me"' : "") + '><span class="rk">#' + r.rank + '</span><span class="nm' + (r.auto ? " auto" : "") + '">' + esc(r.name) + (r.mine ? " (you)" : "") +
+    var mineTap = r.mine && tappable;
+    return '<li' + (r.mine ? ' class="me' + (mineTap ? " tap" : "") + '"' : "") + (mineTap ? ' data-act="rename" role="button" tabindex="0" aria-label="Change your name"' : "") +
+      '><span class="rk">#' + r.rank + '</span><span class="nm' + (r.auto ? " auto" : "") + '">' + esc(r.name) + (r.mine ? " (you)" + (mineTap ? ' <span class="pen" aria-hidden="true">✏️</span>' : "") : "") +
       '</span><span class="sc">' + Number(r.score).toLocaleString("en-US") + "</span></li>";
   }).join("");
   viewList.innerHTML = rowsHtml ? "<ol>" + rowsHtml + "</ol>" : '<p class="muted">No names on the board yet. Finish in the top ' + BOARD_SIZE + " to be the first.</p>";
 }
+// Which name prompt a player gets: "ask" (type a name), "quick" (one tap with the name saved on this phone from an
+// earlier day), "on" (on today's board under their own name), "edit" (changing it), or "" for nothing (not in the
+// top 15, a replay, Jai's own device, or a name Jai has hidden).
+function myRow() { return BOARD ? BOARD.top.filter(function (r) { return r.mine; })[0] || null : null; }
+function nameState() {
+  var at = standing();
+  if (!BOARD || !at || at.rank > BOARD_SIZE || !(T && !T.replay)) { return ""; }
+  var row = myRow(), chosen = row && !row.auto;
+  if (!row && BOARD.my_name) { return ""; }      // they named themselves but Jai hid it
+  if (chosen) { return NAME_EDIT ? "edit" : "on"; }
+  var savedName = cleanName(saved("spitball.name"));
+  return savedName && !nameProblem(savedName) && !NAME_EDIT ? "quick" : "ask";
+}
+function nameForm(value, label) {
+  return '<form class="nameForm" autocomplete="off"><div class="field"><input class="nameInput" type="text" maxlength="16" placeholder="Your name" aria-label="Your name" value="' + esc(value) +
+    '" autocapitalize="words" autocorrect="off" spellcheck="false" enterkeyhint="done"><button class="go" type="submit">' + label + "</button></div>" +
+    '<p class="msg" role="status">' + esc(NAME_MSG) + '</p><span class="fine">Shown to everyone who plays today.</span></form>';
+}
+function nameBlock(st) {
+  var at = standing(), row = myRow(), nick = row && row.auto ? row.name : "", savedName = cleanName(saved("spitball.name"));
+  var rk = "#" + at.rank, msg = NAME_MSG ? '<p class="msg" role="status">' + esc(NAME_MSG) + "</p>" : "";
+  if (st === "quick") {
+    return "<strong>🏅 " + (nick ? "You're " + rk + " as " + esc(nick) + ". Switch to " + esc(savedName) + "?" : "You're " + rk + " today! Add to the leaderboard as " + esc(savedName) + "?") + "</strong>" +
+      '<div class="namebtns"><button class="btn sm" type="button" data-act="name-quick">' + (nick ? "Use " : "Add as ") + esc(savedName) + "</button>" +
+      '<button class="link" type="button" data-act="name-other">✏️ Use a different name</button></div>' + msg;
+  }
+  if (st === "on") {
+    return "<strong>✅ On today's leaderboard as " + esc(row.name) + " (" + rk + ")</strong>" +
+      '<button class="btn alt sm" type="button" data-act="rename">✏️ Edit name</button>';
+  }
+  if (st === "edit") {
+    return "<strong>✏️ Change your name</strong>" + nameForm(row.name, "Save") + '<button class="link" type="button" data-act="name-cancel">Cancel</button>';
+  }
+  return "<strong>🏅 " + (nick ? "You're " + rk + " as " + esc(nick) + "." : "You're " + rk + " today!") + "</strong><span>" +
+    (nick ? "Add your own name?" : "Add your name to the leaderboard.") + "</span>" + nameForm(NAME_EDIT ? "" : savedName, "Add");
+}
+// Fills a name box, but leaves it alone while someone is typing in it, so a refresh never wipes their name.
+function paintNameBox(box, html, good) {
+  if (!box) { return; }
+  var input = box.querySelector("input");
+  if (input && (document.activeElement === input || input.value !== input.defaultValue)) { return; }
+  box.className = "rankbox" + (good ? " win" : "");
+  box.innerHTML = html;
+  box.hidden = !html;
+}
+function clearNameBoxes() { ["viewRank", "sheetName"].forEach(function (id) { var b = document.getElementById(id); if (b) { b.innerHTML = ""; } }); }
 function openBoard(fromHistory) {
   if (!PUZZLE || !S || S.stage !== "done") { return; }
   document.getElementById("boardDate").textContent = PUZZLE.theme + " · " + PUZZLE.shortDate;
@@ -907,30 +949,51 @@ function closeBoard(fromHistory) {
 }
 // The phone's back gesture leaves the leaderboard page and returns to the score.
 window.addEventListener("popstate", function () { if (window.location.hash === "#leaderboard") { openBoard(true); } else { closeBoard(true); } });
-function submitName(raw, retried) {
+function submitName(raw, retried, form) {
   var name = cleanName(raw), problem = nameProblem(name);
-  var input = document.getElementById("nameInput");
-  var resetBox = function () { var box = document.getElementById("viewRank"); if (box) { box.innerHTML = ""; } };
-  if (problem) { NAME_MSG = problem; if (input) { input.closest("form").querySelector(".msg").textContent = problem; } return; }
+  if (problem) { NAME_MSG = problem; var m = form && form.querySelector(".msg"); if (m) { m.textContent = problem; } return; }
   saved("spitball.name", name);
   if (!T || !myDevice()) { return; }
+  var input = form && form.querySelector("input");
   if (input) { input.blur(); input.defaultValue = input.value; }
   rpc(SUBMIT_URL, { r: T.id, me: myDevice(), nm: name }).then(function (data) {
-    if (data && data.ok) { NAME_EDIT = false; NAME_MSG = ""; resetBox(); fetchBoard(); return; }
+    if (data && data.ok) { NAME_EDIT = false; NAME_MSG = ""; clearNameBoxes(); fetchBoard(); return; }
     var why = data && data.why;
-    if (why === "round" && !retried) { track(); setTimeout(function () { submitName(name, true); }, 1500); return; }   // round still saving
+    if (why === "round" && !retried) { track(); setTimeout(function () { submitName(name, true, form); }, 1500); return; }   // round still saving
     NAME_MSG = why === "rank" ? "So close! Someone just passed you." : "That did not go through. Try again in a moment.";
-    resetBox();
+    clearNameBoxes();
     fetchBoard();
   }).catch(function () {
     NAME_MSG = "That did not go through. Try again in a moment.";
-    resetBox();
+    clearNameBoxes();
     paintBoard();
   });
 }
-boardView.addEventListener("submit", function (e) {
+// The name boxes live in the share popup and on the leaderboard page, so their buttons are handled for the whole page.
+document.addEventListener("submit", function (e) {
+  var form = e.target.closest ? e.target.closest(".nameForm") : null;
+  if (!form) { return; }
   e.preventDefault();
-  if (e.target.id === "nameForm") { submitName(document.getElementById("nameInput").value); }
+  submitName(form.querySelector("input").value, false, form);
+});
+document.addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest("[data-act]") : null;
+  if (!b) { return; }
+  var act = b.getAttribute("data-act"), box = b.closest(".rankbox");
+  if (act === "name-quick") { b.disabled = true; submitName(saved("spitball.name"), false, null); }
+  else if (act === "name-other" || act === "rename") {
+    // From the strip, the leaderboard box, or a tap on the player's own row on the board (which opens the box above it)
+    NAME_EDIT = true; NAME_MSG = ""; clearNameBoxes(); paintBoard();
+    var target = box || document.getElementById("viewRank");
+    if (!box && target) { try { target.scrollIntoView({ block: "center", behavior: calm ? "auto" : "smooth" }); } catch (err) {} }
+    var i = target && target.querySelector("input"); if (i) { i.focus({ preventScroll: true }); }
+  }
+  else if (act === "name-cancel") { NAME_EDIT = false; NAME_MSG = ""; clearNameBoxes(); paintBoard(); }
+});
+// Typing in the share popup moves the popup to the top of the screen, above the keyboard.
+document.getElementById("veil").addEventListener("focusin", function (e) { if (e.target.closest && e.target.closest(".nameForm")) { this.classList.add("typing"); } });
+document.getElementById("veil").addEventListener("focusout", function () {
+  var v = this; setTimeout(function () { if (!v.contains(document.activeElement)) { v.classList.remove("typing"); } }, 50);
 });
 boardView.addEventListener("click", function (e) {
   var b = e.target.closest ? e.target.closest("[data-act]") : null;
@@ -938,10 +1001,6 @@ boardView.addEventListener("click", function (e) {
   var act = b.getAttribute("data-act");
   if (act === "share") { openShare(); }
   else if (act === "board-back") { closeBoard(); }
-  else if (act === "rename") {
-    NAME_EDIT = true; NAME_MSG = ""; document.getElementById("viewRank").innerHTML = ""; paintBoard();
-    var i = document.getElementById("nameInput"); if (i) { i.focus({ preventScroll: true }); }
-  }
 });
 stage.addEventListener("click", function (e) {
   var b = e.target.closest ? e.target.closest('[data-act="board"]') : null;
