@@ -604,7 +604,9 @@ function keepTop() {
   var pageY = window.pageYOffset || 0, off = vv ? vv.offsetTop : 0;
   var form = el.closest("form"), btn = form && form.querySelector(".btn");
   var target = btn || el.closest(".field");
-  var bottom = target.getBoundingClientRect().bottom + pageY + off + 16;   // page position that must be on screen
+  // Positions on the page (not the screen). Safari may already have shifted the view by itself (off), so that shift is
+  // not added again here, which made long questions scroll too far.
+  var bottom = target.getBoundingClientRect().bottom + pageY + 12;      // the button's bottom must be on screen
   var y = bottom <= visible ? 0 : Math.ceil(bottom - visible);
   if (Math.abs(pageY + off - y) < 2) { return; }
   window.scrollTo(0, y);

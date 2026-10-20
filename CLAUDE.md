@@ -167,7 +167,7 @@ Safari shifts the screen when the keyboard opens. The game works around this in 
 - A tap on an answer box is handled directly and focuses it with `preventScroll`.
 - The box is invisible for an instant as it takes focus (`calmFocus`), because Safari does not shift the screen for a box it cannot see.
 - A wrong rebus guess updates the card in place so the keyboard stays up.
-- On a question, the number keypad has no Go key, so `keepTop` keeps the "Lock it in" button above the keyboard: if box and button fit with the page at the top it scrolls back to the top, otherwise it moves the page up just enough to show the button (October 20, 2026, after long questions hid it).
+- On a question, the number keypad has no Go key, so `keepTop` keeps the "Lock it in" button above the keyboard: if box and button fit with the page at the top it scrolls back to the top, otherwise it moves the page up just enough to show the button with a small margin (October 20, 2026, after long questions hid it; the first version double-counted Safari's own shift and scrolled too far). On a phone too small to show both, the button wins over the top of the question.
 
 Do not make the rebus screen smaller to solve keyboard problems. Jai likes its current size.
 
