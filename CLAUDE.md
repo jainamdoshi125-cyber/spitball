@@ -120,8 +120,8 @@ The leaderboard has its own page, opened with "🏅 See leaderboard" on the fina
 - The board lists the top 15: players whose current rank is 15 or better. Each row shows the true rank among everyone who finished, and ties share a rank. From the October 18, 2026 puzzle onward (Jai's call, while the game is small) every top-15 player is listed: one who skipped adding a name gets a playful stand-in nickname such as "Lucky Otter" (`board_nickname` in the database, always the same for a device), shown in a lighter italic style, and the game invites them to add their own. Before that date only named players were listed, so there could be gaps.
 - A player in the top 15 can add a name in three places: a strip at the top of the share popup (added October 18, 2026, because people were missing it), the leaderboard page, and by tapping their own row on the board, which carries a small ✏️ when they can add or change a name. Names are optional, public ("Shown to everyone who plays today"), at most 16 characters, with a small bad-word filter in the game. The last name used is saved on the device (`spitball.name`). The wording follows the player's situation:
   - Never added a name: "🏅 You're #4 today! Add your name to the leaderboard." with a name box and Add.
-  - Has a saved name from an earlier day: "🏅 You're #4 today! Add to the leaderboard as Jai?" with a one-tap "Add as Jai" button and "✏️ Use a different name". Under a stand-in nickname this reads "🏅 You're #4 as Lucky Otter. Switch to Jai?" with "Use Jai".
-  - On today's board under their own name: no strip in the share popup (Jai's call), and the leaderboard page shows "✅ You're #4 on the leaderboard. As Jai. Nice work." with a small "Change name" link. The ✏️ on their own row still works.
+  - Has a saved name from an earlier day: the game puts them on today's board under that name automatically (Jai's call, October 20, 2026: assume the name, offer to change it). It is tried once a day per device (`spitball.autoname`); if it does not go through, they get the one-tap "🏅 You're #4 today! Add to the leaderboard as Jai?" with "Add as Jai" and "✏️ Use a different name" instead.
+  - On today's board under their own name: the share popup shows one small line, "✅ On today's leaderboard as Jai (#4) · Change name", and the leaderboard page shows "✅ You're #4 on the leaderboard. As Jai. Nice work." with a small "Change name" link. The ✏️ on their own row still works.
   - Not in the top 15, a replay, Jai's own device, or a name Jai has hid: no strip.
 - While someone types a name in the share popup, the popup moves to the top of the screen so the phone keyboard cannot cover it.
 - Ranks can only go down during the day, because scores never change once someone finishes. The rank is worked out again whenever the player returns; the best rank they reached is remembered on the device (`spitball.peak`), so someone pushed out of the top 15 sees where they were.
@@ -167,6 +167,7 @@ Safari shifts the screen when the keyboard opens. The game works around this in 
 - A tap on an answer box is handled directly and focuses it with `preventScroll`.
 - The box is invisible for an instant as it takes focus (`calmFocus`), because Safari does not shift the screen for a box it cannot see.
 - A wrong rebus guess updates the card in place so the keyboard stays up.
+- On a question, the number keypad has no Go key, so `keepTop` keeps the "Lock it in" button above the keyboard: if box and button fit with the page at the top it scrolls back to the top, otherwise it moves the page up just enough to show the button (October 20, 2026, after long questions hid it).
 
 Do not make the rebus screen smaller to solve keyboard problems. Jai likes its current size.
 

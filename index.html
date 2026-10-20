@@ -145,6 +145,8 @@ button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 .board { display: flex; flex-direction: column; gap: 8px; }
 .btn.sm { min-height: 46px; font-size: 16px; }
 .namebtns { display: flex; flex-direction: column; gap: 6px; }
+.rankbox .onboard { font-size: 14px; font-weight: 600; }
+.rankbox .onboard .link { display: inline; padding: 0; font-size: 14px; }
 .rankbox.win .btn.sm:not(.alt) { background: var(--card); color: var(--ink); box-shadow: 0 4px 0 var(--hit-fg); }
 .sheet .rankbox strong { font-size: 18px; }
 .sheet .rankbox { padding: 10px 12px; gap: 8px; }
@@ -591,15 +593,21 @@ stage.addEventListener("touchend", function (e) {
   input.focus({ preventScroll: true });
 }, { passive: false });
 // Fallback: if the screen was moved anyway and the box fits with the page at the top, put the page back.
+// On a question, the iPhone number keypad has no Go key, so the "Lock it in" button under the box has to stay above
+// the keyboard too. If the box and button fit with the page at the top, the page goes back to the top; if a long
+// question pushes the button behind the keyboard, the page moves up just far enough to show it.
 function keepTop() {
   var el = document.activeElement;
   if (!el || el.tagName !== "INPUT" || !stage.contains(el)) { return; }
   var vv = window.visualViewport;
   var visible = vv ? vv.height : window.innerHeight;
   var pageY = window.pageYOffset || 0, off = vv ? vv.offsetTop : 0;
-  if (pageY === 0 && off === 0) { return; }
-  var boxBottom = el.closest(".field").getBoundingClientRect().bottom + pageY;
-  if (boxBottom + 16 <= visible) { window.scrollTo(0, 0); }
+  var form = el.closest("form"), btn = form && form.querySelector(".btn");
+  var target = btn || el.closest(".field");
+  var bottom = target.getBoundingClientRect().bottom + pageY + off + 16;   // page position that must be on screen
+  var y = bottom <= visible ? 0 : Math.ceil(bottom - visible);
+  if (Math.abs(pageY + off - y) < 2) { return; }
+  window.scrollTo(0, y);
 }
 stage.addEventListener("focusin", function (e) {
   if (e.target.tagName !== "INPUT") { return; }
@@ -823,7 +831,7 @@ function fetchBoard() {
   var counts = !(T && T.replay);
   try {
     rpc(BOARD_URL, { d: PUZZLE.day, me: myDevice(), score: counts ? total() : null })
-      .then(function (data) { if (data && typeof data === "object" && Array.isArray(data.top)) { BOARD = data; paintBoard(); } })
+      .then(function (data) { if (data && typeof data === "object" && Array.isArray(data.top)) { BOARD = data; autoName(); paintBoard(); } })
       .catch(function () {});
   } catch (err) {}
 }
@@ -864,9 +872,11 @@ function paintBoard() {
   }
 
   // In the share popup: the name strip, only for a top-15 player who has not put their own name on today's board yet.
-  // Once they have, the popup goes back to plain sharing (Jai's call); changing the name lives on the leaderboard page.
-  var sheetSt = st === "ask" || st === "quick" ? st : "";
-  paintNameBox(document.getElementById("sheetName"), sheetSt ? nameBlock(sheetSt) : "", !!sheetSt);
+  // Once they are on the board under their own name, the popup shows one small line with a way to change it.
+  var sheetSt = st === "ask" || st === "quick" || st === "edit" ? st : "";
+  var sheetRow = myRow();
+  paintNameBox(document.getElementById("sheetName"), sheetSt ? nameBlock(sheetSt)
+    : st === "on" ? '<span class="onboard">✅ On today\'s leaderboard as ' + esc(sheetRow.name) + " (#" + at.rank + ') · <button class="link" type="button" data-act="rename">Change name</button></span>' : "", !!sheetSt);
 
   // On the leaderboard page.
   var viewRank = document.getElementById("viewRank"), viewList = document.getElementById("viewList");
@@ -895,7 +905,16 @@ function nameState() {
   if (!row && BOARD.my_name) { return ""; }      // they named themselves but Jai hid it
   if (chosen) { return NAME_EDIT ? "edit" : "on"; }
   var savedName = cleanName(saved("spitball.name"));
-  return savedName && !nameProblem(savedName) && !NAME_EDIT ? "quick" : "ask";
+  return savedName && !nameProblem(savedName) && !NAME_EDIT ? (AUTO_NAMING ? "" : "quick") : "ask";
+}
+// A player who used a name on an earlier day goes on today's board under it automatically (Jai's call), and can
+// change it from there. This is tried once a day; if it does not go through, they get the one-tap button instead.
+var AUTO_NAMING = false;
+function autoName() {
+  if (nameState() !== "quick" || saved("spitball.autoname") === PUZZLE.day) { return; }
+  saved("spitball.autoname", PUZZLE.day);
+  AUTO_NAMING = true;
+  submitName(saved("spitball.name"), false, null, function () { AUTO_NAMING = false; });
 }
 function nameForm(value, label) {
   return '<form class="nameForm" autocomplete="off"><div class="field"><input class="nameInput" type="text" maxlength="16" placeholder="Your name" aria-label="Your name" value="' + esc(value) +
@@ -951,7 +970,8 @@ function closeBoard(fromHistory) {
 }
 // The phone's back gesture leaves the leaderboard page and returns to the score.
 window.addEventListener("popstate", function () { if (window.location.hash === "#leaderboard") { openBoard(true); } else { closeBoard(true); } });
-function submitName(raw, retried, form) {
+function submitName(raw, retried, form, done) {
+  var finish = function () { if (done) { done(); done = null; } };
   var name = cleanName(raw), problem = nameProblem(name);
   if (problem) { NAME_MSG = problem; var m = form && form.querySelector(".msg"); if (m) { m.textContent = problem; } return; }
   saved("spitball.name", name);
@@ -959,14 +979,16 @@ function submitName(raw, retried, form) {
   var input = form && form.querySelector("input");
   if (input) { input.blur(); input.defaultValue = input.value; }
   rpc(SUBMIT_URL, { r: T.id, me: myDevice(), nm: name }).then(function (data) {
-    if (data && data.ok) { NAME_EDIT = false; NAME_MSG = ""; clearNameBoxes(); fetchBoard(); return; }
+    if (data && data.ok) { finish(); NAME_EDIT = false; NAME_MSG = ""; clearNameBoxes(); fetchBoard(); return; }
     var why = data && data.why;
-    if (why === "round" && !retried) { track(); setTimeout(function () { submitName(name, true, form); }, 1500); return; }   // round still saving
-    NAME_MSG = why === "rank" ? "So close! Someone just passed you." : "That did not go through. Try again in a moment.";
+    if (why === "round" && !retried) { track(); setTimeout(function () { submitName(name, true, form, done); }, 1500); return; }   // round still saving
+    finish();
+    if (form || why === "rank") { NAME_MSG = why === "rank" ? "So close! Someone just passed you." : "That did not go through. Try again in a moment."; }
     clearNameBoxes();
     fetchBoard();
   }).catch(function () {
-    NAME_MSG = "That did not go through. Try again in a moment.";
+    finish();
+    if (form) { NAME_MSG = "That did not go through. Try again in a moment."; }
     clearNameBoxes();
     paintBoard();
   });
