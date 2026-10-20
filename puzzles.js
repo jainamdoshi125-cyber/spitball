@@ -375,5 +375,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "The most overdue library book ever was finally returned to a college in England. How many years late was it?", a: 288, type: "ratio", unit: "years",
         fact: "288 years. It was borrowed around 1667 and returned in the 1950s, and the college charged no late fee. 📚" }
     ]
+  },
+  "2026-10-21": {
+    rebus: {
+      tiles: [{ e: "⭐" }, { e: "🌃" }],
+      alt: "Rebus: a star, plus a city at night",
+      answers: ["starrynight", "thestarrynight", "starrynights", "starnight", "starrysky", "starrynite"],
+      display: "The Starry Night",
+      hint: "A famous Van Gogh painting. What twinkles in the sky, plus when you can see them."
+    },
+    theme: "Art",
+    hype: ["Masterpiece!", "Picture perfect!", "Frame that one!"],
+    oof: ["Back to the drawing board.", "Smudged it.", "Paint by wrong numbers."],
+    snippet: "On this day in 1959, the <strong>Guggenheim Museum</strong> opened in New York: a giant white spiral where you walk up a ramp to see the art. So today is all about art.",
+    questions: [
+      { level: "Easy", q: "The very first box of Crayola crayons came out in 1903. How many crayons were in it?", a: 8, type: "ratio", unit: "crayons",
+        fact: "8: red, orange, yellow, green, blue, violet, brown and black. The box cost a nickel. 🖍️" },
+      { level: "Easy-medium", q: "The Mona Lisa is famously small in person. How tall is it, in inches?", a: 30, type: "ratio", unit: "inches",
+        fact: "About 30 inches tall and 21 wide, smaller than most TVs. She hangs behind bulletproof glass at the Louvre. 🖼️" },
+      { level: "Medium", q: "Vincent van Gogh couldn't afford models, so he often painted himself. How many self-portraits did he paint?", a: 35, type: "ratio", unit: "self-portraits",
+        fact: "35 painted self-portraits survive, and 27 of them were made in just two years in Paris. 🪞" },
+      { level: "Medium-hard", q: "Michelangelo spent years painting the Sistine Chapel ceiling. How many years did it take?", a: 4, type: "ratio", unit: "years",
+        fact: "4 years, from 1508 to 1512. He painted standing on scaffolding with his head tilted back, not lying down like the legend says. 🎨" },
+      { level: "Hard", q: "The Louvre is the biggest art museum in the world. How many works of art does it have on display?", a: 35000, type: "ratio", unit: "works of art",
+        fact: "Roughly 35,000, and that's only a small slice of its collection of more than 380,000 objects. 🏛️" }
+    ]
   }
 };
