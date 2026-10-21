@@ -400,5 +400,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "The Louvre is the biggest art museum in the world. How many works of art does it have on display?", a: 35000, type: "ratio", unit: "works of art",
         fact: "Roughly 35,000, and that's only a small slice of its collection of more than 380,000 objects. 🏛️" }
     ]
+  },
+  "2026-10-22": {
+    rebus: {
+      tiles: [{ e: "🪨" }, { e: "🌟" }],
+      alt: "Rebus: a rock, plus a shining star",
+      answers: ["rockstar", "rockstars", "rocknroll", "rockandroll"],
+      display: "Rock Star",
+      hint: "A famous musician. A big stone, plus something that twinkles."
+    },
+    theme: "Music",
+    hype: ["Encore!", "Pitch perfect!", "Rock on!"],
+    oof: ["Off key.", "Wrong note.", "Tone deaf."],
+    snippet: "On this day in 1883, the <strong>Metropolitan Opera</strong> opened in New York with a performance of Faust. So today is all about music.",
+    questions: [
+      { level: "Easy", q: "How many keys are on a standard piano?", a: 88, type: "ratio", unit: "keys",
+        fact: "88: 52 white and 36 black, covering just over seven octaves. 🎹" },
+      { level: "Easy-medium", q: "Mozart wrote music that's still famous more than 200 years later, but he died young. How old was he?", a: 35, type: "ratio", unit: "years old",
+        fact: "35. He was born in 1756 and died in 1791, after writing more than 600 pieces of music. 🎼" },
+      { level: "Medium", q: "The Beatles hold the record for the most #1 hits on the Billboard Hot 100. How many #1 hits did they have?", a: 20, type: "ratio", unit: "#1 hits",
+        fact: "20, from I Want to Hold Your Hand in 1964 to The Long and Winding Road in 1970. Mariah Carey is right behind with 19. 🪲" },
+      { level: "Medium-hard", q: "Taylor Swift holds the record for the most Album of the Year wins at the Grammys. How many has she won?", a: 4, type: "ratio", unit: "wins",
+        fact: "4: Fearless, 1989, Folklore and Midnights. No other artist has won more than three. 🏆" },
+      { level: "Hard", q: "Today's opera house at Lincoln Center is one of the biggest in the world. How many seats does it have?", a: 3794, type: "ratio", unit: "seats",
+        fact: "3,794 seats, plus about 245 spots for people standing. Its crystal chandeliers rise up to the ceiling just before every show. 🎭" }
+    ]
   }
 };
