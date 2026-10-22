@@ -425,5 +425,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Today's opera house at Lincoln Center is one of the biggest in the world. How many seats does it have?", a: 3794, type: "ratio", unit: "seats",
         fact: "3,794 seats, plus about 245 spots for people standing. Its crystal chandeliers rise up to the ceiling just before every show. 🎭" }
     ]
+  },
+  "2026-10-23": {
+    rebus: {
+      tiles: [{ e: "🎩" }, { e: "🪄" }],
+      alt: "Rebus: a top hat, plus a magic wand",
+      answers: ["hattrick", "hattricks", "hattrik"],
+      display: "Hat Trick",
+      hint: "Three goals in one game. Something you wear on your head, plus what a magician does."
+    },
+    theme: "Soccer",
+    hype: ["GOAL!", "Top corner!", "Hat trick hero!"],
+    oof: ["Red card.", "Own goal.", "Wide of the post."],
+    snippet: "On this day in 1940, <strong>Pelé</strong> was born in Brazil. He grew up to be one of the greatest soccer players ever. So today is all about soccer.",
+    questions: [
+      { level: "Easy", q: "How many players does each team have on the field in a soccer game?", a: 11, type: "ratio", unit: "players",
+        fact: "11, including the goalkeeper. 🧤" },
+      { level: "Easy-medium", q: "This summer's World Cup in North America was the biggest ever. How many teams played in it?", a: 48, type: "ratio", unit: "teams",
+        fact: "48 teams, up from 32, playing 104 matches across the US, Canada and Mexico. 🌎" },
+      { level: "Medium", q: "Pelé is the only player ever to win a certain number of World Cups. How many did he win?", a: 3, type: "ratio", unit: "World Cups",
+        fact: "3: in 1958, 1962 and 1970. He was just 17 at his first one. 🏆" },
+      { level: "Medium-hard", q: "The Ballon d'Or is the award for the best soccer player in the world. Lionel Messi has won it a record number of times. How many?", a: 8, type: "ratio", unit: "wins",
+        fact: "8, from 2009 to 2023. Cristiano Ronaldo is next with 5. 🐐" },
+      { level: "Hard", q: "When David Beckham moved to the LA Galaxy in 2007, his five-year deal was billed as the biggest in sports history. How much was it worth, in millions of dollars?", a: 250, type: "ratio", unit: "million dollars",
+        fact: "About $250 million, counting his salary and sponsorships. The MLS rule that lets teams sign big stars is still nicknamed the Beckham Rule. ⭐" }
+    ]
   }
 };
