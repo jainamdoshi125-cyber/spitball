@@ -475,5 +475,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "In the 1980s, American Airlines' boss found a sneaky way to save money: take one olive out of every salad served to passengers. Nobody noticed. How much did it save the airline each year, in dollars?", a: 40000, type: "ratio", unit: "dollars",
         fact: "$40,000 a year. The boss, Bob Crandall, was famous for hunting down savings like this. 🫒" }
     ]
+  },
+  "2026-10-26": {
+    rebus: {
+      tiles: [{ e: "🐄" }, { e: "👦" }],
+      alt: "Rebus: a cow, plus a boy",
+      answers: ["cowboy", "cowboys", "cowkid", "cowgirl"],
+      display: "Cowboy",
+      hint: "A rancher on horseback. A farm animal, plus a kid."
+    },
+    theme: "The Wild West",
+    hype: ["Yeehaw!", "Fastest draw in the West!", "Bullseye, partner!"],
+    oof: ["Bit the dust.", "Back to the ranch.", "Missed by a mile, partner."],
+    snippet: "On this day in 1881, Wyatt Earp and Doc Holliday faced off against a gang of outlaws at the <strong>O.K. Corral</strong> in Tombstone, Arizona. So today is all about the Wild West.",
+    questions: [
+      { level: "Easy", q: "Cowboys wore a famous big hat named after how much it could supposedly hold. How many gallons?", a: 10, type: "ratio", unit: "gallons",
+        fact: "10 gallons, supposedly. It really holds less than one, and the name may come from a Spanish word for the braid around the hat. 🤠" },
+      { level: "Easy-medium", q: "The Gunfight at the O.K. Corral is the most famous shootout in history, but it was over fast. How many seconds did it last?", a: 30, type: "ratio", unit: "seconds",
+        fact: "About 30 seconds, with about 30 shots fired. 🔫" },
+      { level: "Medium", q: "Before the telegraph, the Pony Express raced mail across the country on horseback. How many days did a letter take from Missouri to California?", a: 10, type: "ratio", unit: "days",
+        fact: "About 10 days. The Pony Express shut down on October 26, 1861, exactly 20 years before the O.K. Corral. 🐎" },
+      { level: "Medium-hard", q: "Pioneers walked the Oregon Trail beside their covered wagons. How long was it, in miles?", a: 2170, type: "ratio", unit: "miles",
+        fact: "About 2,170 miles, from Missouri to Oregon. The trip took four to six months. 🐂" },
+      { level: "Hard", q: "Wyatt Earp survived the O.K. Corral and lived a long life. How old was he when he died?", a: 80, type: "ratio", unit: "years old",
+        fact: "80. He lived until 1929 and died in Los Angeles, just as Hollywood was making movies about the Wild West. 🎬" }
+    ]
   }
 };
