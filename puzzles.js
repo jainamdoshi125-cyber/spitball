@@ -450,5 +450,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "When David Beckham moved to the LA Galaxy in 2007, his five-year deal was billed as the biggest in sports history. How much was it worth, in millions of dollars?", a: 250, type: "ratio", unit: "million dollars",
         fact: "About $250 million, counting his salary and sponsorships. The MLS rule that lets teams sign big stars is still nicknamed the Beckham Rule. ⭐" }
     ]
+  },
+  "2026-10-25": {
+    rebus: {
+      tiles: [{ e: "🔴" }, { e: "👁️" }],
+      alt: "Rebus: a red circle, plus an eye",
+      answers: ["redeye", "redeyes", "redeyeflight", "redi"],
+      display: "Red-Eye",
+      hint: "An overnight flight. A color, plus what you see with."
+    },
+    theme: "Flying",
+    hype: ["Smooth landing!", "Cleared for takeoff!", "First class!"],
+    oof: ["Turbulence.", "Flight delayed.", "Lost luggage."],
+    snippet: "On this day in 2007, the <strong>Airbus A380</strong>, the biggest passenger plane ever built, carried its first passengers, from Singapore to Sydney. So today is all about flying.",
+    questions: [
+      { level: "Easy", q: "How many engines does a Boeing 747 jumbo jet have?", a: 4, type: "ratio", unit: "engines",
+        fact: "4 engines. Newer long-haul jets like the Boeing 787 fly just as far with only 2. 🛫" },
+      { level: "Easy-medium", q: "The Wright brothers made the first airplane flight in 1903. How many seconds did it last?", a: 12, type: "ratio", unit: "seconds",
+        fact: "12 seconds, covering 120 feet. That's shorter than the wingspan of a Boeing 747. 🛩️" },
+      { level: "Medium", q: "The longest nonstop flight in the world goes from New York to Singapore. How many hours does it take?", a: 19, type: "ratio", unit: "hours",
+        fact: "About 19 hours (18 hours and 40 minutes on a typical day), covering roughly 9,500 miles. 🌏" },
+      { level: "Medium-hard", q: "The Airbus A380 is the biggest passenger plane in the world. How many passengers is it allowed to carry, at most?", a: 853, type: "ratio", unit: "passengers",
+        fact: "853 is the safety limit. Most airlines fit about 500 seats, and some even put showers on board. 🚿" },
+      { level: "Hard", q: "In the 1980s, American Airlines' boss found a sneaky way to save money: take one olive out of every salad served to passengers. Nobody noticed. How much did it save the airline each year, in dollars?", a: 40000, type: "ratio", unit: "dollars",
+        fact: "$40,000 a year. The boss, Bob Crandall, was famous for hunting down savings like this. 🫒" }
+    ]
   }
 };
