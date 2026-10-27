@@ -500,5 +500,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Wyatt Earp survived the O.K. Corral and lived a long life. How old was he when he died?", a: 80, type: "ratio", unit: "years old",
         fact: "80. He lived until 1929 and died in Los Angeles, just as Hollywood was making movies about the Wild West. 🎬" }
     ]
+  },
+  "2026-10-27": {
+    rebus: {
+      tiles: [{ e: "🎮" }, { e: "🌙" }],
+      alt: "Rebus: a game controller, plus the moon at night",
+      answers: ["gamenight", "gamenights", "gamingnight", "videogamenight", "gamesnight"],
+      display: "Game Night",
+      hint: "When friends get together to play. Something you play, plus when the sun goes down."
+    },
+    theme: "Toys and Games",
+    hype: ["Toy-rrific!", "Game on!", "You win!"],
+    oof: ["Game over.", "Batteries not included.", "Back in the box."],
+    snippet: "On this day in 1858, <strong>Theodore Roosevelt</strong> was born. Years later, a famous stuffed animal was named after him: the teddy bear. So today is all about toys and games.",
+    questions: [
+      { level: "Easy", q: "How many hippos are in a game of Hungry Hungry Hippos?", a: 4, type: "ratio", unit: "hippos",
+        fact: "4 hippos, one for each player, all chomping for the same marbles. 🦛" },
+      { level: "Easy-medium", q: "How many wooden blocks come in a standard Jenga set?", a: 54, type: "ratio", unit: "blocks",
+        fact: "54 blocks, stacked 18 levels high with three blocks on each level. 🧱" },
+      { level: "Medium", q: "Add up every dot on a pair of dice. How many dots are there in total?", a: 42, type: "ratio", unit: "dots",
+        fact: "42. Each die has 21 dots, and opposite sides always add up to 7. 🎲" },
+      { level: "Medium-hard", q: "How many letter tiles come in a standard game of Scrabble?", a: 100, type: "ratio", unit: "tiles",
+        fact: "100 tiles, including 2 blanks. E is the most common letter, on 12 tiles. 🔤" },
+      { level: "Hard", q: "In 2024, a rare prototype Boba Fett action figure from Star Wars became the most expensive toy ever sold. How much did it go for, in dollars?", a: 1340000, type: "ratio", unit: "dollars",
+        fact: "About $1.34 million, for a 1979 rocket-firing version that never made it to store shelves. 🚀" }
+    ]
   }
 };
