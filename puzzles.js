@@ -525,5 +525,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "In 2024, a rare prototype Boba Fett action figure from Star Wars became the most expensive toy ever sold. How much did it go for, in dollars?", a: 1340000, type: "ratio", unit: "dollars",
         fact: "About $1.34 million, for a 1979 rocket-firing version that never made it to store shelves. 🚀" }
     ]
+  },
+  "2026-10-28": {
+    rebus: {
+      tiles: [{ e: "📮" }, { e: "🃏" }],
+      alt: "Rebus: a mailbox, plus a playing card",
+      answers: ["postcard", "postcards", "mailcard"],
+      display: "Postcard",
+      hint: "What you mail home from a trip. A mailbox, plus a playing card."
+    },
+    theme: "Landmarks",
+    hype: ["Postcard perfect!", "A real wonder!", "Landmark guess!"],
+    oof: ["Wrong turn.", "Tourist trap.", "Lost without a map."],
+    snippet: "On this day in 1886, the <strong>Statue of Liberty</strong> was dedicated in New York Harbor, a gift from the people of France. So today is all about famous landmarks.",
+    questions: [
+      { level: "Easy", q: "How many spikes stick out of the Statue of Liberty's crown?", a: 7, type: "ratio", unit: "spikes",
+        fact: "7 spikes. They're often said to stand for the seven continents and the seven seas. 👑" },
+      { level: "Easy-medium", q: "The presidents carved into Mount Rushmore are huge. How tall is each face, in feet?", a: 60, type: "ratio", unit: "feet",
+        fact: "About 60 feet, as tall as a six-story building. The carving took 14 years. 🗿" },
+      { level: "Medium", q: "The Empire State Building went up incredibly fast. How many days did it take to build?", a: 410, type: "ratio", unit: "days",
+        fact: "410 days, about 13 and a half months. At its fastest, it rose more than four floors a week. 🏙️" },
+      { level: "Medium-hard", q: "Big Ben's clock in London is giant. How long is its minute hand, in feet?", a: 14, type: "ratio", unit: "feet",
+        fact: "Almost 14 feet, about as long as a car. 🕰️" },
+      { level: "Hard", q: "Counting all its branches, how long is the Great Wall of China, in miles?", a: 13171, type: "ratio", unit: "miles",
+        fact: "About 13,171 miles, according to a 2012 survey. That's more than half the distance around the Earth. 🧱" }
+    ]
   }
 };
