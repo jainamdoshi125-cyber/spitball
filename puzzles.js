@@ -550,5 +550,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Counting all its branches, how long is the Great Wall of China, in miles?", a: 13171, type: "ratio", unit: "miles",
         fact: "About 13,171 miles, according to a 2012 survey. That's more than half the distance around the Earth. 🧱" }
     ]
+  },
+  "2026-10-29": {
+    rebus: {
+      tiles: [{ e: "🏄" }, { e: "🕸️" }],
+      alt: "Rebus: a surfer, plus a spider web",
+      answers: ["surftheweb", "surfingtheweb", "websurfing", "websurf", "surfweb", "surftheinternet", "surfingtheinternet"],
+      display: "Surf the Web",
+      hint: "Three words for browsing online. What you do on a wave, plus what a spider spins."
+    },
+    theme: "The Internet",
+    hype: ["Going viral!", "Full Wi-Fi!", "Logged in!"],
+    oof: ["404: not found.", "Connection lost.", "Buffering."],
+    snippet: "On this day in 1969, a computer at UCLA sent the very first message over <strong>ARPANET</strong>, the network that grew into the internet. It crashed partway through. So today is all about the internet.",
+    questions: [
+      { level: "Easy", q: "Google's logo uses a few different colors. How many?", a: 4, type: "ratio", unit: "colors",
+        fact: "4: blue, red, yellow and green. Blue and red each show up twice. 🔎" },
+      { level: "Easy-medium", q: "When Twitter launched, how many characters could a tweet have?", a: 140, type: "ratio", unit: "characters",
+        fact: "140, so a tweet and a username could fit inside one 160-character text message. The limit doubled to 280 in 2017. 🐦" },
+      { level: "Medium", q: "In what year was the first video posted to YouTube?", a: 2005, type: "year", unit: "year",
+        fact: "2005. Co-founder Jawed Karim posted it on April 23. 📹" },
+      { level: "Medium-hard", q: "That first YouTube video, called Me at the Zoo, was very short. How long was it, in seconds?", a: 19, type: "ratio", unit: "seconds",
+        fact: "19 seconds. He stands in front of the San Diego Zoo elephants and talks about their really long trunks. 🐘" },
+      { level: "Hard", q: "About how many people around the world use the internet, in billions?", a: 6, type: "ratio", unit: "billion people",
+        fact: "About 6 billion, roughly 3 out of every 4 people on Earth. 🌍" }
+    ]
   }
 };
