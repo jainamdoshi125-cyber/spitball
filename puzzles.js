@@ -600,5 +600,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "How long is the Amazon River, in miles?", a: 4000, type: "ratio", unit: "miles",
         fact: "At least 4,000 miles, longer than a drive across the whole US. 🛶" }
     ]
+  },
+  "2026-10-31": {
+    rebus: {
+      tiles: [{ e: "🍬" }, { e: "🌽" }],
+      alt: "Rebus: a wrapped candy, plus an ear of corn",
+      answers: ["candycorn", "candycorns", "candycorne"],
+      display: "Candy Corn",
+      hint: "A striped Halloween sweet. A piece of candy, plus a vegetable on the cob."
+    },
+    theme: "Halloween",
+    hype: ["Spooktacular!", "Fang-tastic!", "Treat!"],
+    oof: ["Trick!", "Boo.", "Scared stiff."],
+    snippet: "On this day in 1926, exactly 100 years ago, the great escape artist <strong>Harry Houdini</strong> died. For years after, his wife held a séance every Halloween to try to reach him. So today is all about Halloween.",
+    questions: [
+      { level: "Easy", q: "How many witch sisters cause chaos in the movie Hocus Pocus?", a: 3, type: "ratio", unit: "sisters",
+        fact: "3: Winifred, Mary and Sarah Sanderson. 🧹" },
+      { level: "Easy-medium", q: "Houdini died young, on Halloween. How old was he?", a: 52, type: "ratio", unit: "years old",
+        fact: "52. He was born in Budapest, Hungary, and became the most famous escape artist ever. ⛓️" },
+      { level: "Medium", q: "Michael Jackson's Thriller video was more like a mini movie than a music video. How many minutes long is it?", a: 14, type: "ratio", unit: "minutes",
+        fact: "Almost 14 minutes (13:42), packed with werewolves, zombies and that famous dance. 🧟" },
+      { level: "Medium-hard", q: "Thriller cost a fortune to make for a music video back in 1983. How much did it cost, in dollars?", a: 500000, type: "ratio", unit: "dollars",
+        fact: "About $500,000, unheard of for a music video back then. It became the first music video picked for the National Film Registry. 🕺" },
+      { level: "Hard", q: "This month, a grower in Rhode Island smashed the world record for the heaviest pumpkin. How much did it weigh, in pounds?", a: 3156, type: "ratio", unit: "pounds",
+        fact: "3,156 pounds, the first pumpkin ever to top 3,000. Guinness still has to make it official. 🎃" }
+    ]
   }
 };
