@@ -575,5 +575,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "About how many people around the world use the internet, in billions?", a: 6, type: "ratio", unit: "billion people",
         fact: "About 6 billion, roughly 3 out of every 4 people on Earth. 🌍" }
     ]
+  },
+  "2026-10-30": {
+    rebus: {
+      tiles: [{ e: "🌴" }, { e: "🏋️" }],
+      alt: "Rebus: a palm tree, plus a weightlifter",
+      answers: ["junglegym", "junglegyms", "junglejim", "junglejims"],
+      display: "Jungle Gym",
+      hint: "Something kids climb on at the playground. A wild, leafy place, plus where you lift weights."
+    },
+    theme: "The Jungle",
+    hype: ["King of the jungle!", "Float like a butterfly!", "Swinging through the trees!"],
+    oof: ["Lost in the jungle.", "Quicksand.", "Down for the count."],
+    snippet: "On this day in 1974, Muhammad Ali beat George Foreman in Zaire in a famous fight called <strong>The Rumble in the Jungle</strong>. So today is all about the jungle.",
+    questions: [
+      { level: "Easy", q: "How many legs does a tarantula have?", a: 8, type: "ratio", unit: "legs",
+        fact: "8 legs. 🕷️" },
+      { level: "Easy-medium", q: "A big adult male gorilla, called a silverback, weighs about how many pounds?", a: 400, type: "ratio", unit: "pounds",
+        fact: "About 400 pounds. That's what the National Zoo's silverback, Baraka, weighs. 🦍" },
+      { level: "Medium", q: "Rainforests are packed with life. What percent of Earth's land do they cover?", a: 6, type: "ratio", unit: "percent",
+        fact: "About 6 percent, yet rainforests hold more than half of the world's plant and animal species. 🌳" },
+      { level: "Medium-hard", q: "The golden poison frog is one of the deadliest animals on Earth. One frog carries enough poison to kill how many adult people?", a: 10, type: "ratio", unit: "people",
+        fact: "About 10 people, from a frog only about 2 inches long. 🐸" },
+      { level: "Hard", q: "How long is the Amazon River, in miles?", a: 4000, type: "ratio", unit: "miles",
+        fact: "At least 4,000 miles, longer than a drive across the whole US. 🛶" }
+    ]
   }
 };
