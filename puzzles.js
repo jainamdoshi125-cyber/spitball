@@ -625,5 +625,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "This month, a grower in Rhode Island smashed the world record for the heaviest pumpkin. How much did it weigh, in pounds?", a: 3156, type: "ratio", unit: "pounds",
         fact: "3,156 pounds, the first pumpkin ever to top 3,000. Guinness still has to make it official. 🎃" }
     ]
+  },
+  "2026-11-01": {
+    rebus: {
+      tiles: [{ e: "🐴" }, { e: "👟" }],
+      alt: "Rebus: a horse, plus a shoe",
+      answers: ["horseshoe", "horseshoes", "horseshoo"],
+      display: "Horseshoe",
+      hint: "A lucky U-shaped piece of metal. The animal, plus something you wear on your foot."
+    },
+    theme: "Horses",
+    hype: ["Giddy up!", "Photo finish!", "Straight from the horse's mouth!"],
+    oof: ["Neigh.", "Hold your horses.", "Back to the stable."],
+    snippet: "On this day in 1938, the underdog <strong>Seabiscuit</strong> raced the champion War Admiral head to head, and much of the country stopped to listen on the radio. So today is all about horses.",
+    questions: [
+      { level: "Easy", q: "How many horseshoes does a horse usually wear?", a: 4, type: "ratio", unit: "horseshoes",
+        fact: "4, one on each hoof. Hanging one over a door is said to bring good luck. 🍀" },
+      { level: "Easy-medium", q: "At most, how many horses can run in the Kentucky Derby?", a: 20, type: "ratio", unit: "horses",
+        fact: "20 horses, which makes the start a crowded scramble. The Derby is nicknamed the Run for the Roses. 🌹" },
+      { level: "Medium", q: "Winning the Kentucky Derby, the Preakness and the Belmont in one year is horse racing's Triple Crown. How many horses have ever done it?", a: 13, type: "ratio", unit: "horses",
+        fact: "13, from Sir Barton in 1919 to Justify in 2018. 🏆" },
+      { level: "Medium-hard", q: "In 2004, fans packed Belmont Park to see if Smarty Jones could win the Triple Crown. It set the track's attendance record. How many people came?", a: 120139, type: "ratio", unit: "people",
+        fact: "120,139 people. Smarty Jones lost by a length, so the long wait for a Triple Crown winner went on. 🏟️" },
+      { level: "Hard", q: "After Secretariat's legendary Belmont Stakes win in 1973, thousands of fans never cashed their winning bets. They kept the tickets as souvenirs. How many tickets went uncashed?", a: 5617, type: "ratio", unit: "tickets",
+        fact: "5,617 winning tickets. Secretariat won that day by a record 31 lengths. 🎟️" }
+    ]
   }
 };
