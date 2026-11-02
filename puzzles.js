@@ -650,5 +650,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "After Secretariat's legendary Belmont Stakes win in 1973, thousands of fans never cashed their winning bets. They kept the tickets as souvenirs. How many tickets went uncashed?", a: 5617, type: "ratio", unit: "tickets",
         fact: "5,617 winning tickets. Secretariat won that day by a record 31 lengths. 🎟️" }
     ]
+  },
+  "2026-11-02": {
+    rebus: {
+      tiles: [{ e: "🌙" }, { e: "🚶" }],
+      alt: "Rebus: a crescent moon, plus a person walking",
+      answers: ["moonwalk", "moonwalks", "moonwalking", "moonwalker"],
+      display: "Moonwalk",
+      hint: "A famous dance move, and something astronauts did in 1969. Something in the night sky, plus a stroll."
+    },
+    theme: "Space",
+    hype: ["Out of this world!", "Stellar!", "Houston, we have a winner!"],
+    oof: ["Lost in space.", "Houston, we have a problem.", "Way off orbit."],
+    snippet: "On this day in 2000, the first crew moved into the <strong>International Space Station</strong>. People have lived up there ever since. So today is all about space.",
+    questions: [
+      { level: "Easy", q: "How many planets are in our solar system?", a: 8, type: "ratio", unit: "planets",
+        fact: "8, ever since Pluto was moved to the dwarf planet list in 2006. 🪐" },
+      { level: "Easy-medium", q: "The International Space Station zooms around the Earth again and again. How many times does it go around in one day?", a: 16, type: "ratio", unit: "times",
+        fact: "16 times a day, so the crew sees 16 sunrises and 16 sunsets every day. 🌅" },
+      { level: "Medium", q: "Venus is the hottest planet, even hotter than Mercury. How hot is its surface, in degrees Fahrenheit?", a: 900, type: "ratio", unit: "°F",
+        fact: "About 900°F, hot enough to melt lead. Its thick clouds trap the heat. 🔥" },
+      { level: "Medium-hard", q: "How fast does the International Space Station travel, in miles per hour?", a: 17500, type: "ratio", unit: "mph",
+        fact: "About 17,500 mph, roughly 5 miles every second. 🚀" },
+      { level: "Hard", q: "A year is how long a planet takes to go around the Sun. How many Earth days long is a year on Mars?", a: 687, type: "ratio", unit: "days",
+        fact: "687 days, almost two Earth years. 🔴" }
+    ]
   }
 };
