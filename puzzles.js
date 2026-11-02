@@ -675,5 +675,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "A year is how long a planet takes to go around the Sun. How many Earth days long is a year on Mars?", a: 687, type: "ratio", unit: "days",
         fact: "687 days, almost two Earth years. 🔴" }
     ]
+  },
+  "2026-11-03": {
+    rebus: {
+      tiles: [{ e: "⌚" }, { e: "🐕" }],
+      alt: "Rebus: a wristwatch, plus a dog",
+      answers: ["watchdog", "watchdogs", "watchdawg"],
+      display: "Watchdog",
+      hint: "A dog that guards the house. Something you wear on your wrist, plus a pup."
+    },
+    theme: "Dogs",
+    hype: ["Good boy!", "Top dog!", "Best in show!"],
+    oof: ["Ruff.", "Bad dog.", "Barking up the wrong tree."],
+    snippet: "On this day in 1957, a dog named <strong>Laika</strong> became the first animal ever to orbit the Earth. So today is all about dogs.",
+    questions: [
+      { level: "Easy", q: "People often say one dog year equals how many human years?", a: 7, type: "ratio", unit: "human years",
+        fact: "7, but it's a myth. Dogs actually grow up fastest in their first year or two, then age more slowly. 🐕" },
+      { level: "Easy-medium", q: "How many teeth does an adult dog have?", a: 42, type: "ratio", unit: "teeth",
+        fact: "42, ten more than an adult person. 🦷" },
+      { level: "Medium", q: "Greyhounds are the fastest dogs. How fast can they run, in miles per hour?", a: 43, type: "ratio", unit: "mph",
+        fact: "At least 43 mph, fast enough to keep up with cars on a city street. 💨" },
+      { level: "Medium-hard", q: "Clifford the Big Red Dog is famously huge. In the books and shows, he's usually drawn about how many feet tall?", a: 25, type: "ratio", unit: "feet",
+        fact: "About 25 feet, though his size changes from book to book. He was a tiny puppy who grew big from being loved so much. ❤️" },
+      { level: "Hard", q: "In what year did Scooby-Doo first appear on TV?", a: 1969, type: "year", unit: "year",
+        fact: "1969, in Scooby-Doo, Where Are You! on CBS. 👻" }
+    ]
   }
 };
