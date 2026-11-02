@@ -95,6 +95,9 @@ table { width: 100%; border-collapse: collapse; font-size: 14px; }
 th { text-align: left; font-family: var(--mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 6px 0; }
 td { padding: 8px 0; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
 td.n, th.n { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 12px; }
+td.tools { white-space: nowrap; }
+form.rename { display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+form.rename input { width: 9.5em; padding: 6px 8px; font-size: 15px; }
 td .tag { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-left: 8px; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 680px) { .grid2 { grid-template-columns: 1fr; } }
@@ -190,7 +193,7 @@ function api(path, extra, method, body) {
 // Signing in here marks this browser as yours: the game stops reporting from it, and the rounds it already sent
 // are left out of every number on this page. The list of left-out devices lives in the database, so it applies
 // whichever device you open this page on. The button at the bottom of the page switches it back.
-var IGNORED = {}, HIDDEN = 0, NAMES = null;
+var IGNORED = {}, HIDDEN = 0, NAMES = null, NICKS = {}, RENAMING = null, RENAME_MSG = "";
 function keep(key, value) {
   try { if (arguments.length === 1) { return localStorage.getItem(key); } localStorage.setItem(key, value); } catch (err) {}
   return null;
@@ -272,6 +275,38 @@ $("dash").addEventListener("click", function (e) {
   b.disabled = true;
   api("board_names?device_id=eq." + b.getAttribute("data-hide") + "&puzzle_day=eq." + pickedDay, null, "PATCH", { hidden: b.getAttribute("data-to") === "true" })
     .then(load, function () { b.disabled = false; $("status").textContent = "Could not change that name. Try Refresh."; });
+});
+// Stand-in nicknames come from the same database function the game uses, so they always match what players see.
+function fetchNicks(devs) {
+  devs.forEach(function (d) { NICKS[d] = null; });
+  Promise.all(devs.map(function (d) {
+    return fetch(BASE + "/rest/v1/rpc/board_nickname", { method: "POST", headers: { "Content-Type": "application/json", "apikey": KEY, "Authorization": "Bearer " + KEY }, body: JSON.stringify({ dev: d }) })
+      .then(function (res) { return res.ok ? res.json() : null; }).then(function (name) { NICKS[d] = typeof name === "string" ? name : ""; }, function () { NICKS[d] = ""; });
+  })).then(function () { draw(); });
+}
+$("dash").addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest("[data-rename],[data-cancel]") : null;
+  if (!b) { return; }
+  RENAME_MSG = "";
+  RENAMING = b.hasAttribute("data-rename") ? b.getAttribute("data-rename") : null;
+  draw();
+  var i = $("renameInput"); if (i) { i.focus(); i.select(); }
+});
+$("dash").addEventListener("submit", function (e) {
+  var f = e.target.closest ? e.target.closest("form.rename") : null;
+  if (!f) { return; }
+  e.preventDefault();
+  var name = $("renameInput").value.replace(/\s+/g, " ").trim().slice(0, 16);
+  if (!name) { RENAME_MSG = "Type a name first."; draw(); return; }
+  f.querySelector("button[type=submit]").disabled = true;
+  fetch(BASE + "/rest/v1/rpc/board_submit", { method: "POST", headers: { "Content-Type": "application/json", "apikey": KEY, "Authorization": "Bearer " + KEY },
+    body: JSON.stringify({ r: f.getAttribute("data-round"), me: f.getAttribute("data-dev"), nm: name }) })
+    .then(function (res) { return res.ok ? res.json() : null; })
+    .then(function (data) {
+      if (data && data.ok) { RENAMING = null; RENAME_MSG = ""; return load(); }
+      RENAME_MSG = data && data.why === "rank" ? "That player has dropped out of the top 15, so their name can no longer change." : "That rename did not go through. Try Refresh.";
+      draw();
+    }, function () { RENAME_MSG = "That rename did not go through. Try Refresh."; draw(); });
 });
 $("deviceBtn").addEventListener("click", function () { keep("spitball.notrack", keep("spitball.notrack") === "0" ? "1" : "0"); load(); });
 
@@ -439,18 +474,42 @@ function draw() {
   html += '<section class="card"><h2>Wrong rebus answers</h2><p class="muted">' + (P ? 'The answer shown was "' + esc(P.rebus.display) + '". ' : "") + "What people typed that the game did not accept. Anything that shows up a lot and reads as fair is worth accepting.</p>" +
     (wrongRows.length ? '<table><thead><tr><th>Typed</th><th class="n">Times</th></tr></thead><tbody>' + wrongRows.map(function (w) { return "<tr><td>" + esc(w) + '</td><td class="n">' + num(wrong[w]) + "</td></tr>"; }).join("") + "</tbody></table>" : '<p class="muted">None yet.</p>') + "</section>";
 
-  // Leaderboard names for this day, with a hide button for anything offensive or obviously faked
+  // The day's leaderboard as players see it (top 15), with admin tools: rename any entry, including one showing a
+  // stand-in nickname, and hide or show a name. Renaming goes through the same database step the game uses, so it
+  // works for anyone currently in the top 15. Named players who have since dropped out are listed underneath.
   if (NAMES) {
-    var byRound = {};
-    ROUNDS.forEach(function (r) { byRound[r.id] = r; });
-    var dayNames = NAMES.filter(function (n) { return n.puzzle_day === pickedDay; }).map(function (n) {
-      var r = byRound[n.round_id]; return { n: n, score: r && typeof r.total === "number" ? r.total : null };
-    }).sort(function (a, b) { return (b.score || 0) - (a.score || 0); });
-    html += '<section class="card"><h2>Leaderboard names</h2><p class="muted">Every name players added for this day, highest score first. Hide one and it disappears from the board for everyone. A hidden name stays hidden even if the player changes it.</p>' +
-      (dayNames.length ? '<table><thead><tr><th>Name</th><th class="n">Score</th><th class="n"></th></tr></thead><tbody>' + dayNames.map(function (x) {
-        return "<tr><td>" + esc(x.n.name) + (x.n.hidden ? '<span class="tag">hidden</span>' : "") + '</td><td class="n">' + (x.score === null ? "n/a" : num(x.score)) +
-          '</td><td class="n"><button class="pill" type="button" data-hide="' + esc(x.n.device_id) + '" data-to="' + (x.n.hidden ? "false" : "true") + '">' + (x.n.hidden ? "Show" : "Hide") + "</button></td></tr>";
-      }).join("") + "</tbody></table>" : '<p class="muted">No names yet for this day.</p>') + "</section>";
+    var firsts = {}, named = {};
+    ROUNDS.filter(function (r) { return r.puzzle_day === pickedDay && r.finished && typeof r.total === "number" && !r.replay; })
+      .sort(function (x, y) { return x.opened_at < y.opened_at ? -1 : x.opened_at > y.opened_at ? 1 : 0; })
+      .forEach(function (r) { if (!firsts[r.device_id]) { firsts[r.device_id] = r; } });
+    NAMES.filter(function (n) { return n.puzzle_day === pickedDay; }).forEach(function (n) { named[n.device_id] = n; });
+    var list = Object.keys(firsts).map(function (d) { return firsts[d]; }).sort(function (x, y) { return y.total - x.total; });
+    list.forEach(function (r, i) { r._rank = i && list[i - 1].total === r.total ? list[i - 1]._rank : i + 1; });
+    var top = list.filter(function (r) { return r._rank <= 15; });
+    var nicknames = pickedDay >= "2026-10-18";
+    var needNick = top.filter(function (r) { return nicknames && !named[r.device_id] && NICKS[r.device_id] === undefined; });
+    if (needNick.length) { fetchNicks(needNick.map(function (r) { return r.device_id; })); }
+    var rowHtml = function (r) {
+      var n = named[r.device_id], nick = !n && nicknames ? NICKS[r.device_id] : null;
+      var label = n ? esc(n.name) + (n.hidden ? '<span class="tag">hidden</span>' : "")
+        : nick ? '<i class="muted">' + esc(nick) + '</i><span class="tag">nickname</span>' : '<span class="muted">no name</span>';
+      var editing = RENAMING === r.device_id;
+      var tools = editing
+        ? '<form class="rename" data-dev="' + esc(r.device_id) + '" data-round="' + esc(r.id) + '"><input id="renameInput" maxlength="16" value="' + esc(n ? n.name : "") + '" aria-label="New name">' +
+          '<button class="pill" type="submit">Save</button><button class="pill" type="button" data-cancel="1">Cancel</button></form>'
+        : '<button class="pill" type="button" data-rename="' + esc(r.device_id) + '">Rename</button>' +
+          (n ? ' <button class="pill" type="button" data-hide="' + esc(r.device_id) + '" data-to="' + (n.hidden ? "false" : "true") + '">' + (n.hidden ? "Show" : "Hide") + "</button>" : "");
+      return '<tr><td class="n">#' + r._rank + "</td><td>" + label + '</td><td class="n">' + num(r.total) + '</td><td class="n tools">' + tools + "</td></tr>";
+    };
+    var dropped = Object.keys(named).filter(function (d) { return !firsts[d] || firsts[d]._rank > 15; }).map(function (d) { return named[d]; });
+    html += '<section class="card"><h2>Leaderboard</h2><p class="muted">Today\'s top 15 as players see it. Rename changes the name on any entry, including one showing a nickname, and the player sees the new name too. Hide takes a name off the board for everyone, and it stays hidden even if the player changes it. Your own devices are not on the board.</p>' +
+      (RENAME_MSG ? '<p class="msg">' + esc(RENAME_MSG) + "</p>" : "") +
+      (top.length ? '<table class="board-admin"><thead><tr><th class="n">#</th><th>Name</th><th class="n">Score</th><th class="n"></th></tr></thead><tbody>' + top.map(rowHtml).join("") + "</tbody></table>" : '<p class="muted">Nobody has finished this day yet.</p>') +
+      (dropped.length ? '<h3 style="margin-top:8px">Names no longer in the top 15</h3><table><tbody>' + dropped.map(function (n) {
+        var r = firsts[n.device_id];
+        return "<tr><td>" + esc(n.name) + (n.hidden ? '<span class="tag">hidden</span>' : "") + '</td><td class="n">' + (r ? "#" + r._rank + " · " + num(r.total) : "n/a") +
+          '</td><td class="n"><button class="pill" type="button" data-hide="' + esc(n.device_id) + '" data-to="' + (n.hidden ? "false" : "true") + '">' + (n.hidden ? "Show" : "Hide") + "</button></td></tr>";
+      }).join("") + "</tbody></table>" : "") + "</section>";
   }
   dash.innerHTML = html;
   $("dayPick").addEventListener("change", function (e) { pickedDay = e.target.value; draw(); });
