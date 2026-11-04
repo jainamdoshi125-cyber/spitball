@@ -725,5 +725,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Making a mummy was a long job. How many days did the whole mummification process take?", a: 70, type: "ratio", unit: "days",
         fact: "70 days. Much of that time went to drying the body out with a natural salt called natron. 🧻" }
     ]
+  },
+  "2026-11-05": {
+    rebus: {
+      tiles: [{ e: "🔥" }, { e: "🍘" }],
+      alt: "Rebus: a flame, plus a rice cracker",
+      answers: ["firecracker", "firecrackers", "firecraker"],
+      display: "Firecracker",
+      hint: "Something that goes bang. A flame, plus a crunchy snack."
+    },
+    theme: "Fireworks",
+    hype: ["Boom!", "Sparkling!", "Lit!"],
+    oof: ["Fizzled.", "Dud.", "Up in smoke."],
+    snippet: "On this day in 1605, a plot to blow up England's Parliament was foiled. Ever since, the British have marked every November 5th with bonfires and <strong>fireworks</strong>. So today is all about fireworks.",
+    questions: [
+      { level: "Easy", q: "This past Fourth of July, the US celebrated a big birthday. How many years old did it turn?", a: 250, type: "ratio", unit: "years old",
+        fact: "250 years since the Declaration of Independence in 1776. 🇺🇸" },
+      { level: "Easy-medium", q: "Sparklers look harmless, but they burn incredibly hot. How hot, in degrees Fahrenheit?", a: 2000, type: "ratio", unit: "°F",
+        fact: "About 2,000°F, as hot as a blowtorch. That's why they're not toys for little kids. ✨" },
+      { level: "Medium", q: "Almost every state lets people buy some kind of fireworks. How many states ban all of them?", a: 1, type: "ratio", unit: "",
+        fact: "Just 1: Massachusetts. 🚫" },
+      { level: "Medium-hard", q: "Macy's Fourth of July fireworks show in New York hit a big milestone this year. Which number show was it?", a: 50, type: "ratio", unit: "",
+        fact: "The 50th, with 85,000 shells in 30 colors. 🎆" },
+      { level: "Hard", q: "This July, Joey Chestnut won the famous Coney Island hot dog eating contest again. How many hot dogs did he eat in 10 minutes?", a: 66, type: "ratio", unit: "hot dogs",
+        fact: "66 hot dogs and buns, for his 18th title. His record is 76. 🌭" }
+    ]
   }
 };
