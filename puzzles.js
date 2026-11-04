@@ -700,5 +700,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "In what year did Scooby-Doo first appear on TV?", a: 1969, type: "year", unit: "year",
         fact: "1969, in Scooby-Doo, Where Are You! on CBS. 👻" }
     ]
+  },
+  "2026-11-04": {
+    rebus: {
+      tiles: [{ e: "🏖️" }, { e: "⛈️" }],
+      alt: "Rebus: a sandy beach, plus a thunderstorm",
+      answers: ["sandstorm", "sandstorms", "dusstorm", "duststorm"],
+      display: "Sandstorm",
+      hint: "A desert hazard. What a beach is made of, plus wild weather."
+    },
+    theme: "Ancient Egypt",
+    hype: ["Pharaoh-nomenal!", "Fit for a pharaoh!", "Pure gold!"],
+    oof: ["Cursed!", "Lost in the sand.", "Back to the tomb."],
+    snippet: "On this day in 1922, archaeologist Howard Carter found the hidden steps to <strong>King Tut's tomb</strong>, sealed for more than 3,000 years. So today is all about ancient Egypt.",
+    questions: [
+      { level: "Easy", q: "How many great pyramids stand side by side at Giza?", a: 3, type: "ratio", unit: "pyramids",
+        fact: "3, built for three kings. The biggest, the Great Pyramid, is the last of the Seven Wonders of the Ancient World still standing. 🔺" },
+      { level: "Easy-medium", q: "The Great Pyramid is enormous. How many years did it take to build?", a: 20, type: "ratio", unit: "years",
+        fact: "About 20 years, according to the Greek historian Herodotus, using around 2.3 million stone blocks. 🧱" },
+      { level: "Medium", q: "King Tut became pharaoh as a boy and died young. About how old was he when he died?", a: 19, type: "ratio", unit: "years old",
+        fact: "About 18 or 19. He had ruled Egypt for around ten years. 👑" },
+      { level: "Medium-hard", q: "When it was finished, how tall was the Great Pyramid, in feet?", a: 482, type: "ratio", unit: "feet",
+        fact: "About 482 feet. It was the tallest thing people had ever built for nearly 4,000 years. 📐" },
+      { level: "Hard", q: "Making a mummy was a long job. How many days did the whole mummification process take?", a: 70, type: "ratio", unit: "days",
+        fact: "70 days. Much of that time went to drying the body out with a natural salt called natron. 🧻" }
+    ]
   }
 };
