@@ -750,5 +750,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "This July, Joey Chestnut won the famous Coney Island hot dog eating contest again. How many hot dogs did he eat in 10 minutes?", a: 66, type: "ratio", unit: "hot dogs",
         fact: "66 hot dogs and buns, for his 18th title. His record is 76. 🌭" }
     ]
+  },
+  "2026-11-06": {
+    rebus: {
+      tiles: [{ e: "👆" }, { e: "⬇️" }],
+      alt: "Rebus: a pointing finger, plus a down arrow",
+      answers: ["touchdown", "touchdowns", "touchdwn"],
+      display: "Touchdown",
+      hint: "Six points in football. What a finger does, plus the opposite of up."
+    },
+    theme: "Football",
+    hype: ["Touchdown!", "Hail Mary!", "MVP!"],
+    oof: ["Fumble.", "Flag on the play.", "Sacked."],
+    snippet: "On this day in 1869, Rutgers beat Princeton in the very first <strong>college football</strong> game. So today is all about football.",
+    questions: [
+      { level: "Easy", q: "How many points is a touchdown worth?", a: 6, type: "ratio", unit: "points",
+        fact: "6, plus a chance at 1 or 2 more right after. 🏈" },
+      { level: "Easy-medium", q: "Counting both end zones, how long is a football field, in yards?", a: 120, type: "ratio", unit: "yards",
+        fact: "120 yards: 100 for the field, plus 10 for each end zone. 📏" },
+      { level: "Medium", q: "In that first college game in 1869, how many players did each team have on the field?", a: 25, type: "ratio", unit: "players",
+        fact: "25 a side, and the game looked a lot more like soccer. Rutgers won 6 to 4. ⚽" },
+      { level: "Medium-hard", q: "Tom Brady holds the record for the most Super Bowl wins by a player. How many?", a: 7, type: "ratio", unit: "Super Bowls",
+        fact: "7, more than any NFL team has ever won. 💍" },
+      { level: "Hard", q: "Super Bowl ads are famously pricey. How much did a 30-second ad cost this year, in millions of dollars?", a: 8, type: "ratio", unit: "million dollars",
+        fact: "About $8 million on average, and a few went for more than $10 million. 📺" }
+    ]
   }
 };
