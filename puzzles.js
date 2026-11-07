@@ -775,5 +775,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Super Bowl ads are famously pricey. How much did a 30-second ad cost this year, in millions of dollars?", a: 8, type: "ratio", unit: "million dollars",
         fact: "About $8 million on average, and a few went for more than $10 million. 📺" }
     ]
+  },
+  "2026-11-07": {
+    rebus: {
+      tiles: [{ e: "🧪" }, { e: "🧥" }],
+      alt: "Rebus: a test tube, plus a coat",
+      answers: ["labcoat", "labcoats", "labjacket", "testtubecoat"],
+      display: "Lab Coat",
+      hint: "What scientists wear. Something from a science lab, plus something that keeps you warm."
+    },
+    theme: "Science",
+    hype: ["Eureka!", "Genius!", "Nobel-worthy!"],
+    oof: ["Back to the lab.", "Failed experiment.", "Total meltdown."],
+    snippet: "On this day in 1867, <strong>Marie Curie</strong> was born in Poland. She became one of the greatest scientists who ever lived. So today is all about science.",
+    questions: [
+      { level: "Easy", q: "Marie Curie was the first person to win more than one Nobel Prize. How many did she win?", a: 2, type: "ratio", unit: "Nobel Prizes",
+        fact: "2: physics in 1903 and chemistry in 1911. ⚛️" },
+      { level: "Easy-medium", q: "At sea level, what temperature does water boil at, in degrees Fahrenheit?", a: 212, type: "ratio", unit: "°F",
+        fact: "212°F, or 100°C. High up on a mountain, water boils at a lower temperature. 🫖" },
+      { level: "Medium", q: "How many elements are on the periodic table?", a: 118, type: "ratio", unit: "elements",
+        fact: "118. The four newest got their names in 2016. 🧪" },
+      { level: "Medium-hard", q: "A hummingbird's heart races when it flies. How many times can it beat in one minute?", a: 1200, type: "ratio", unit: "beats",
+        fact: "Up to about 1,200 beats a minute when it's flying hard. Yours beats about 70. 🐦" },
+      { level: "Hard", q: "We can't feel it, but the Earth is always spinning. How fast is the ground moving at the equator, in miles per hour?", a: 1000, type: "ratio", unit: "mph",
+        fact: "About 1,000 mph. We don't feel it because everything around us moves right along with us. 🌍" }
+    ]
   }
 };
