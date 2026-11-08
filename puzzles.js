@@ -800,5 +800,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "We can't feel it, but the Earth is always spinning. How fast is the ground moving at the equator, in miles per hour?", a: 1000, type: "ratio", unit: "mph",
         fact: "About 1,000 mph. We don't feel it because everything around us moves right along with us. 🌍" }
     ]
+  },
+  "2026-11-08": {
+    rebus: {
+      tiles: [{ e: "🧠" }, { e: "🌊" }],
+      alt: "Rebus: a brain, plus an ocean wave",
+      answers: ["brainwave", "brainwaves", "brainwav"],
+      display: "Brainwave",
+      hint: "A sudden clever idea. What you think with, plus something rolling in from the ocean."
+    },
+    theme: "Inventions",
+    hype: ["Brilliant!", "Patent pending!", "Lightbulb moment!"],
+    oof: ["Short circuit.", "Needs more work.", "Out of order."],
+    snippet: "On this day in 1895, Wilhelm Röntgen discovered <strong>X-rays</strong> by accident in his lab. So today is all about inventions.",
+    questions: [
+      { level: "Easy", q: "A classic yellow Post-it Note is a square. How many inches long is each side?", a: 3, type: "ratio", unit: "inches",
+        fact: "3 inches. Post-its came from a glue that didn't stick very well. 📝" },
+      { level: "Easy-medium", q: "QWERTY keyboards are named after their top row of letters. How many letters are in that top row?", a: 10, type: "ratio", unit: "letters",
+        fact: "10: Q, W, E, R, T, Y, U, I, O and P. ⌨️" },
+      { level: "Medium", q: "The very first YouTube video, \"Me at the zoo,\" was really short. How many seconds long is it?", a: 19, type: "ratio", unit: "seconds",
+        fact: "19 seconds, filmed at the San Diego Zoo by one of YouTube's founders in 2005. 🐘" },
+      { level: "Medium-hard", q: "Apple's very first computer, the Apple I, went on sale in 1976. How much did it cost, in dollars?", a: 666.66, type: "ratio", unit: "dollars",
+        fact: "$666.66. Steve Wozniak said he just liked repeating digits. 🍎" },
+      { level: "Hard", q: "Thomas Edison was the king of inventors. How many US patents did he hold?", a: 1093, type: "ratio", unit: "patents",
+        fact: "1,093 US patents, including the phonograph and a long-lasting light bulb. 💡" }
+    ]
   }
 };
