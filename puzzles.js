@@ -825,5 +825,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Thomas Edison was the king of inventors. How many US patents did he hold?", a: 1093, type: "ratio", unit: "patents",
         fact: "1,093 US patents, including the phonograph and a long-lasting light bulb. 💡" }
     ]
+  },
+  "2026-11-09": {
+    rebus: {
+      tiles: [{ e: "🧱" }, { e: "🌷" }],
+      alt: "Rebus: a brick wall, plus a flower",
+      answers: ["wallflower", "wallflowers", "brickflower"],
+      display: "Wallflower",
+      hint: "A shy person at a party. A brick barrier, plus something that blooms."
+    },
+    theme: "Germany",
+    hype: ["Wunderbar!", "Sehr gut!", "Prost!"],
+    oof: ["Nein!", "Ach.", "Auf Wiedersehen."],
+    snippet: "On this night in 1989, the <strong>Berlin Wall</strong> came down, and people from East and West Berlin climbed on top of it to celebrate together. So today is all about Germany.",
+    questions: [
+      { level: "Easy", q: "At Oktoberfest, beer comes in a giant glass mug. How many liters does it hold?", a: 1, type: "ratio", unit: "",
+        fact: "1 liter, about a quart. Servers famously carry ten or more at once. 🍺" },
+      { level: "Easy-medium", q: "The Berlin Wall split the city in two. How many years did it stand?", a: 28, type: "ratio", unit: "years",
+        fact: "28 years, from 1961 to 1989. 🧱" },
+      { level: "Medium", q: "The wall looped all the way around West Berlin. How long was it, in miles?", a: 96, type: "ratio", unit: "miles",
+        fact: "About 96 miles. Small pieces of it now stand in museums all over the world. 🗺️" },
+      { level: "Medium-hard", q: "Munich's Oktoberfest set a new attendance record this fall. How many people went, in millions?", a: 7.4, type: "ratio", unit: "million people",
+        fact: "A record 7.4 million, who drank 6.7 million liters of beer in 16 days. 🥨" },
+      { level: "Hard", q: "Germans take their bread seriously. How many different kinds of bread are listed in the country's official bread register?", a: 3200, type: "ratio", unit: "kinds of bread",
+        fact: "More than 3,200, from dark rye to soft pretzel rolls. 🍞" }
+    ]
   }
 };
