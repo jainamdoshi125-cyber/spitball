@@ -60,7 +60,8 @@ Planning ahead: Jai can approve several days at once. Approved puzzles that are 
 - The hook is a real event that happened on that calendar date. Verify the date with a web search.
 - The theme is one level broader than the hook (a film becomes the movies, a shipwreck becomes the ocean). Narrow single-topic days exclude people, so avoid them.
 - At most one or two questions about the hook itself. The other questions should be things anyone can reason toward.
-- Every answer is a number, and every question states its unit.
+- Every answer is a whole number, and every question states its unit (Jai's rule, November 9, 2026). Never use an answer with a decimal or fraction. If the true figure is not whole, change the unit or the question until it is (millions to thousands, miles to feet), or pick a different fact. Do not round a real figure just to make it fit.
+- No obscure questions that feel impossible (Jai's rule, November 9, 2026). Every question, including Q4 and Q5, must be something a general player can picture and reason toward. If the only "hard" option is an obscure fact, make that slot a fun medium question instead, and label its level honestly.
 - The snippet must not give away any answer, including the year if a question asks for it.
 - The rebus can be loose and does not need to be exact. Accept reasonable alternative readings in `answers` (lowercase, no spaces).
 - Each puzzle carries three themed `hype` lines and three themed `oof` lines for great and terrible guesses.

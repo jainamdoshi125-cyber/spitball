@@ -23,7 +23,8 @@ Add an entry to `puzzles.js` under the new date. Each entry has:
 
 - The hook is a real event from that date. The theme is one level broader (a film becomes the movies).
 - At most one or two questions about the event itself. The rest should be things anyone can reason toward.
-- Every answer is a number. State the unit.
+- Every answer is a whole number. State the unit. Never use decimals or fractions: change the unit or the question, or pick a different fact.
+- No obscure, impossible-feeling questions. If the only hard option is obscure, use a fun medium question in that slot.
 - Numbers score by plain distance from the answer. The `level` sets the range, which is how far off (as a percent of the answer) earns 50 points: Easy 40, Easy-medium 47, Medium 55, Medium-hard 63, Hard 70.
 - Only add `spread` to a question that should break from its level's range.
 - For years, `spread` is a percent of how long ago the event was (35 is standard).
