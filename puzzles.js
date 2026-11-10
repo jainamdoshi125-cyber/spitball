@@ -850,5 +850,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Germans take their bread seriously. How many different kinds of bread are listed in the country's official bread register?", a: 3200, type: "ratio", unit: "kinds of bread",
         fact: "More than 3,200, from dark rye to soft pretzel rolls. 🍞" }
     ]
+  },
+  "2026-11-10": {
+    rebus: {
+      tiles: [{ e: "🔍" }, { e: "🎉" }],
+      alt: "Rebus: a magnifying glass, plus a party popper",
+      answers: ["searchparty", "searchparties", "searchingparty", "searchcelebration", "lookparty", "findparty", "magnifyingparty"],
+      display: "Search Party",
+      hint: "A group sent out to find someone who is missing. Looking for something, plus a celebration."
+    },
+    theme: "Africa",
+    hype: ["Roar-some!", "Safari so good!", "King of the savanna!"],
+    oof: ["Lost in the Sahara.", "Wrong watering hole.", "Trampled by the herd."],
+    snippet: "On this day in 1871, reporter <strong>Henry Stanley</strong> finally found the missing explorer David Livingstone in a lakeside town in East Africa, after months of leading a search party across the continent. His famous greeting: \"Dr. Livingstone, I presume?\" So today is all about Africa.",
+    questions: [
+      { level: "Easy", q: "Camels have carried people across the Sahara for centuries. How many humps does a Sahara camel have?", a: 1, type: "ratio", unit: "",
+        fact: "Just 1. They're called dromedaries. The two-humped kind lives in Asia. 🐪" },
+      { level: "Easy-medium", q: "The giraffe is the tallest animal on Earth. About how tall can a big male grow, in feet?", a: 18, type: "ratio", unit: "feet",
+        fact: "About 18 feet. Its neck alone is longer than most people are tall. 🦒" },
+      { level: "Medium", q: "How many countries are in Africa?", a: 54, type: "ratio", unit: "countries",
+        fact: "54, by the United Nations' count. That's more than any other continent. 🌍" },
+      { level: "Medium-hard", q: "Elephants are pregnant longer than any other mammal. How many months does an African elephant carry her baby?", a: 22, type: "ratio", unit: "months",
+        fact: "22 months, which is nearly two years. 🐘" },
+      { level: "Hard", q: "Mount Kilimanjaro is the tallest mountain in Africa. How tall is it, in feet?", a: 19341, type: "ratio", unit: "feet",
+        fact: "19,341 feet. It's the tallest mountain in the world that stands all on its own. 🏔️" }
+    ]
   }
 };
