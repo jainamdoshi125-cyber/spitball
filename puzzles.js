@@ -875,5 +875,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Mount Kilimanjaro is the tallest mountain in Africa. How tall is it, in feet?", a: 19341, type: "ratio", unit: "feet",
         fact: "19,341 feet. It's the tallest mountain in the world that stands all on its own. 🏔️" }
     ]
+  },
+  "2026-11-11": {
+    rebus: {
+      tiles: [{ e: "🚗" }, { e: "🎱" }],
+      alt: "Rebus: a car, plus an eight ball",
+      answers: ["carpool", "carpools", "carpooling", "carpooler", "autopool", "carbilliards", "careightball", "car8ball", "poolcar"],
+      display: "Carpool",
+      hint: "Sharing a ride to work or school. Something you drive, plus a game played with a cue and an eight ball."
+    },
+    theme: "Road Trips",
+    hype: ["Smooth cruising!", "Green lights all the way!", "Pedal to the metal!"],
+    oof: ["Flat tire.", "Wrong exit.", "Out of gas."],
+    snippet: "On this day exactly 100 years ago, <strong>Route 66</strong> was born. The highway from Chicago to the California coast became the most famous road in America. Happy 100th birthday to the Mother Road. So today is all about road trips.",
+    questions: [
+      { level: "Easy", q: "Big rig trucks are nicknamed for the number of wheels they roll on. How many wheels does a standard one have?", a: 18, type: "ratio", unit: "wheels",
+        fact: "18. That's 10 on the truck up front and 8 on the trailer. 🚛" },
+      { level: "Easy-medium", q: "Route 66 runs from Illinois to California. Counting those two, how many states does it pass through?", a: 8, type: "ratio", unit: "states",
+        fact: "8: Illinois, Missouri, Kansas, Oklahoma, Texas, New Mexico, Arizona and California. Kansas gets just 13 miles of it. 🗺️" },
+      { level: "Medium", q: "A century ago, Henry Ford's Model T put America on wheels. In 1925, how much did the cheapest new one cost, in dollars?", a: 260, type: "ratio", unit: "dollars",
+        fact: "$260 for the basic two-seater, the lowest price the Model T ever hit. 🚗" },
+      { level: "Medium-hard", q: "How long was Route 66 from end to end, in miles?", a: 2448, type: "ratio", unit: "miles",
+        fact: "2,448 miles. When it opened, only 800 of them were paved. 🛣️" },
+      { level: "Hard", q: "In 1903, a Vermont doctor bet $50 that he could drive a car all the way across America. Nobody had ever done it. How many days did the trip take him?", a: 63, type: "ratio", unit: "days",
+        fact: "63 days, plus a few hours, from San Francisco to New York. He picked up a dog named Bud along the way, who rode in goggles. 🐶" }
+    ]
   }
 };
