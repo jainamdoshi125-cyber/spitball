@@ -880,7 +880,7 @@ window.SPITBALL_PUZZLES = {
     rebus: {
       tiles: [{ e: "🚗" }, { e: "🎱" }],
       alt: "Rebus: a car, plus an eight ball",
-      answers: ["carpool", "carpools", "carpooling", "carpooler", "autopool", "carbilliards", "careightball", "car8ball", "poolcar"],
+      answers: ["carpool", "carpools", "carpooling", "carpooler"],
       display: "Carpool",
       hint: "Sharing a ride to work or school. Something you drive, plus a game played with a cue and an eight ball."
     },

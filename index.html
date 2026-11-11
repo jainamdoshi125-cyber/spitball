@@ -298,7 +298,10 @@ function reaction(score) {
 function tier(score) { return score >= 90 ? "hit" : score >= 60 ? "ok" : score >= 30 ? "meh" : "miss"; }
 var MAX_TOTAL = 100 * WEIGHTS.reduce(function (s, w) { return s + w; }, 0);
 
-// ---------- rebus matching: ignore case, spaces, punctuation, a leading "the", and small typos ----------
+// ---------- rebus matching: ignore case, spaces, punctuation and a leading "the", and forgive one typo ----------
+// Stricter since November 11, 2026 (Jai's call, after "car ball" passed for "carpool"). A guess must be an accepted
+// answer with at most one slip (a wrong, missing, extra or swapped letter), two slips for answers of 10 letters or
+// more, and none at all for answers of 4 letters or fewer.
 function norm(s) {
   return String(s).toLowerCase().normalize("NFKD").replace(/[^a-z0-9]/g, "").replace(/^the(?=.{3,})/, "");
 }
@@ -319,7 +322,7 @@ function rebusMatches(guess) {
   var g = norm(guess);
   if (!g) { return false; }
   return PUZZLE.rebus.answers.some(function (ans) {
-    var allowed = ans.length <= 4 ? 0 : ans.length <= 8 ? 2 : 3;
+    var allowed = ans.length <= 4 ? 0 : ans.length < 10 ? 1 : 2;
     return editDistance(g, ans) <= allowed;
   });
 }

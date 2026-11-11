@@ -63,7 +63,7 @@ Planning ahead: Jai can approve several days at once. Approved puzzles that are 
 - Every answer is a whole number, and every question states its unit (Jai's rule, November 9, 2026). Never use an answer with a decimal or fraction. If the true figure is not whole, change the unit or the question until it is (millions to thousands, miles to feet), or pick a different fact. Do not round a real figure just to make it fit.
 - No obscure questions that feel impossible (Jai's rule, November 9, 2026). Every question, including Q4 and Q5, must be something a general player can picture and reason toward. If the only "hard" option is an obscure fact, make that slot a fun medium question instead, and label its level honestly.
 - The snippet must not give away any answer, including the year if a question asks for it.
-- The rebus can be loose and does not need to be exact. Accept reasonable alternative readings in `answers` (lowercase, no spaces).
+- The rebus pictures can be loose, but the accepted answers are strict (Jai's rule, November 11, 2026, after "car ball" passed for "carpool"). `answers` (lowercase, no spaces) holds only the real answer, its word forms (plural, -ing, -er) and true synonyms that mean the same thing. Never list a description of the pictures ("car8ball", "careightball") or a half-solved reading. The game itself forgives one typo (two for answers of 10 letters or more, none for 4 letters or fewer), so do not add misspellings either.
 - Each puzzle carries three themed `hype` lines and three themed `oof` lines for great and terrible guesses.
 - Every fun fact ends with one emoji that fits the fact, after the final period.
 - Check every fact against a source before publishing.

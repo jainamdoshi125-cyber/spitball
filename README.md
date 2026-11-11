@@ -13,7 +13,7 @@ The puzzle changes for everyone at 12:01 AM Eastern time. If a day has no puzzle
 
 Add an entry to `puzzles.js` under the new date. Each entry has:
 
-- `rebus`: `tiles` (pictures only), `alt` (a description for screen readers), `answers` (accepted answers in lowercase with no spaces), `display` (the answer as shown) and `hint`.
+- `rebus`: `tiles` (pictures only), `alt` (a description for screen readers), `answers` (accepted answers in lowercase with no spaces: only the real answer, its word forms and true synonyms, never a description of the pictures; the game forgives one typo by itself), `display` (the answer as shown) and `hint`.
 - `theme`: the day's broad topic.
 - `hype` and `oof`: three themed reaction lines each, for great and terrible guesses.
 - `snippet`: the "on this day" story. It must not give away any answer.
