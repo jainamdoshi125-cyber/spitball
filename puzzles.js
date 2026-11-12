@@ -900,5 +900,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "In 1903, a Vermont doctor bet $50 that he could drive a car all the way across America. Nobody had ever done it. How many days did the trip take him?", a: 63, type: "ratio", unit: "days",
         fact: "63 days, plus a few hours, from San Francisco to New York. He picked up a dog named Bud along the way, who rode in goggles. 🐶" }
     ]
+  },
+  "2026-11-12": {
+    rebus: {
+      tiles: [{ e: "🫠" }, { e: "🍲" }],
+      alt: "Rebus: a melting face, plus a pot of food",
+      answers: ["meltingpot", "meltingpots"],
+      display: "Melting Pot",
+      hint: "A place where people from all over the world mix together. What ice cream does on a hot day, plus what you cook soup in."
+    },
+    theme: "New York City",
+    hype: ["Big Apple brilliant!", "You own this town!", "A true New Yorker!"],
+    oof: ["Fuhgeddaboudit.", "Stuck in traffic.", "Missed the subway."],
+    snippet: "On this day in 1954, <strong>Ellis Island</strong> closed its doors. For more than 60 years, it was the first stop in America for newcomers sailing into New York Harbor, the gateway to the great melting pot. So today is all about New York City.",
+    questions: [
+      { level: "Easy", q: "New York City is made up of boroughs, like Brooklyn and the Bronx. How many boroughs are there?", a: 5, type: "ratio", unit: "boroughs",
+        fact: "5: Manhattan, Brooklyn, Queens, the Bronx and Staten Island. 🗽" },
+      { level: "Easy-medium", q: "The Empire State Building was once the tallest building in the world. How many floors does it have?", a: 102, type: "ratio", unit: "floors",
+        fact: "102 floors, with 1,860 steps if you skip the elevator. 🏙️" },
+      { level: "Medium", q: "On New Year's Eve, a glittering ball slides down a pole high above Times Square. How many seconds does the drop take?", a: 60, type: "ratio", unit: "seconds",
+        fact: "60 seconds. It starts at 11:59 PM and lands exactly at midnight. 🎆" },
+      { level: "Medium-hard", q: "Central Park is a long green rectangle in the middle of Manhattan. How many city blocks long is it?", a: 51, type: "ratio", unit: "blocks",
+        fact: "51 blocks, from 59th Street all the way up to 110th Street. 🌳" },
+      { level: "Hard", q: "Yellow taxis are everywhere in New York, but the law caps how many there can be. How many yellow cabs is the city allowed?", a: 13587, type: "ratio", unit: "taxis",
+        fact: "13,587, each with a metal medallion bolted to its hood. 🚕" }
+    ]
   }
 };
