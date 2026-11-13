@@ -925,5 +925,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Yellow taxis are everywhere in New York, but the law caps how many there can be. How many yellow cabs is the city allowed?", a: 13587, type: "ratio", unit: "taxis",
         fact: "13,587, each with a metal medallion bolted to its hood. 🚕" }
     ]
+  },
+  "2026-11-13": {
+    rebus: {
+      tiles: [{ e: "🍀" }, { e: "🦆" }],
+      alt: "Rebus: a four-leaf clover, plus a duck",
+      answers: ["luckyduck", "luckyducks", "luckyducky"],
+      display: "Lucky Duck",
+      hint: "What you call someone who catches a happy break. A green good luck charm, plus a bird that quacks."
+    },
+    theme: "Luck",
+    hype: ["Lucky you!", "Jackpot!", "You're on a roll!"],
+    oof: ["Tough luck.", "Snake eyes.", "A black cat crossed your path."],
+    snippet: "Today is <strong>Friday the 13th</strong>, the unluckiest day on the calendar, or so the superstition goes. Nobody knows for sure how the fear got started, but plenty of people still play it extra safe today. So today is all about luck.",
+    questions: [
+      { level: "Easy", q: "Most clovers have three leaves. How many leaves does a lucky one have?", a: 4, type: "ratio", unit: "leaves",
+        fact: "4. Finding one is rare, which is exactly why it's lucky. 🍀" },
+      { level: "Easy-medium", q: "Superstition says breaking a mirror brings bad luck. For how many years?", a: 7, type: "ratio", unit: "years",
+        fact: "7 years. The idea goes back to the ancient Romans, who believed life renewed itself every seven years. 🪞" },
+      { level: "Medium", q: "Every year has at least one Friday the 13th. What is the most a single year can have?", a: 3, type: "ratio", unit: "Friday the 13ths",
+        fact: "3, and this year is one of them: February, March and today. 📅" },
+      { level: "Medium-hard", q: "Lots of tall buildings are so nervous about the number 13 that they skip it. The elevator maker Otis once checked its tall buildings. What percent had no floor labeled 13?", a: 85, type: "ratio", unit: "percent",
+        fact: "About 85 percent. The elevator buttons jump straight from 12 to 14. 🏢" },
+      { level: "Hard", q: "A four-leaf clover is lucky, so more leaves must be luckier. What is the most leaves ever counted on a single clover?", a: 63, type: "ratio", unit: "leaves",
+        fact: "63 leaves, a world record. A gardener in Japan spent more than ten years breeding it. ☘️" }
+    ]
   }
 };
