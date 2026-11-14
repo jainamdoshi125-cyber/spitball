@@ -950,5 +950,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "A four-leaf clover is lucky, so more leaves must be luckier. What is the most leaves ever counted on a single clover?", a: 63, type: "ratio", unit: "leaves",
         fact: "63 leaves, a world record. A gardener in Japan spent more than ten years breeding it. ☘️" }
     ]
+  },
+  "2026-11-14": {
+    rebus: {
+      tiles: [{ e: "🐋" }, { e: "⌚" }],
+      alt: "Rebus: a whale, plus a wristwatch",
+      answers: ["whalewatch", "whalewatching", "whalewatcher", "whalewatchers", "whalewatches"],
+      display: "Whale Watch",
+      hint: "A boat trip to spot giants of the sea. The biggest animal in the ocean, plus what you wear on your wrist."
+    },
+    theme: "The Ocean",
+    hype: ["Whale done!", "Making waves!", "Shore thing!"],
+    oof: ["Lost at sea.", "Man overboard!", "Sunk like a stone."],
+    snippet: "On this day in 1851, <strong>Moby-Dick</strong> hit American bookstores. Herman Melville's tale of a sea captain chasing a giant white whale flopped at first, and is now called one of the greatest novels ever written. So today is all about the ocean.",
+    questions: [
+      { level: "Easy", q: "How many arms does a classic starfish have?", a: 5, type: "ratio", unit: "arms",
+        fact: "5, though some kinds of sea stars have 10, 20 or even 40. ⭐" },
+      { level: "Easy-medium", q: "An octopus has eight arms and more than one heart. How many hearts?", a: 3, type: "ratio", unit: "hearts",
+        fact: "3. Two pump blood through the gills, and one sends it around the rest of the body. 🐙" },
+      { level: "Medium", q: "What percent of the Earth's surface is covered by ocean?", a: 71, type: "ratio", unit: "percent",
+        fact: "About 71 percent. The ocean holds nearly all of the water on the planet. 🌊" },
+      { level: "Medium-hard", q: "Surfers chase giant waves off the coast of Portugal. How tall was the biggest wave ever officially surfed, in feet?", a: 86, type: "ratio", unit: "feet",
+        fact: "86 feet, about as tall as an eight-story building. Germany's Sebastian Steudtner rode it in 2020. 🏄" },
+      { level: "Hard", q: "The deepest spot in the ocean is the Challenger Deep, in the Pacific. How deep is it, in feet?", a: 35876, type: "ratio", unit: "feet",
+        fact: "About 35,876 feet, which is nearly 7 miles straight down. Mount Everest would fit with room to spare. 🤿" }
+    ]
   }
 };
