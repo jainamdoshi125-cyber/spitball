@@ -975,5 +975,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "The deepest spot in the ocean is the Challenger Deep, in the Pacific. How deep is it, in feet?", a: 35876, type: "ratio", unit: "feet",
         fact: "About 35,876 feet, which is nearly 7 miles straight down. Mount Everest would fit with room to spare. 🤿" }
     ]
+  },
+  "2026-11-15": {
+    rebus: {
+      tiles: [{ e: "🥛" }, { e: "🤝" }],
+      alt: "Rebus: a glass of milk, plus a handshake",
+      answers: ["milkshake", "milkshakes"],
+      display: "Milkshake",
+      hint: "A thick, sweet drink you sip through a straw. What comes from a cow, plus what two people do when they meet."
+    },
+    theme: "Fast Food",
+    hype: ["Chef's kiss!", "Supersized!", "Order up!"],
+    oof: ["Wrong order.", "The ice cream machine is broken.", "Cold fries."],
+    snippet: "On this day in 1969, Dave Thomas opened the very first <strong>Wendy's</strong> in Columbus, Ohio. He named it after his young daughter, made the burgers square, and served the Frosty, a shake so thick you eat it with a spoon. So today is all about fast food.",
+    questions: [
+      { level: "Easy", q: "How many inches does Subway claim to have in a Footlong?", a: 12, type: "ratio", unit: "inches",
+        fact: "12 inches. In 2013, customers measured some at just 11 and took Subway to court. 🥪" },
+      { level: "Easy-medium", q: "KFC's fried chicken recipe is a famous secret blend of herbs and spices. How many?", a: 11, type: "ratio", unit: "herbs and spices",
+        fact: "11. The recipe is locked in a vault at KFC headquarters in Kentucky. 🍗" },
+      { level: "Medium", q: "Wendy's is named after founder Dave Thomas's daughter. How old was she when the first one opened?", a: 8, type: "ratio", unit: "years old",
+        fact: "8. Her real name is Melinda, and Wendy was her nickname. 👧" },
+      { level: "Medium-hard", q: "When the McDonald brothers launched their fast food menu in 1948, how much did a hamburger cost, in cents?", a: 15, type: "ratio", unit: "cents",
+        fact: "15 cents. A cheeseburger was 19 cents and fries were a dime. 🍟" },
+      { level: "Hard", q: "How many calories are in a Big Mac?", a: 580, type: "ratio", unit: "calories",
+        fact: "580 calories, by McDonald's own count in the US. 🍔" }
+    ]
   }
 };
