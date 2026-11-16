@@ -1000,5 +1000,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "How many calories are in a Big Mac?", a: 580, type: "ratio", unit: "calories",
         fact: "580 calories, by McDonald's own count in the US. 🍔" }
     ]
+  },
+  "2026-11-16": {
+    rebus: {
+      tiles: [{ e: "🔨" }, { e: "🦵" }],
+      alt: "Rebus: a hammer, plus a leg",
+      answers: ["breakaleg", "breakleg", "breakalegs", "breakyourleg", "brokenleg", "brakealeg"],
+      display: "Break a Leg",
+      hint: "How you wish an actor good luck. What a hammer can do, plus a body part."
+    },
+    theme: "Broadway",
+    hype: ["Bravo!", "Standing ovation!", "Encore!"],
+    oof: ["Stage fright.", "Forgot your lines.", "Curtains."],
+    snippet: "On this day in 1959, <strong>The Sound of Music</strong> opened on Broadway, and the hills have been alive ever since. So today is all about Broadway.",
+    questions: [
+      { level: "Easy", q: "In The Sound of Music, how many von Trapp children does Maria look after?", a: 7, type: "ratio", unit: "children",
+        fact: "7, from Liesl, who is 16 going on 17, down to little Gretl. 🎶" },
+      { level: "Easy-medium", q: "How many Broadway theaters are there in New York City?", a: 41, type: "ratio", unit: "theaters",
+        fact: "41, and only a few of them are actually on the street called Broadway. 🎭" },
+      { level: "Medium", q: "Hamilton was the biggest Broadway hit in years. How many Tony Awards did it win?", a: 11, type: "ratio", unit: "Tony Awards",
+        fact: "11, from a record 16 nominations. The Producers still holds the record for wins with 12. 🏆" },
+      { level: "Medium-hard", q: "A theater has to be a certain size to count as Broadway. What is the smallest number of seats it can have?", a: 500, type: "ratio", unit: "seats",
+        fact: "500 seats. Anything with 100 to 499 is called Off-Broadway. 💺" },
+      { level: "Hard", q: "The Phantom of the Opera is the longest-running show in Broadway history. How many performances did it play?", a: 13981, type: "ratio", unit: "performances",
+        fact: "13,981 performances over 35 years, from 1988 to 2023. 👻" }
+    ]
   }
 };
