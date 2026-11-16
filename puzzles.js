@@ -1005,7 +1005,7 @@ window.SPITBALL_PUZZLES = {
     rebus: {
       tiles: [{ e: "🔨" }, { e: "🦵" }],
       alt: "Rebus: a hammer, plus a leg",
-      answers: ["breakaleg", "breakleg", "breakalegs", "breakyourleg", "brokenleg", "brakealeg"],
+      answers: ["breakaleg", "breakalegs"],
       display: "Break a Leg",
       hint: "How you wish an actor good luck. What a hammer can do, plus a body part."
     },
