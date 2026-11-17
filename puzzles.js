@@ -1025,5 +1025,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "The Phantom of the Opera is the longest-running show in Broadway history. How many performances did it play?", a: 13981, type: "ratio", unit: "performances",
         fact: "13,981 performances over 35 years, from 1988 to 2023. 👻" }
     ]
+  },
+  "2026-11-17": {
+    rebus: {
+      tiles: [{ e: "👑" }, { e: "💎" }],
+      alt: "Rebus: a crown, plus a gem",
+      answers: ["crownjewels", "crownjewel"],
+      display: "Crown Jewels",
+      hint: "A royal family's most precious treasures. What a queen wears on her head, plus sparkly gems."
+    },
+    theme: "Kings and Queens",
+    hype: ["Royally good!", "Fit for a queen!", "Crown that guess!"],
+    oof: ["Off with your head!", "Back to the dungeon.", "Royally off."],
+    snippet: "On this day in 1558, a 25-year-old princess became <strong>Queen Elizabeth I</strong> of England. She went on to become one of the most famous queens in history. So today is all about kings and queens.",
+    questions: [
+      { level: "Easy", q: "A deck of playing cards has kings and queens in every suit. How many kings and queens are there in total?", a: 8, type: "ratio", unit: "kings and queens",
+        fact: "8: four kings and four queens, one of each for every suit. 🃏" },
+      { level: "Easy-medium", q: "England's King Henry VIII is famous for getting married again and again. How many wives did he have?", a: 6, type: "ratio", unit: "wives",
+        fact: "6. Queen Elizabeth I was the daughter of wife number two, Anne Boleyn. 💍" },
+      { level: "Medium", q: "Queen Elizabeth II ruled longer than any other British king or queen. How many years was she queen?", a: 70, type: "ratio", unit: "years",
+        fact: "70 years, from 1952 to 2022. 👑" },
+      { level: "Medium-hard", q: "Queen Victoria had a big family. How many children did she have?", a: 9, type: "ratio", unit: "children",
+        fact: "9 children. They married into so many royal families that she was nicknamed the grandmother of Europe. 👶" },
+      { level: "Hard", q: "King Charles waited longer than anyone to take the British throne. How old was he when he became king?", a: 73, type: "ratio", unit: "years old",
+        fact: "73, the oldest person ever to become Britain's king or queen. ⏳" }
+    ]
   }
 };
