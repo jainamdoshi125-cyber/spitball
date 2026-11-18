@@ -1050,5 +1050,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "King Charles waited longer than anyone to take the British throne. How old was he when he became king?", a: 73, type: "ratio", unit: "years old",
         fact: "73, the oldest person ever to become Britain's king or queen. ⏳" }
     ]
+  },
+  "2026-11-18": {
+    rebus: {
+      tiles: [{ e: "🐭" }, { e: "🪤" }],
+      alt: "Rebus: a mouse, plus a trap",
+      answers: ["mousetrap", "mousetraps"],
+      display: "Mousetrap",
+      hint: "How you catch a tiny cheese thief. A small squeaky animal, plus something that snaps shut."
+    },
+    theme: "Disney",
+    hype: ["Magical!", "A dream come true!", "Happily ever after!"],
+    oof: ["Bibbidi-bobbidi-oops.", "Goofy guess.", "Grumpy would be grumpy."],
+    snippet: "On this day, a cartoon called Steamboat Willie hit the big screen and made <strong>Mickey Mouse</strong> a star. Disney counts it as Mickey's birthday. So today is all about Disney.",
+    questions: [
+      { level: "Easy", q: "Counting his thumb, how many fingers does Mickey Mouse have on each hand?", a: 4, type: "ratio", unit: "fingers",
+        fact: "4. Fewer fingers made him quicker and cheaper to draw. 🧤" },
+      { level: "Easy-medium", q: "Snow White lives with seven dwarfs. How many of the seven have a beard?", a: 6, type: "ratio", unit: "dwarfs",
+        fact: "6. Dopey is the only one without a beard. ⛏️" },
+      { level: "Medium", q: "In Aladdin, how many wishes does the Genie grant?", a: 3, type: "ratio", unit: "wishes",
+        fact: "3 wishes, with a few rules: no wishing for more wishes. 🧞" },
+      { level: "Medium-hard", q: "Today is Mickey Mouse's birthday. How old is he turning?", a: 98, type: "ratio", unit: "years old",
+        fact: "98. Steamboat Willie came out in 1928, so Mickey turns 100 in two years. 🎂" },
+      { level: "Hard", q: "In what year did Disneyland first open its gates in California?", a: 1955, type: "year", unit: "year",
+        fact: "1955. A ticket to get in on opening day cost one dollar. 🎢" }
+    ]
   }
 };
