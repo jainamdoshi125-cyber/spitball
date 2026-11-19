@@ -1075,5 +1075,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "In what year did Disneyland first open its gates in California?", a: 1955, type: "year", unit: "year",
         fact: "1955. A ticket to get in on opening day cost one dollar. 🎢" }
     ]
+  },
+  "2026-11-19": {
+    rebus: {
+      tiles: [{ e: "🥇" }, { e: "👩" }],
+      alt: "Rebus: a first place medal, plus a woman",
+      answers: ["firstlady", "firstladies"],
+      display: "First Lady",
+      hint: "The president's wife. Where the winner finishes, plus a polite word for a woman."
+    },
+    theme: "Presidents",
+    hype: ["Presidential!", "Landslide!", "Hail to the chief!"],
+    oof: ["Vetoed.", "Recount!", "Lost the election."],
+    snippet: "On this day in 1863, Abraham Lincoln gave the <strong>Gettysburg Address</strong>, one of the most famous speeches in American history. It took him about two minutes. So today is all about presidents.",
+    questions: [
+      { level: "Easy", q: "How many presidents are carved into Mount Rushmore?", a: 4, type: "ratio", unit: "presidents",
+        fact: "4: Washington, Jefferson, Theodore Roosevelt and Lincoln. 🗿" },
+      { level: "Easy-medium", q: "Lincoln's speech begins with the words \"Four score and seven years ago.\" How many years is that?", a: 87, type: "ratio", unit: "years",
+        fact: "87. A score is 20, so four score and seven is 80 plus 7. That points back to 1776. 📜" },
+      { level: "Medium", q: "Abraham Lincoln was the tallest president ever. How tall was he, in inches?", a: 76, type: "ratio", unit: "inches",
+        fact: "76 inches, or 6 feet 4. His famous top hat made him look even taller. 🎩" },
+      { level: "Medium-hard", q: "The Constitution says you must be a certain age to become president. How old do you have to be?", a: 35, type: "ratio", unit: "years old",
+        fact: "35. The youngest president ever was Theodore Roosevelt, who took office at 42. 🎂" },
+      { level: "Hard", q: "Counting each person only once, how many different people have been president of the United States?", a: 45, type: "ratio", unit: "people",
+        fact: "45. The count of presidencies is two higher, because Grover Cleveland and Donald Trump each served two terms that were not back to back. 🇺🇸" }
+    ]
   }
 };
