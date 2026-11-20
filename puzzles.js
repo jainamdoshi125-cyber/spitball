@@ -1100,5 +1100,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Counting each person only once, how many different people have been president of the United States?", a: 45, type: "ratio", unit: "people",
         fact: "45. The count of presidencies is two higher, because Grover Cleveland and Donald Trump each served two terms that were not back to back. 🇺🇸" }
     ]
+  },
+  "2026-11-20": {
+    rebus: {
+      tiles: [{ e: "🟩" }, { e: "⛰️" }],
+      alt: "Rebus: a green square, plus a mountain",
+      answers: ["greenmountain", "greenmountains"],
+      display: "Green Mountain",
+      hint: "A mountain range in New England. A color, plus a tall peak."
+    },
+    theme: "Vermont",
+    hype: ["Mapletastic!", "Peak performance!", "Sweet as syrup!"],
+    oof: ["Lost in the woods.", "Brain freeze.", "Snowed in."],
+    snippet: "Today we're heading to <strong>Vermont</strong>, the Green Mountain State: home of maple syrup, covered bridges and Ben &amp; Jerry's ice cream. So today is all about Vermont.",
+    questions: [
+      { level: "Easy", q: "How many US states share a border with Vermont?", a: 3, type: "ratio", unit: "states",
+        fact: "3: New York, New Hampshire and Massachusetts. To the north is Canada. 🗺️" },
+      { level: "Easy-medium", q: "Ben and Jerry learned to make ice cream from a mail-order course. How much did the course cost, in dollars?", a: 5, type: "ratio", unit: "dollars",
+        fact: "$5, from Penn State. They split the cost. 🍦" },
+      { level: "Medium", q: "Calvin Coolidge was born in Plymouth Notch, Vermont. Which number president was he?", a: 30, type: "ratio", unit: "",
+        fact: "30th. He took the oath of office at his family's Vermont farmhouse, sworn in by his own father by lamplight. 🕯️" },
+      { level: "Medium-hard", q: "Counting in the order they joined the Union, which number state was Vermont?", a: 14, type: "ratio", unit: "",
+        fact: "14th, in 1791. It was the first state to join after the original 13. 🇺🇸" },
+      { level: "Hard", q: "Ben &amp; Jerry's first shop opened in an old gas station in Burlington, Vermont. In what year?", a: 1978, type: "year", unit: "year",
+        fact: "1978. They celebrated their first anniversary with a free cone day, which became a yearly tradition. 🎉" }
+    ]
   }
 };
