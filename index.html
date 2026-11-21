@@ -95,6 +95,10 @@ button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 .note { background: var(--tint); border-radius: 18px; padding: 14px 16px; font-size: 16px; line-height: 1.5; }
 .note b.lbl { display: block; margin-bottom: 4px; }
 .note mark, .note strong { background: var(--sun); color: var(--on-sun); padding: 0 4px; border-radius: 4px; font-weight: 700; }
+.note.story strong { background: none; color: var(--ink); padding: 0; }
+.answer { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.answer .word { font-family: var(--display); font-weight: 800; font-size: 30px; line-height: 1.1; text-transform: uppercase; letter-spacing: 0.02em;
+  background: var(--sun); color: var(--on-sun); padding: 4px 12px 5px; border-radius: 8px; transform: rotate(-1.5deg); overflow-wrap: anywhere; max-width: 100%; }
 .lbl { font-family: var(--mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
 
 .t-hit { --tier-bg: var(--hit-bg); --tier-fg: var(--hit-fg); }
@@ -645,7 +649,10 @@ function render() {
     h = open +
       '<p class="eyebrow"><span>Today\'s theme</span><span>' + how + "</span></p>" +
       "<h2>" + PUZZLE.theme + "</h2>" +
-      '<p class="note"><b class="lbl">The pictures said: ' + PUZZLE.rebus.display + "</b>" + PUZZLE.snippet + "</p>" +
+      // The rebus answer gets the highlight (Jai's call, November 21, 2026: players were reading the highlighted name
+      // in the story as the answer). The story's own bold name is plain bold, so only the answer stands out.
+      '<div class="answer"><span class="lbl">The pictures said</span><span class="word">' + PUZZLE.rebus.display + "</span></div>" +
+      '<p class="note story">' + PUZZLE.snippet + "</p>" +
       '<p class="muted">Up next: five questions, each answered with a number. The closer you land, the more you score. They get harder, and the later ones count for more.</p>' +
       '<button class="btn" type="button" data-act="start">Start the questions</button>' +
       "</section>";

@@ -39,7 +39,7 @@ The game sends one anonymous record per round to a small Supabase database (free
 ## How a day works
 
 1. Rebus screen. Pictures only, never letters. Three tries. A hint appears after the second wrong guess. "Give up and show me" is always available. The rebus earns no points.
-2. Theme screen. Shows the theme and a short "on this day" story.
+2. Theme screen. Shows the theme, then the rebus answer in a big hot pink highlight under "The pictures said", then a short "on this day" story. The story's key name is plain bold, not highlighted, so players do not mistake it for the answer (Jai's call, November 21, 2026).
 3. Five number questions, easy to hard.
 4. Final score, a per-question breakdown, and a share popup.
 
