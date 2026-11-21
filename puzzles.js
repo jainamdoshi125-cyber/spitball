@@ -1125,5 +1125,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "Ben &amp; Jerry's first shop opened in an old gas station in Burlington, Vermont. In what year?", a: 1978, type: "year", unit: "year",
         fact: "1978. They celebrated their first anniversary with a free cone day, which became a yearly tradition. 🎉" }
     ]
+  },
+  "2026-11-21": {
+    rebus: {
+      tiles: [{ e: "✏️" }, { e: "🌉" }],
+      alt: "Rebus: a pencil, plus a bridge",
+      answers: ["drawbridge", "drawbridges"],
+      display: "Drawbridge",
+      hint: "The bridge at a castle gate. What you do with a pencil, plus a way across the water."
+    },
+    theme: "Bridges",
+    hype: ["Nailed the crossing!", "Rock solid!", "Bridge built!"],
+    oof: ["Bridge out.", "Water under the bridge.", "A bridge too far."],
+    snippet: "On this day in 1964, the <strong>Verrazzano-Narrows Bridge</strong> opened in New York, linking Brooklyn and Staten Island. It was the longest bridge of its kind in the world. So today is all about bridges.",
+    questions: [
+      { level: "Easy", q: "How many lanes of traffic does the Golden Gate Bridge have?", a: 6, type: "ratio", unit: "lanes",
+        fact: "6 lanes. A machine nicknamed the zipper truck slides the middle barrier over so rush hour gets an extra lane. 🚗" },
+      { level: "Easy-medium", q: "How many tall towers hold up the Golden Gate Bridge?", a: 2, type: "ratio", unit: "towers",
+        fact: "2 towers, painted a color called International Orange. 🌉" },
+      { level: "Medium", q: "Pittsburgh is nicknamed the City of Bridges. How many bridges does it have?", a: 446, type: "ratio", unit: "bridges",
+        fact: "446, by the count Pittsburgh is proud of. That's a few more than Venice, Italy. 🌁" },
+      { level: "Medium-hard", q: "The Brooklyn Bridge was a huge job. How many years did it take to build?", a: 14, type: "ratio", unit: "years",
+        fact: "14 years, from 1869 to 1883. 🏗️" },
+      { level: "Hard", q: "In what year did the Golden Gate Bridge open in San Francisco?", a: 1937, type: "year", unit: "year",
+        fact: "1937. On opening day, about 200,000 people walked across before any cars were allowed. 🚶" }
+    ]
   }
 };
