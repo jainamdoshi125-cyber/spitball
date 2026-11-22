@@ -1150,5 +1150,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "In what year did the Golden Gate Bridge open in San Francisco?", a: 1937, type: "year", unit: "year",
         fact: "1937. On opening day, about 200,000 people walked across before any cars were allowed. 🚶" }
     ]
+  },
+  "2026-11-22": {
+    rebus: {
+      tiles: [{ e: "🚢" }, { e: "💥" }],
+      alt: "Rebus: a ship, plus a crash",
+      answers: ["shipwreck", "shipwrecks", "shipwrecked"],
+      display: "Shipwreck",
+      hint: "What's left after a ship sinks. A big boat, plus a crash."
+    },
+    theme: "Pirates",
+    hype: ["Arrr, well done!", "X marks the spot!", "Treasure!"],
+    oof: ["Davy Jones' locker.", "Shiver me timbers.", "Lost at sea."],
+    snippet: "On this day in 1718, the pirate <strong>Blackbeard</strong> fought his last battle off the coast of North Carolina. So today is all about pirates.",
+    questions: [
+      { level: "Easy", q: "A pirate's parrot sits on his shoulder. How many legs does a parrot have?", a: 2, type: "ratio", unit: "legs",
+        fact: "2 legs, with two toes pointing forward and two pointing back for a strong grip. 🦜" },
+      { level: "Easy-medium", q: "How many Pirates of the Caribbean movies are there?", a: 5, type: "ratio", unit: "movies",
+        fact: "5, starting with The Curse of the Black Pearl in 2003. A sixth is in the works. 🎬" },
+      { level: "Medium", q: "In the old pirate song, how many men are on the dead man's chest?", a: 15, type: "ratio", unit: "men",
+        fact: "15 men. Yo ho ho, and a bottle of rum! The song comes from the book Treasure Island. 🍾" },
+      { level: "Medium-hard", q: "How many cannons did Blackbeard's ship carry?", a: 40, type: "ratio", unit: "cannons",
+        fact: "40 cannons, as many as some navy warships of the time. 💣" },
+      { level: "Hard", q: "About how many pirates were in Blackbeard's crew?", a: 300, type: "ratio", unit: "pirates",
+        fact: "About 300. The wreck of his ship was found off North Carolina in 1996. 🏴‍☠️" }
+    ]
   }
 };
