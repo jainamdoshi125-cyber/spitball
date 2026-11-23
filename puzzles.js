@@ -1175,5 +1175,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "About how many pirates were in Blackbeard's crew?", a: 300, type: "ratio", unit: "pirates",
         fact: "About 300. The wreck of his ship was found off North Carolina in 1996. 🏴‍☠️" }
     ]
+  },
+  "2026-11-23": {
+    rebus: {
+      tiles: [{ e: "🧃" }, { e: "📦" }],
+      alt: "Rebus: a juice box, plus a box",
+      answers: ["jukebox", "jukeboxes"],
+      display: "Jukebox",
+      hint: "Drop in a coin and it plays a song. Say the first picture out loud."
+    },
+    theme: "Songs",
+    hype: ["Encore!", "Hit song!", "Turn it up!"],
+    oof: ["Off key.", "Skip this track.", "Wrong note."],
+    snippet: "On this day long ago, a San Francisco saloon got the world's first <strong>jukebox</strong>. Drop in a nickel, then listen through a tube. So today is all about songs.",
+    questions: [
+      { level: "Easy", q: "How many days of Christmas are in the famous holiday song?", a: 12, type: "ratio", unit: "days",
+        fact: "12 days, running from Christmas Day into early January. Add up every gift in the song and you get 364. 🎄" },
+      { level: "Easy-medium", q: "How many Spice Girls were there?", a: 5, type: "ratio", unit: "Spice Girls",
+        fact: "5: Scary, Sporty, Baby, Ginger and Posh. Wannabe hit number one in 37 countries. 🌶️" },
+      { level: "Medium", q: "Stevie Wonder had his first number one hit as a kid. How old was he?", a: 13, type: "ratio", unit: "years old",
+        fact: "13, with Fingertips in 1963. He was the youngest solo artist ever to top the chart. 🎹" },
+      { level: "Medium-hard", q: "How many songs could the first jukebox hold at a time?", a: 1, type: "ratio", unit: "",
+        fact: "Just 1. It played one wax cylinder, which was swapped every day or so. 🎶" },
+      { level: "Hard", q: "In what year did the first jukebox play in a saloon?", a: 1889, type: "year", unit: "year",
+        fact: "1889. It earned over $1,000 in nickels in its first six months. 🪙" }
+    ]
   }
 };
