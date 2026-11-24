@@ -1200,5 +1200,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "In what year did the first jukebox play in a saloon?", a: 1889, type: "year", unit: "year",
         fact: "1889. It earned over $1,000 in nickels in its first six months. 🪙" }
     ]
+  },
+  "2026-11-24": {
+    rebus: {
+      tiles: [{ e: "👩" }, { e: "🐛" }],
+      alt: "Rebus: a woman, plus a bug",
+      answers: ["ladybug", "ladybugs", "ladybird", "ladybirds"],
+      display: "Ladybug",
+      hint: "A little red beetle with black spots. A polite word for a woman, plus a bug."
+    },
+    theme: "Animals",
+    hype: ["Wild!", "King of the jungle!", "You're a beast!"],
+    oof: ["Monkeying around.", "Bird brain.", "Back to the zoo."],
+    snippet: "On this day in 1859, <strong>Charles Darwin</strong> published On the Origin of Species, his big book about how animals change over time. So today is all about animals.",
+    questions: [
+      { level: "Easy", q: "How many legs does a spider have?", a: 8, type: "ratio", unit: "legs",
+        fact: "8 legs. That's how you tell a spider from an insect, which has 6. 🕷️" },
+      { level: "Easy-medium", q: "How many wings does a honeybee have?", a: 4, type: "ratio", unit: "wings",
+        fact: "4 wings, in two pairs that hook together in flight. They beat over 200 times a second. 🐝" },
+      { level: "Medium", q: "How many years did Darwin's famous trip on the ship Beagle last?", a: 5, type: "ratio", unit: "years",
+        fact: "About 5, from 1831 to 1836. The Galápagos Islands stop changed everything. 🐢" },
+      { level: "Medium-hard", q: "How fast can a cheetah run, in miles per hour?", a: 70, type: "ratio", unit: "mph",
+        fact: "About 70 mph, faster than any other land animal. It can only keep it up for about 30 seconds. 🐆" },
+      { level: "Hard", q: "The blue whale is the biggest animal ever. How long can it grow, in feet?", a: 100, type: "ratio", unit: "feet",
+        fact: "Up to 100 feet, about as long as three school buses. Its tongue alone can weigh as much as an elephant. 🐋" }
+    ]
   }
 };
