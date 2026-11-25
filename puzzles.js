@@ -1225,5 +1225,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "The blue whale is the biggest animal ever. How long can it grow, in feet?", a: 100, type: "ratio", unit: "feet",
         fact: "Up to 100 feet, about as long as three school buses. Its tongue alone can weigh as much as an elephant. 🐋" }
     ]
+  },
+  "2026-11-25": {
+    rebus: {
+      tiles: [{ e: "🦶" }, { e: "🖨️" }],
+      alt: "Rebus: a foot, plus a printer",
+      answers: ["footprint", "footprints"],
+      display: "Footprint",
+      hint: "A clue a detective follows. A body part, plus a machine that makes copies."
+    },
+    theme: "Mysteries",
+    hype: ["Case closed!", "Elementary!", "Great detective work!"],
+    oof: ["The butler did it.", "Cold case.", "Back to the drawing room."],
+    snippet: "On this day long ago, Agatha Christie's murder mystery <strong>The Mousetrap</strong> opened in London. It's still running today, the longest-running play ever. So today is all about mysteries.",
+    questions: [
+      { level: "Easy", q: "How many suspects are in the board game Clue?", a: 6, type: "ratio", unit: "suspects",
+        fact: "6, including Colonel Mustard, Miss Scarlet and Professor Plum. 🕵️" },
+      { level: "Easy-medium", q: "How many Knives Out movies are there?", a: 3, type: "ratio", unit: "movies",
+        fact: "3: Knives Out, Glass Onion and Wake Up Dead Man, all starring Daniel Craig as Benoit Blanc. 🔪" },
+      { level: "Medium", q: "How many rooms are on the Clue game board?", a: 9, type: "ratio", unit: "rooms",
+        fact: "9, from the Kitchen to the Conservatory. Two corner rooms have secret passages. 🚪" },
+      { level: "Medium-hard", q: "How many Sherlock Holmes stories did Arthur Conan Doyle write?", a: 60, type: "ratio", unit: "stories",
+        fact: "60: four novels and 56 short stories. 🔍" },
+      { level: "Hard", q: "The Mousetrap opened in London on this day. How many years ago?", a: 74, type: "ratio", unit: "years",
+        fact: "74 years, back in 1952. It has played more than 30,000 times. 🐭" }
+    ]
   }
 };
