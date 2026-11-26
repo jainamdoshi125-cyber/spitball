@@ -1250,5 +1250,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "The Mousetrap opened in London on this day. How many years ago?", a: 74, type: "ratio", unit: "years",
         fact: "74 years, back in 1952. It has played more than 30,000 times. 🐭" }
     ]
+  },
+  "2026-11-26": {
+    rebus: {
+      tiles: [{ e: "🥁" }, { e: "🏒" }],
+      alt: "Rebus: a drum, plus a stick",
+      answers: ["drumstick", "drumsticks"],
+      display: "Drumstick",
+      hint: "Everyone fights over this part of the turkey. Something you bang, plus a stick."
+    },
+    theme: "Thanksgiving",
+    hype: ["Gobble gobble!", "Pass the gravy!", "Thankful for that one!"],
+    oof: ["Undercooked.", "Burnt the pie.", "Cold leftovers."],
+    snippet: "On this day in 1789, <strong>George Washington</strong> set the first national day of thanks for the new country. And today, it's Thanksgiving again. So today is all about Thanksgiving.",
+    questions: [
+      { level: "Easy", q: "How many NFL games are played on Thanksgiving Day?", a: 3, type: "ratio", unit: "games",
+        fact: "3, and the Detroit Lions play every year. 🏈" },
+      { level: "Easy-medium", q: "How fast can a wild turkey run, in miles per hour?", a: 25, type: "ratio", unit: "mph",
+        fact: "Up to 25 mph, and they can fly at about 55. 🦃" },
+      { level: "Medium", q: "How many passengers sailed to America on the Mayflower?", a: 102, type: "ratio", unit: "passengers",
+        fact: "102, plus a crew of about 30. The trip took 66 days. ⛵" },
+      { level: "Medium-hard", q: "How many turkeys do Americans eat on Thanksgiving, in millions?", a: 46, type: "ratio", unit: "million turkeys",
+        fact: "About 46 million, a fifth of all the turkeys eaten in a year. 🍗" },
+      { level: "Hard", q: "In what year was the Pilgrims' first Thanksgiving feast?", a: 1621, type: "year", unit: "year",
+        fact: "1621. The feast lasted three days, with about 90 Wampanoag guests. 🌽" }
+    ]
   }
 };
