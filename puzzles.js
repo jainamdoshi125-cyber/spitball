@@ -1275,5 +1275,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "In what year was the Pilgrims' first Thanksgiving feast?", a: 1621, type: "year", unit: "year",
         fact: "1621. The feast lasted three days, with about 90 Wampanoag guests. 🌽" }
     ]
+  },
+  "2026-11-27": {
+    rebus: {
+      tiles: [{ e: "🥋" }, { e: "🪓" }],
+      alt: "Rebus: a martial arts uniform, plus an axe",
+      answers: ["karatechop", "karatechops"],
+      display: "Karate Chop",
+      hint: "A quick hit with the side of your hand. A martial arts outfit, plus what an axe does."
+    },
+    theme: "Martial Arts",
+    hype: ["Hi-yah!", "Black belt!", "Wax on, nailed it!"],
+    oof: ["Wax off.", "Swept the leg.", "Back to the dojo."],
+    snippet: "On this day in 1940, <strong>Bruce Lee</strong> was born in San Francisco. He became the most famous martial arts movie star ever. So today is all about martial arts.",
+    questions: [
+      { level: "Easy", q: "How many Teenage Mutant Ninja Turtles are there?", a: 4, type: "ratio", unit: "turtles",
+        fact: "4: Leonardo, Michelangelo, Donatello and Raphael, all named after artists. 🐢" },
+      { level: "Easy-medium", q: "Bruce Lee had a famous short punch. How many inches away did it start?", a: 1, type: "ratio", unit: "",
+        fact: "Just 1 inch. The one-inch punch could still knock a grown man backward. 👊" },
+      { level: "Medium", q: "How many seasons did the Karate Kid show Cobra Kai run?", a: 6, type: "ratio", unit: "seasons",
+        fact: "6 seasons, ending in 2025, with the original stars back in their old roles. 🐍" },
+      { level: "Medium-hard", q: "Ralph Macchio played a teenager in The Karate Kid. How old was he really?", a: 22, type: "ratio", unit: "years old",
+        fact: "22, playing 17-year-old Daniel LaRusso. His castmates thought he was joking about his age. 🥋" },
+      { level: "Hard", q: "In what year did Bruce Lee's movie Enter the Dragon come out?", a: 1973, type: "year", unit: "year",
+        fact: "1973. It made him a worldwide star and made nunchucks famous. 🐉" }
+    ]
   }
 };
