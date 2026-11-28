@@ -1300,5 +1300,30 @@ window.SPITBALL_PUZZLES = {
       { level: "Hard", q: "In what year did Bruce Lee's movie Enter the Dragon come out?", a: 1973, type: "year", unit: "year",
         fact: "1973. It made him a worldwide star and made nunchucks famous. 🐉" }
     ]
+  },
+  "2026-11-28": {
+    rebus: {
+      tiles: [{ e: "🐴" }, { e: "💪" }],
+      alt: "Rebus: a horse, plus a flexed arm",
+      answers: ["horsepower"],
+      display: "Horsepower",
+      hint: "How we measure how strong an engine is. An animal you ride, plus strength."
+    },
+    theme: "Cars",
+    hype: ["Full throttle!", "Checkered flag!", "Vroom vroom!"],
+    oof: ["Flat tire.", "Stalled out.", "Out of gas."],
+    snippet: "On this day long ago, America's first <strong>car race</strong> rumbled through snowy Chicago. So today is all about cars.",
+    questions: [
+      { level: "Easy", q: "How many Cars movies has Pixar made?", a: 3, type: "ratio", unit: "movies",
+        fact: "3, all starring Lightning McQueen. Ka-chow! ⚡" },
+      { level: "Easy-medium", q: "How many seats does a Formula 1 race car have?", a: 1, type: "ratio", unit: "",
+        fact: "Just 1. The driver is squeezed in so tight they take the steering wheel off to climb out. 🏎️" },
+      { level: "Medium", q: "How many laps is the Indy 500?", a: 200, type: "ratio", unit: "laps",
+        fact: "200 laps of a 2.5 mile track, which adds up to 500 miles. 🏁" },
+      { level: "Medium-hard", q: "Six cars started America's first car race. How many finished?", a: 2, type: "ratio", unit: "cars",
+        fact: "Just 2. The winner took over 10 hours and averaged about 7 miles per hour. 🐢" },
+      { level: "Hard", q: "In what year was America's first car race?", a: 1895, type: "year", unit: "year",
+        fact: "1895, on Thanksgiving Day, in two inches of snow. ❄️" }
+    ]
   }
 };
